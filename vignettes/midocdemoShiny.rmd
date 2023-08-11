@@ -1,5 +1,5 @@
 ---
-title: "Multiple Imputation DOCtor (midoc)"
+title: "Multiple Imputation DOCtor (midoc) Shiny version - download only"
 author: "Elinor Curnow, Jon Heron, Rosie Cornish, Kate Tilling, and James Carpenter"
 date: "2023-07-19"
 output:
@@ -7,7 +7,7 @@ output:
     code_folding: hide
 runtime: shiny
 vignette: >
-  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc)}
+  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc) Shiny version to download}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
