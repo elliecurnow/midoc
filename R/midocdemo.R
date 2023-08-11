@@ -1,6 +1,6 @@
 #' @export
 midocdemo <- function(dir = getwd()) {
-  appDir <- system.file("shiny-examples/midocdemo.rmd", package = "midoc")
+  appDir <- system.file("vignettes/midocdemo.rmd", package = "midoc")
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `midoc`.", call. = FALSE)
   }
