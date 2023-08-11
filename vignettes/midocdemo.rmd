@@ -6,6 +6,10 @@ output:
   html_document:
     code_folding: hide
 runtime: shiny
+vignette: >
+  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 <style type="text/css">
@@ -340,4 +344,7 @@ shinyApp(ui = ui, server = server)
 
 ```
 
+```{r, include=FALSE}
 ## Step 4 Check that all relationships are correctly specified
+```
+
