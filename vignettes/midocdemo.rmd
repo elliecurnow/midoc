@@ -84,13 +84,13 @@ plot(dagitty::dagitty('dag {
 
 ```{r, include=FALSE}
 
-ui <- fluidPage(
+ui <- shiny::fluidPage(
   
   # App title ----
-  titlePanel("Shiny app to draw the specified directed acyclic graph (DAG)"),
+  shiny::titlePanel("Shiny app to draw the specified directed acyclic graph (DAG)"),
 
   # Sidebar layout with input and output definitions ----
-  sidebarLayout(
+  shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
     sidebarPanel(

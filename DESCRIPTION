@@ -22,5 +22,6 @@ Imports:
     dagitty,
     data.table,
     mfp,
+    shiny,
     stats
 VignetteBuilder: knitr
