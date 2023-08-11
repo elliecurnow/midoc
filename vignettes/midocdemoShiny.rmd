@@ -92,20 +92,32 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
+<<<<<<< HEAD
     shiny::sidebarPanel(
+=======
+    sidebarPanel(
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
           textAreaInput("mdag",
                   label = "Directed acyclic graph",
                   value = 'C -> bmi7 C -> matage matage -> bmi7 C -> R')
           ),
 
     # Main panel for displaying outputs ----
+<<<<<<< HEAD
     shiny::mainPanel(
+=======
+    mainPanel(
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
       #Debug print value of sting being passed
       #textOutput("testvar"),
       
       # Output: Plot result ----
+<<<<<<< HEAD
       shiny::plotOutput("mdagplot", width="300px", height="300px")
+=======
+      plotOutput("mdagplot", width="300px", height="300px")
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       
     )
   )
@@ -121,14 +133,22 @@ server <- function(input, output) {
     
     #output$testvar = renderText(print(mdagspec()))
     
+<<<<<<< HEAD
     output$mdagplot <- shiny::renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
+=======
+    output$mdagplot <- renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 }
 ```
 
 ```{r, echo=FALSE}
 
+<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
+=======
+shinyApp(ui = ui, server = server)
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
 
@@ -182,7 +202,11 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
+<<<<<<< HEAD
     shiny::sidebarPanel(
+=======
+    sidebarPanel(
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       textInput(inputId = "y",
                   label = "Analysis model outcome",
                   value = "bmi7"),
@@ -201,7 +225,11 @@ ui <- shiny::fluidPage(
     ),
 
     # Main panel for displaying outputs ----
+<<<<<<< HEAD
     shiny::mainPanel(
+=======
+    mainPanel(
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       
       # Output: Print result ----
       textOutput(outputId = "checkcra"),
@@ -216,7 +244,11 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
+<<<<<<< HEAD
   output$checkcra <- shiny::renderPrint({
+=======
+  output$checkcra <- renderPrint({
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
   midoc::checkcra(input$y,input$covs,input$r,input$mdag)
   
@@ -227,7 +259,11 @@ server <- function(input, output) {
 
 ```{r, echo=FALSE}
 
+<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
+=======
+shinyApp(ui = ui, server = server)
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
 
@@ -294,7 +330,11 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
+<<<<<<< HEAD
     shiny::sidebarPanel(
+=======
+    sidebarPanel(
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       textInput(inputId = "dep",
                   label = "Partially observed variable",
                   value = "bmi7"),
@@ -313,10 +353,17 @@ ui <- shiny::fluidPage(
     ),
 
     # Main panel for displaying outputs ----
+<<<<<<< HEAD
     shiny::mainPanel(
       
       # Output: Print result ----
       shiny::textOutput(outputId = "checkmi"),
+=======
+    mainPanel(
+      
+      # Output: Print result ----
+      textOutput(outputId = "checkmi"),
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
     )
   )
@@ -328,7 +375,11 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
+<<<<<<< HEAD
   output$checkmi <- shiny::renderPrint({
+=======
+  output$checkmi <- renderPrint({
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
   midoc::checkmi(input$dep,input$preds,input$r,input$mdag)
   
@@ -339,7 +390,11 @@ server <- function(input, output) {
 
 ```{r, echo=FALSE}
 
+<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
+=======
+shinyApp(ui = ui, server = server)
+>>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
 
