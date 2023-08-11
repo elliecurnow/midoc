@@ -92,32 +92,20 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
-<<<<<<< HEAD
     shiny::sidebarPanel(
-=======
-    sidebarPanel(
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
-          textAreaInput("mdag",
+          shiny::textAreaInput("mdag",
                   label = "Directed acyclic graph",
                   value = 'C -> bmi7 C -> matage matage -> bmi7 C -> R')
           ),
 
     # Main panel for displaying outputs ----
-<<<<<<< HEAD
     shiny::mainPanel(
-=======
-    mainPanel(
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
       #Debug print value of sting being passed
       #textOutput("testvar"),
       
       # Output: Plot result ----
-<<<<<<< HEAD
       shiny::plotOutput("mdagplot", width="300px", height="300px")
-=======
-      plotOutput("mdagplot", width="300px", height="300px")
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       
     )
   )
@@ -133,22 +121,14 @@ server <- function(input, output) {
     
     #output$testvar = renderText(print(mdagspec()))
     
-<<<<<<< HEAD
     output$mdagplot <- shiny::renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
-=======
-    output$mdagplot <- renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 }
 ```
 
 ```{r, echo=FALSE}
 
-<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
-=======
-shinyApp(ui = ui, server = server)
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
 
@@ -202,37 +182,29 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
-<<<<<<< HEAD
     shiny::sidebarPanel(
-=======
-    sidebarPanel(
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
-      textInput(inputId = "y",
+      shiny::textInput(inputId = "y",
                   label = "Analysis model outcome",
                   value = "bmi7"),
 
-      textInput(inputId = "covs",
+      shiny::textInput(inputId = "covs",
                   label = "Analysis model covariates, separated by a space",
                   value = "matage C"),
       
-      textInput(inputId = "r",
+      shiny::textInput(inputId = "r",
                   label = "Complete record indicator",
                   value = "R"),
 
-      textAreaInput(inputId = "mdag",
+      shiny::textAreaInput(inputId = "mdag",
                   label = "Directed acyclic graph",
                   value = "C -> bmi7 C -> matage matage -> bmi7 C -> R")
     ),
 
     # Main panel for displaying outputs ----
-<<<<<<< HEAD
     shiny::mainPanel(
-=======
-    mainPanel(
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
       
       # Output: Print result ----
-      textOutput(outputId = "checkcra"),
+      shiny::textOutput(outputId = "checkcra"),
 
     )
   )
@@ -244,11 +216,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
-<<<<<<< HEAD
   output$checkcra <- shiny::renderPrint({
-=======
-  output$checkcra <- renderPrint({
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
   midoc::checkcra(input$y,input$covs,input$r,input$mdag)
   
@@ -259,14 +227,9 @@ server <- function(input, output) {
 
 ```{r, echo=FALSE}
 
-<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
-=======
-shinyApp(ui = ui, server = server)
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
-
 
 ## Step 3 Check whether multiple imputation is likely to be a valid strategy
 Although CRA is valid for our example, we may also wish to perform MI. Remember that MI is valid in principle if each partially observed variable is unrelated to its missingness, given its imputation model predictors. Furthermore, we should include all other analysis model variables in the imputation model for each partially observed variable, so that the analysis and imputation models are "compatible". Therefore, the imputation model for BMI at age 7 years should include maternal age and the confounders. 
@@ -330,40 +293,29 @@ ui <- shiny::fluidPage(
   shiny::sidebarLayout(
 
     # Sidebar panel for inputs ----
-<<<<<<< HEAD
     shiny::sidebarPanel(
-=======
-    sidebarPanel(
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
-      textInput(inputId = "dep",
+      shiny::textInput(inputId = "dep",
                   label = "Partially observed variable",
                   value = "bmi7"),
 
-      textInput(inputId = "preds",
+      shiny::textInput(inputId = "preds",
                   label = "Imputation model predictors, separated by a space",
                   value = "matage C"),
       
-      textInput(inputId = "r",
+      shiny::textInput(inputId = "r",
                   label = "Partially observed variable's missingness indicator",
                   value = "R"),
 
-      textAreaInput(inputId = "mdag",
+      shiny::textAreaInput(inputId = "mdag",
                   label = "Directed acyclic graph",
                   value = "C -> bmi7 C -> matage matage -> bmi7 C -> R C -> bwt pregsize -> bmi7   pregsize -> bwt  U -> bwt  U -> R  U -> C")
     ),
 
     # Main panel for displaying outputs ----
-<<<<<<< HEAD
     shiny::mainPanel(
       
       # Output: Print result ----
       shiny::textOutput(outputId = "checkmi"),
-=======
-    mainPanel(
-      
-      # Output: Print result ----
-      textOutput(outputId = "checkmi"),
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
     )
   )
@@ -375,11 +327,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
-<<<<<<< HEAD
   output$checkmi <- shiny::renderPrint({
-=======
-  output$checkmi <- renderPrint({
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
   midoc::checkmi(input$dep,input$preds,input$r,input$mdag)
   
@@ -390,11 +338,7 @@ server <- function(input, output) {
 
 ```{r, echo=FALSE}
 
-<<<<<<< HEAD
 shiny::shinyApp(ui = ui, server = server)
-=======
-shinyApp(ui = ui, server = server)
->>>>>>> 20dd5c76218917591dbf98eb8b5f0d41bd6d027d
 
 ```
 
