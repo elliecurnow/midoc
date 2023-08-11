@@ -5,6 +5,7 @@ date: "2023-07-19"
 output:
   html_document:
     code_folding: hide
+runtime: shiny
 vignette: >
   %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc)}
   %\VignetteEngine{knitr::rmarkdown}
@@ -78,6 +79,60 @@ plot(dagitty::dagitty('dag {
   C -> R}'))
 ```
 
+**You can draw your own DAG using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- shiny::fluidPage(
+  
+  # App title ----
+  shiny::titlePanel("Shiny app to draw the specified directed acyclic graph (DAG)"),
+
+  # Sidebar layout with input and output definitions ----
+  shiny::sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+          textAreaInput("mdag",
+                  label = "Directed acyclic graph",
+                  value = 'C -> bmi7 C -> matage matage -> bmi7 C -> R')
+          ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+
+      #Debug print value of sting being passed
+      #textOutput("testvar"),
+      
+      # Output: Plot result ----
+      plotOutput("mdagplot", width="300px", height="300px")
+      
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+  
+    mdagspec <- reactive(paste('dag {',input$mdag,'}'))
+    
+    #output$testvar = renderText(print(mdagspec()))
+    
+    output$mdagplot <- renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+
 **Tips for specifying a "missingness" DAG**
 
 Identify variables related to missingness using:
@@ -111,6 +166,69 @@ If `bmi7` was itself a cause of missingness, CRA would always be invalid, i.e. t
 ```{r}
 midoc::checkcra(y="bmi7", covs="matage C", r="R",
          mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R bmi7 -> R")
+```
+
+
+**You can check whether CRA is valid for your own DAG and analysis model using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- shiny::fluidPage(
+
+  # App title ----
+  shiny::titlePanel("Shiny app to check validity of a complete records analysis"),
+
+  # Sidebar layout with input and output definitions ----
+  shiny::sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      textInput(inputId = "y",
+                  label = "Analysis model outcome",
+                  value = "bmi7"),
+
+      textInput(inputId = "covs",
+                  label = "Analysis model covariates, separated by a space",
+                  value = "matage C"),
+      
+      textInput(inputId = "r",
+                  label = "Complete record indicator",
+                  value = "R"),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = "C -> bmi7 C -> matage matage -> bmi7 C -> R")
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Print result ----
+      textOutput(outputId = "checkcra"),
+
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+
+  output$checkcra <- renderPrint({
+
+  midoc::checkcra(input$y,input$covs,input$r,input$mdag)
+  
+    })
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
 ```
 
 
@@ -163,6 +281,67 @@ midoc::checkmi(dep="bmi7", preds="matage C bwt", r="R",
 **Note**
 In theory, MI would be valid if we added both birth weight and pregnancy size as predictors in our imputation model ( as suggested by the `checkmi` results shown above). However, in practice, this strategy may still result in biased estimates, due to unmeasured confounding of the relationship between BMI at age 7 years and birth weight. We recommend not including colliders of the partially observed variable and its missingness as auxiliary variables.
 
+**You can check whether MI is valid for your own DAG and imputation models (checking the imputation model for each partially observed variable in turn) using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- shiny::fluidPage(
+
+  # App title ----
+  shiny::titlePanel("Shiny app to check validity of multiple imputation"),
+
+  # Sidebar layout with input and output definitions ----
+  shiny::sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      textInput(inputId = "dep",
+                  label = "Partially observed variable",
+                  value = "bmi7"),
+
+      textInput(inputId = "preds",
+                  label = "Imputation model predictors, separated by a space",
+                  value = "matage C"),
+      
+      textInput(inputId = "r",
+                  label = "Partially observed variable's missingness indicator",
+                  value = "R"),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = "C -> bmi7 C -> matage matage -> bmi7 C -> R C -> bwt pregsize -> bmi7   pregsize -> bwt  U -> bwt  U -> R  U -> C")
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Print result ----
+      textOutput(outputId = "checkmi"),
+
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+
+  output$checkmi <- renderPrint({
+
+  midoc::checkmi(input$dep,input$preds,input$r,input$mdag)
+  
+    })
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
+```
 
 ```{r, include=FALSE}
 ## Step 4 Check that all relationships are correctly specified
