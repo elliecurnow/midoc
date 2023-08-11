@@ -1,0 +1,343 @@
+---
+title: "Multiple Imputation DOCtor (midoc)"
+author: "Elinor Curnow, Jon Heron, Rosie Cornish, Kate Tilling, and James Carpenter"
+date: "2023-07-19"
+output:
+  html_document:
+    code_folding: hide
+runtime: shiny
+---
+
+<style type="text/css">
+  body{
+  font-size: 14pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+```{r, include=FALSE}
+library(shiny)
+library(ggplot2)
+library(dagitty)
+library(midoc)
+#Also load demo data
+#load(file="testdata.Rda")
+```
+## About `midoc`
+Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. 
+However, using MI in practice can be complex. Application of MI involves multiple decisions which are rarely justified or even documented, and for which little guidance is available. 
+
+The Multiple Imputation DOCtor (`midoc`) R package is a decision-making system which incorporates expert, up-to-date guidance to help you choose the most appropriate analysis method 
+when there are missing data. `midoc` will guide you through your analysis, examining the structure of the dataset to advise on whether MI is needed, and if so how to perform it. 
+
+Here, we will demonstrate the key features of `midoc` using a worked example.
+
+In this example, we consider the association between maternal age (our exposure) and child's body mass index (BMI) at age 7 years (our outcome), adjusting for confounders (e.g. maternal education level; for simplicity, our confounders are collectively denoted by C).
+
+## Step 1 Specify the analysis and missingness models using a directed acyclic graph
+First, we will construct a directed acyclic graph (DAG) for our example, using syntax as per the R package [dagitty](https://doi.org/10.1093/ije/dyw341). 
+
+We will start by specifying the analysis model of interest, assuming there are no missing data. 
+
+We will assume maternal age (`matage`) causes BMI at age 7 years (`bmi7`), and C causes both maternal age and BMI at age 7 years. We can express these relationships using `dagitty` syntax, as follows:
+
+`C -> bmi7 C -> matage matage -> bmi7`
+
+Next, for each partially observed variable, we will specify the variables related to its probability of being missing (its "missingness") by adding these relationships to our DAG. 
+
+For example, suppose BMI at age 7 years is partially observed, and its missingness is caused by C. 
+
+We will use indicator variable R to denote the missingness of BMI at age 7 years (for example, R=1 if BMI at age 7 years is observed, and 0 otherwise). For simplicity, we will assume all other variables are fully observed, so R also indicates a complete record (R=1 if all variables are fully observed, and 0 otherwise). 
+
+Our DAG is now as follows:
+
+`C -> bmi7 C -> matage matage -> bmi7 C -> R`
+
+We will now draw our DAG and visually check that the relationships are specified as we intended:
+
+**Note** We have used additional commands to specify the layout of the DAG shown below - although this is not necessary when using `midoc`, go to the dagitty [website](https://www.dagitty.net/) if you would like to find out more about using `dagitty` to draw DAGs.
+
+```{r, echo=FALSE, out.width="400px", out.height="300px"}
+plot(dagitty::dagitty('dag {
+  bmi7 [pos="0,-0.5"]
+  matage [pos="-2,-0.5"]
+  C [pos="-1,0.5"]
+  R [pos="2,-0.5"]
+  matage -> bmi7
+  C -> bmi7
+  C -> matage
+  C -> R}'))
+```
+
+**You can draw your own DAG using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- fluidPage(
+  
+  # App title ----
+  titlePanel("Shiny app to draw the specified directed acyclic graph (DAG)"),
+
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+          textAreaInput("mdag",
+                  label = "Directed acyclic graph",
+                  value = 'C -> bmi7 C -> matage matage -> bmi7 C -> R')
+          ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+
+      #Debug print value of sting being passed
+      #textOutput("testvar"),
+      
+      # Output: Plot result ----
+      plotOutput("mdagplot", width="300px", height="300px")
+      
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+  
+    mdagspec <- reactive(paste('dag {',input$mdag,'}'))
+    
+    #output$testvar = renderText(print(mdagspec()))
+    
+    output$mdagplot <- renderPlot(plot(dagitty(mdagspec(),layout=T)))
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+
+**Tips for specifying a "missingness" DAG**
+
+Identify variables related to missingness using:
+
+* Subject-matter knowledge, for example, prior research on causes of drop-out in your study and knowledge of the data collection process
+
+* Data exploration, for example, by performing a logistic regression of each missingness indicator on your analysis model variables - noting that you may have to exclude any variables with a large proportion of missing data to avoid perfect prediction  
+
+## Step 2 Check whether complete records analysis is likely to be a valid strategy
+Our next step is to determine whether complete records analysis (CRA) is a valid strategy, using our DAG. Remember that, in general, CRA will be valid if the analysis model outcome is unrelated to missingness of all partially observed variables, given the analysis model covariates (in special cases, depending on the type of analysis model, this rule can be relaxed - here, we will consider the general setting without making any assumptions about the fitted model). 
+
+We will use the `midoc` function `checkcra` applied to our DAG to check whether complete records analysis (CRA) is valid, specifying our outcome (`y`), covariates, i.e. our independent variables, (`covs`), complete records indicator (`r`), and DAG (`mdag`).
+
+Suppose we decided to estimate the unadjusted association between `bmi7` and `matage`, without including our confounders `C` in the model, using CRA. The results are shown below (note, tap "Show" to reveal the code used to create these results). We can see that CRA would not be valid (we can also tell this by inspecting our DAG: there is an open path from `bmi7` to `R` via `C` if we only condition on `matage`). `checkcra` suggests that CRA would be valid if we included `C` in the analysis model.  
+
+```{r}
+checkcra(y="bmi7", covs="matage", r="R",
+         mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R")
+```
+
+If we now add `C` to the model and re-run `checkcra`, as below, we see that CRA is now valid, in principle.
+
+```{r}
+checkcra(y="bmi7", covs="matage C", r="R",
+         mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R")
+```
+
+**Note**
+If `bmi7` was itself a cause of missingness, CRA would always be invalid, i.e. there would be no other variables we could add to the analysis model to make CRA valid. See below to see the results of `checkcra` in this case (note, in the code, we have added a path from `bmi7` to `R` to the specified DAG).
+
+```{r}
+checkcra(y="bmi7", covs="matage C", r="R",
+         mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R bmi7 -> R")
+```
+
+
+**You can check whether CRA is valid for your own DAG and analysis model using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- fluidPage(
+
+  # App title ----
+  titlePanel("Shiny app to check validity of a complete records analysis"),
+
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      textInput(inputId = "y",
+                  label = "Analysis model outcome",
+                  value = "bmi7"),
+
+      textInput(inputId = "covs",
+                  label = "Analysis model covariates, separated by a space",
+                  value = "matage C"),
+      
+      textInput(inputId = "r",
+                  label = "Complete record indicator",
+                  value = "R"),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = "C -> bmi7 C -> matage matage -> bmi7 C -> R")
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Print result ----
+      textOutput(outputId = "checkcra"),
+
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+
+  output$checkcra <- renderPrint({
+
+  checkcra(input$y,input$covs,input$r,input$mdag)
+  
+    })
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+
+## Step 3 Check whether multiple imputation is likely to be a valid strategy
+Although CRA is valid for our example, we may also wish to perform MI. Remember that MI is valid in principle if each partially observed variable is unrelated to its missingness, given its imputation model predictors. Furthermore, we should include all other analysis model variables in the imputation model for each partially observed variable, so that the analysis and imputation models are "compatible". Therefore, the imputation model for BMI at age 7 years should include maternal age and the confounders. 
+
+We have already verified (using `checkcra`) that BMI at age 7 years is unrelated to its missingness, given maternal age and the confounders. Therefore, we know that MI will be valid if we use only these variables in the imputation model for BMI at age 7 years (because the analysis model and the imputation model are exactly the same in this case). However, MI using just maternal age and the confounders in the imputation model for BMI at age 7 years will recover no additional information compared to CRA. Therefore, we may wish to include "auxiliary variables" in our imputation model for BMI at age 7 years (i.e. variables that are predictive of BMI at age 7 years, but that are not required for the analysis model) to improve the precision of our MI estimate, compared to the CRA estimate. 
+
+In our example, we have two variables that could be used as auxiliary variables: pregnancy size - singleton or multiple birth - (`pregsize`) and birth weight (`bwt`). We assume that pregnancy size is a cause of BMI at age 7 years, but not its missingness, whereas we assume birth weight is related to both BMI at 7 years (via pregnancy size) and its missingness (via some unmeasured variable U e.g. maternal occupational social class). We will now add these variables to our DAG. Below, we have shown our updated DAG. 
+
+```{r, echo=FALSE, out.width="400px", out.height="300px"}
+plot(dagitty::dagitty('dag {
+  bmi7 [pos="0,-0.5"]
+  matage [pos="-2,-0.5"]
+  C [pos="-1,0.5"]
+  R [pos="2,-0.5"]
+  bwt [pos="1,-1"]
+  pregsize [pos="0,-1.5"]
+  U [pos="2,-1.5"]
+  matage -> bmi7
+  C -> bmi7
+  C -> matage
+  C -> R
+  C -> bwt
+  pregsize -> bmi7
+  pregsize -> bwt
+  U -> bwt
+  U -> R
+  U -> C
+  }'))
+```
+
+
+We will use the `midoc` function `checkmi` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and the confounders, specifying the partially observed variable (`dep`), predictors (`preds`), missingness indicator (`r`), and DAG (`mdag`).
+
+We will first consider the imputation model including pregnancy size. The results are shown below. These suggest that MI would be valid in principle if we included `pregsize` as well as the other analysis model variables in the imputation model for BMI at age 7 years.  
+
+```{r}
+checkmi(dep="bmi7", preds="matage C pregsize", r="R",
+         mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R C -> bwt pregsize -> bmi7   pregsize -> bwt  U -> bwt  U -> R  U -> C")
+```
+
+We will next consider the imputation model including birth weight. The results are shown below. These suggest that MI would not be valid if we included `bwt` as well as the other analysis model variables in the imputation model for BMI at age 7 years (we can also tell this by inspecting our DAG: since `bwt` is a collider, conditioning on `bwt` opens a path from `bmi7` to `R` via `bwt`). 
+
+```{r}
+checkmi(dep="bmi7", preds="matage C bwt", r="R",
+         mdag="C -> bmi7 C -> matage matage -> bmi7 C -> R C -> bwt pregsize -> bmi7   pregsize -> bwt  U -> bwt  U -> R  U -> C")
+```
+
+**Note**
+In theory, MI would be valid if we added both birth weight and pregnancy size as predictors in our imputation model ( as suggested by the `checkmi` results shown above). However, in practice, this strategy may still result in biased estimates, due to unmeasured confounding of the relationship between BMI at age 7 years and birth weight. We recommend not including colliders of the partially observed variable and its missingness as auxiliary variables.
+
+**You can check whether MI is valid for your own DAG and imputation models (checking the imputation model for each partially observed variable in turn) using a Shiny app, by editing the text in the box below.**
+
+```{r, include=FALSE}
+
+ui <- fluidPage(
+
+  # App title ----
+  titlePanel("Shiny app to check validity of multiple imputation"),
+
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+      textInput(inputId = "dep",
+                  label = "Partially observed variable",
+                  value = "bmi7"),
+
+      textInput(inputId = "preds",
+                  label = "Imputation model predictors, separated by a space",
+                  value = "matage C"),
+      
+      textInput(inputId = "r",
+                  label = "Partially observed variable's missingness indicator",
+                  value = "R"),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = "C -> bmi7 C -> matage matage -> bmi7 C -> R C -> bwt pregsize -> bmi7   pregsize -> bwt  U -> bwt  U -> R  U -> C")
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+      
+      # Output: Print result ----
+      textOutput(outputId = "checkmi"),
+
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+
+  output$checkmi <- renderPrint({
+
+  checkmi(input$dep,input$preds,input$r,input$mdag)
+  
+    })
+
+}
+```
+
+```{r, echo=FALSE}
+
+shinyApp(ui = ui, server = server)
+
+```
+
+## Step 4 Check that all relationships are correctly specified
