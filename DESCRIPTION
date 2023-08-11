@@ -21,6 +21,7 @@ Imports:
     blorr,
     dagitty,
     data.table,
+    ggplot2,
     mfp,
     shiny,
     stats
