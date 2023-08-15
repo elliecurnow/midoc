@@ -7,7 +7,7 @@ output:
     code_folding: hide
 runtime: shiny
 vignette: >
-  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc) Shiny version to download}
+  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc) Shiny version}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

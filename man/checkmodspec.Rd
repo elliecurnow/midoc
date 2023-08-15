@@ -13,6 +13,15 @@ checkmodspec(formula, family, data)
 
 \item{data}{a data frame containing all the variables stated in the formula.}
 }
+\value{
+A message indicating whether the relationships between the model outcome and covariates are likely to be correctly specified or not, plus results of a method for examining model mis-specification.
+}
 \description{
 Check specification of the proposed model (analysis or imputation) using the observed data
+}
+\examples{
+checkmodspec(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), data=bmi)
+checkmodspec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gaussian(identity), data=bmi)
+checkmodspec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
+checkmodspec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
 }

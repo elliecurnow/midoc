@@ -24,8 +24,10 @@ DAG and imputation model
 Check multiple imputation is valid
 }
 \examples{
-checkmi(dep="iq8", preds="edscore14 smoking", r="r",
- mdag="smoking -> iq8 -> edscore14 smoking -> edscore14 smoking -> r")
-checkmi(dep="iq8", preds="edscore14", r="r",
- mdag="smoking -> iq8 -> edscore14 smoking -> edscore14 smoking -> r")
+checkmi(dep="bmi7", preds="matage mated pregsize", r="R",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R mated -> bwt
+ pregsize -> bmi7 pregsize -> bwt  U -> bwt  U -> R  U -> mated")
+checkmi(dep="bmi7", preds="matage mated bwt", r="R",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R mated -> bwt
+ pregsize -> bmi7 pregsize -> bwt  U -> bwt  U -> R  U -> mated")
 }

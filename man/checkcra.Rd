@@ -24,9 +24,10 @@ DAG and analysis model outcome and covariate(s)
 Check complete records analysis is valid
 }
 \examples{
-checkcra(y="edscore14", covs="iq8", r="r", mdag="iq8 -> edscore14 iq8 -> r")
-checkcra(y="edscore14", covs="iq8", r="r",
- mdag="smoking -> iq8 -> edscore14 smoking -> edscore14 smoking -> r")
-checkcra(y="edscore14", covs="iq8 smoking", r="r",
- mdag="smoking -> iq8 -> edscore14 smoking -> edscore14 smoking -> r")
+checkcra(y="bmi7", covs="matage", r="R",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
+checkcra(y="bmi7", covs="matage mated", r="R",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
+checkcra(y="bmi7", covs="matage mated", r="R",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R bmi7 -> R")
 }

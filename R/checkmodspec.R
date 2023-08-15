@@ -4,11 +4,14 @@
 #' @param family a description of the error distribution and link function to be used in the model. Family functions that are supported are gaussian(identity) and binomial(logit).
 #' @param data a data frame containing all the variables stated in the formula.
 #'
-#' @importFrom data.table setDT
-#' @return
+#' @return A message indicating whether the relationships between the model outcome and covariates are likely to be correctly specified or not, plus results of a method for examining model mis-specification.
 #' @export
 #'
 #' @examples
+#' checkmodspec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
+#' checkmodspec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(identity), data=bmi)
+#' checkmodspec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
+#' checkmodspec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
 checkmodspec <- function(formula, family, data) {
   if (is.character(family))
     family <- get(family, mode = "function")
@@ -43,10 +46,12 @@ Check the specification of each relationship in your model.")
         pval,
         fill=TRUE)
     if(pval > 0.1){
-      cat("\033[0;32mA large p-value means there is little evidence of model mis-specification.\033[0m")
+      cat("A large p-value means there is little evidence of model mis-specification.")
     } else {
-      cat("\033[0;31mA small p-value means the model may be mis-specified.
-Check the specification of each relationship in your model.\033[0m")
+      cat("A small p-value means the model may be mis-specified.
+Check the specification of each relationship in your model.")
     }
   }
 }
+
+#Add comment explaining how to update the imputation model formula in 'mice'
