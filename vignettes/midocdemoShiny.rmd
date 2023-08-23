@@ -385,7 +385,9 @@ midoc::checkmodspec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(ident
 midoc::checkmodspec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
 ```
 
-Once we include a quadratic form of maternal age in our model for maternal education, there is no evidence of model mis-specification:
+There is some evidence of model mis-specification. 
+
+Once we include a quadratic form of maternal age in our model for maternal education, there is little evidence of model mis-specification:
 
 ```{r}
 midoc::checkmodspec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
