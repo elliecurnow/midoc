@@ -19,9 +19,15 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
+    blorr,
+    cli,
     dagitty,
+    glue,
+    lifecycle,
     mfp,
+    rlang,
     stats,
+    withr
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
