@@ -20,8 +20,8 @@ A message indicating whether the relationships between the model outcome and cov
 Check specification of the proposed model (analysis or imputation) using the observed data
 }
 \examples{
-checkmodspec(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), data=bmi)
-checkmodspec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gaussian(identity), data=bmi)
+checkmodspec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
+checkmodspec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(identity), data=bmi)
 checkmodspec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
 checkmodspec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
 }
