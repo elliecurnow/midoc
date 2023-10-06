@@ -11,23 +11,24 @@
 #' @export
 #'
 #' @examples
-#' checkcra(y="bmi7", covs="matage", r="R",
+#' checkCRA(y="bmi7", covs="matage", r="R",
 #'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
-#' checkcra(y="bmi7", covs="matage mated", r="R",
+#' checkCRA(y="bmi7", covs="matage mated", r="R",
 #'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
-#' checkcra(y="bmi7", covs="matage mated", r="R",
+#' checkCRA(y="bmi7", covs="matage mated", r="R",
 #'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R bmi7 -> R")
-checkcra <- function(y, covs, r, mdag) {
+checkCRA <- function(y, covs, r, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   covsvec <- unlist(strsplit(covs," "))
   #If r does not depend on y conditional on covariates, then CRA is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), y, r, covsvec)){
-    cat("The analysis model outcome and complete record indicator are independent given analysis model covariates.
-Hence, complete records analysis is valid.", fill=TRUE)
+    cat("The analysis model outcome and complete record indicator are independent
+given analysis model covariates. Hence, complete records analysis is valid.", fill=TRUE)
   }
   else {
-    cat("The analysis model outcome and complete record indicator are not independent given analysis model covariates.
-Hence, complete records analysis may not be valid.","\n",fill=TRUE)
+    cat("The analysis model outcome and complete record indicator are not independent
+given analysis model covariates. Hence, complete records analysis may not be valid.",
+        "\n",fill=TRUE)
     adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r),outcome=y,type = "all")
     if(length(adjsets)==0){
       cat("There are no other variables which could be added to the model to make
@@ -35,14 +36,16 @@ the analysis model outcome and complete record indicator conditionally independe
           "\n",
 "Consider using a different strategy e.g. multiple imputation.",fill=TRUE)
     } else {
-      cat("Consider using a different different strategy, e.g. multiple imputation, and/or analysis model.",
+      cat("Consider using a different strategy, e.g. multiple imputation,
+and/or analysis model.",
           "\n",
-"For example, the analysis model outcome and complete record indicator are independent if,
-in addition to the specified covariates, the following sets of variables are included
-as covariates in the analysis model:","\n",fill=TRUE)
+"For example, the analysis model outcome and complete record indicator are independent
+if, in addition to the specified covariates, the following sets of variables are included
+as covariates in the analysis model:",
+          "\n",fill=TRUE)
 print(adjsets)
     }
   }
 }
 
-#Add note on special case where missingness of independent of model covariates and depends on a cause of Y not Y itself
+

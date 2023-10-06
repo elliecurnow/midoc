@@ -8,11 +8,11 @@
 #' @export
 #'
 #' @examples
-#' checkmodspec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
-#' checkmodspec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(identity), data=bmi)
-#' checkmodspec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
-#' checkmodspec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
-checkmodspec <- function(formula, family, data) {
+#' checkModSpec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
+#' checkModSpec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(identity), data=bmi)
+#' checkModSpec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
+#' checkModSpec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
+checkModSpec <- function(formula, family, data) {
   if (is.character(family))
     family <- get(family, mode = "function")
   if (is.function(family))
@@ -27,15 +27,16 @@ checkmodspec <- function(formula, family, data) {
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
     modfittest <- mfp::mfp(r ~ fp(fitvals, df = 4, select=0.05), data=modfit)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
-    cat("Model mis-specification test (regression of model residuals on a fractional polynomial of the fitted values)",
+    cat("Model mis-specification test (regression of model residuals on a
+fractional polynomial of the fitted values)",
         "P-value:",
         pval,
         fill=TRUE)
     if(pval > 0.1){
-      cat("A large p-value means there is little evidence of model mis-specification.")
+      cat("A large p-value means there is little evidence of model mis-specification.","\n",fill=TRUE)
     } else {
-      cat("A small p-value means the model may be mis-specified.
-Check the specification of each relationship in your model.")
+      cat("A small p-value means the model may be mis-specified.","\n",
+"Check the specification of each relationship in your model.","\n",fill=TRUE)
     }
   }
   else if(fam == "binomial(logit)"){
@@ -46,12 +47,13 @@ Check the specification of each relationship in your model.")
         pval,
         fill=TRUE)
     if(pval > 0.1){
-      cat("A large p-value means there is little evidence of model mis-specification.")
+      cat("A large p-value means there is little evidence of model mis-specification.","\n",fill=TRUE)
     } else {
-      cat("A small p-value means the model may be mis-specified.
-Check the specification of each relationship in your model.")
+      cat("A small p-value means the model may be mis-specified.","\n",
+"Check the specification of each relationship in your model.","\n",fill=TRUE)
     }
   }
+cat("Note that a non-linear relationship can be specified with the 'formulas' option
+when using mice(). ")
 }
 
-#Add comment explaining how to update the imputation model formula in 'mice'
