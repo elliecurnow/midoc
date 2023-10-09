@@ -279,6 +279,15 @@ plot(dagitty::dagitty('dag {
   }'))
 ```
 
+<br>
+
+Note that CRA is still valid for our updated mDAG. We can check this using `checkCRA` once more:
+```{r}
+midoc::checkCRA(y="bmi7", covs="matage mated", r="R",
+         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+```
+
+<br>
 
 We will use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education, specifying the partially observed variable (`dep`), predictors (`preds`), missingness indicator for the partially observed variable (`r_dep`), and mDAG (`mdag`).
 
