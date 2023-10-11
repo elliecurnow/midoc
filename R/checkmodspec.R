@@ -27,8 +27,8 @@ checkModSpec <- function(formula, family, data) {
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
     modfittest <- mfp::mfp(r ~ fp(fitvals, df = 4, select=0.05), data=modfit)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
-    cat("Model mis-specification test (regression of model residuals on a
-fractional polynomial of the fitted values)",
+    cat("Model mis-specification method: regression of model residuals on a
+fractional polynomial of the fitted values",
         "P-value:",
         pval,
         fill=TRUE)
@@ -42,7 +42,7 @@ fractional polynomial of the fitted values)",
   else if(fam == "binomial(logit)"){
     modfittest <- blorr::blr_linktest(mod)
     pval <- stats::coef(modfittest)[3,4]
-    cat("Model mis-specification test (Pregibon's link test)",
+    cat("Model mis-specification method: Pregibon's link test",
         "P-value:",
         pval,
         fill=TRUE)
