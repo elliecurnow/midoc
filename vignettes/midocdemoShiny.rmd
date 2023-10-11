@@ -445,7 +445,7 @@ midoc::checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gauss
 
 <br>
 
-**Note** We must make sure we account for the non-linear relationship between BMI at age 7 years and maternal education in all other imputation models. For example, the imputation model for maternal education would also need to include a quadratic form of maternal education (this is induced by conditioning on BMI at age 7 years). Although there are no missing values for maternal education in our dataset, we can still explore the specification that we would need using `checkModSpec` as follows (note that we do not include pregnancy size as a predictor of maternal education):
+**Note** We must make sure we account for the non-linear relationship between BMI at age 7 years and maternal education in all other imputation models. For example, the imputation model for maternal education would also need to include a quadratic form of maternal age (this is induced by conditioning on BMI at age 7 years). Although there are no missing values for maternal education in our dataset, we can still explore the specification that we would need using `checkModSpec` as follows (note that we do not include pregnancy size as a predictor of maternal education):
 
 `checkModSpec(formula=mated~bmi7+matage, family=binomial(logit),` 
 `data=bmi)`
