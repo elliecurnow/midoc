@@ -2,26 +2,42 @@
 % Please edit documentation in R/checkmodspec.R
 \name{checkModSpec}
 \alias{checkModSpec}
-\title{Check specification of the proposed model (analysis or imputation) using the observed data}
+\title{Inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data)
+checkModSpec(formula, family, data, modplot = TRUE)
 }
 \arguments{
-\item{formula}{a formula object: a symbolic description of the model to be fitted, with the model outcome on the left of a ~ operator, and the covariates, separated by + operators, on the right.}
+\item{formula}{A formula object: a symbolic description of the model to be
+fitted, with the dependent variable on the left of a ~ operator, and the
+covariates, separated by + operators, on the right}
 
-\item{family}{a description of the error distribution and link function to be used in the model. Family functions that are supported are gaussian(identity) and binomial(logit).}
+\item{family}{A description of the error distribution and link function to be
+used in the model; family functions that are supported are
+gaussian(identity) and binomial(logit)}
 
-\item{data}{a data frame containing all the variables stated in the formula.}
+\item{data}{A data frame containing all the variables stated in the formula}
+
+\item{modplot}{If TRUE and there is evidence of model mis-specification,
+displays a plot which can be used to explore the functional form of each
+covariate in the specified model; use modplot = FALSE to disable the plot}
 }
 \value{
-A message indicating whether the relationships between the model outcome and covariates are likely to be correctly specified or not, plus results of a method for examining model mis-specification.
+A message indicating whether the relationships between the dependent
+variable and covariates are likely to be correctly specified or not, plus
+an object of type 'miprop' (a list containing the specified formula,
+family, and dataset name)
 }
 \description{
-Check specification of the proposed model (analysis or imputation) using the observed data
+Explore whether the observed relationships in the specified dataset are
+consistent with the proposed parametric model (which may represent the
+analysis or imputation model).
 }
 \examples{
 checkModSpec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
-checkModSpec(formula=bmi7~matage+I(matage^2)+mated, family=gaussian(identity), data=bmi)
+checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
+  family=gaussian(identity), data=bmi)
+
 checkModSpec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
-checkModSpec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), data=bmi)
+checkModSpec(formula=mated~bmi7+matage+I(matage^2),
+  family=binomial(logit), data=bmi)
 }

@@ -2,32 +2,41 @@
 % Please edit documentation in R/checkcra.R
 \name{checkCRA}
 \alias{checkCRA}
-\title{Check complete records analysis is valid}
+\title{Inspect complete records analysis model}
 \usage{
-checkCRA(y, covs, r, mdag)
+checkCRA(y, covs, r_cra, mdag)
 }
 \arguments{
-\item{y}{the analysis model outcome, specified as a string}
+\item{y}{The analysis model outcome, specified as a string}
 
-\item{covs}{the analysis model covariate(s), specified as a string (space delimited)}
+\item{covs}{The analysis model covariate(s), specified as a string (space
+delimited)}
 
-\item{r}{the complete record indicator, specified as a string}
+\item{r_cra}{The complete record indicator, specified as a string}
 
-\item{mdag}{the directed acyclic graph specified as a string using "dagitty" syntax, including all observed and
-unobserved variables related to the analysis model variables and their missingness}
+\item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
+syntax}
 }
 \value{
-A message indicating whether complete records analysis is valid under the proposed missingness
-DAG and analysis model outcome and covariate(s)
+A message indicating whether complete records analysis is valid under
+the proposed DAG and analysis model outcome and covariate(s)
 }
 \description{
-Check complete records analysis is valid
+Check complete records analysis is valid under the proposed analysis model
+and directed acyclic graph (DAG). The DAG should include all observed and
+unobserved variables related to the analysis model variables and their
+missingness, as well as all required missingness indicators.
+}
+\details{
+In general, complete records analysis is valid if the analysis model outcome
+and complete record indicator are unrelated, conditional on the specified
+covariates (in causal inference this is referred to as 'd-separation').
 }
 \examples{
-checkCRA(y="bmi7", covs="matage", r="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
-checkCRA(y="bmi7", covs="matage mated", r="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R")
-checkCRA(y="bmi7", covs="matage mated", r="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R bmi7 -> R")
+checkCRA(y="bmi7", covs="matage", r_cra="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r bmi7 -> r")
 }

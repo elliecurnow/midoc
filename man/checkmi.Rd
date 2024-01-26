@@ -2,35 +2,48 @@
 % Please edit documentation in R/checkmi.R
 \name{checkMI}
 \alias{checkMI}
-\title{Check multiple imputation is valid}
+\title{Inspect multiple imputation model}
 \usage{
 checkMI(dep, preds, r_dep, mdag)
 }
 \arguments{
-\item{dep}{the partially observed variable, specified as a string}
+\item{dep}{The partially observed variable to be imputed, specified as a
+string}
 
-\item{preds}{the imputation model predictor(s), specified as a string (space delimited)}
+\item{preds}{The imputation model predictor(s), specified as a string (space
+delimited)}
 
-\item{r_dep}{the partially observed variable's missingness indicator, specified as a string}
+\item{r_dep}{The partially observed variable's missingness indicator,
+specified as a string}
 
-\item{mdag}{the directed acyclic graph specified as a string using "dagitty" syntax, including all observed and
-unobserved variables related to the analysis model variables and their missingness}
+\item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
+syntax}
 }
 \value{
-A message indicating whether multiple imputation is valid under the proposed missingness
-DAG and imputation model
+A message indicating whether multiple imputation is valid under the
+proposed DAG and imputation model
 }
 \description{
-Check multiple imputation is valid
+Check multiple imputation is valid under the proposed imputation model and
+directed acyclic graph (DAG). The imputation model should include all other
+analysis model variables as predictors, as well as any auxiliary variables.
+The DAG should include all observed and unobserved variables related to the
+analysis model variables and their missingness, as well as all required
+missingness indicators.
+}
+\details{
+In principle, multiple imputation is valid if each partially observed
+variable is unrelated to its own missingness, given its imputation model
+predictors.
 }
 \examples{
-checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R mated -> bwt
- pregsize -> bmi7 pregsize -> bwt  U -> bwt  U -> R  U -> mated")
-checkMI(dep="bmi7", preds="matage mated bwt", r_dep="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R mated -> bwt
- pregsize -> bmi7 pregsize -> bwt  U -> bwt  U -> R  U -> mated")
-checkMI(dep="matage", preds="bmi7 mated bwt", r_dep="R",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 mated -> R mated -> bwt
- pregsize -> bmi7 pregsize -> bwt  U -> bwt  U -> R  U -> mated")
+checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
+ pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
+ pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+checkMI(dep="matage", preds="bmi7 mated bwt", r_dep="r",
+ mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
+ pregsize -> bmi7 pregsize -> bwt  U -> bwt")
 }

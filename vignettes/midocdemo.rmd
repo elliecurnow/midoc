@@ -28,20 +28,12 @@ vignette: >
 }
 </style>
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ```{r include=FALSE}
 knitr::opts_chunk$set(comment = NA)
 ```
 
 ```{r, include=FALSE}
-#library(shiny)
-#library(dagitty)
-#library(midoc)
-#Also load demo data
-#data(bmi, package = "midoc")
+library(midoc)
 ```
 ## About midoc
 Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. 
@@ -68,11 +60,11 @@ We will assume maternal age (`matage`) causes BMI at age 7 years (`bmi7`), and m
 
 Next, for each partially observed variable, we will specify the variables related to its probability of being missing (its "missingness") by adding these relationships to our DAG. This type of DAG is often referred to as a "missingness" DAG (mDAG) [1](https://doi.org/10.1177/0962280210394469), [2](https://doi.org/10.1093/ije/dyad008). 
 
-For example, suppose BMI at age 7 years is partially observed. We will use indicator variable R to denote the missingness of BMI at age 7 years (for example, R=1 if BMI at age 7 years is observed, and 0 otherwise). For simplicity, we will assume all other variables are fully observed, so R also indicates a complete record (R=1 if all variables are fully observed, and 0 otherwise). Further suppose that R is related to maternal education level (via some unmeasured variable U, e.g. maternal occupational social class, that is a cause of both maternal education level and R), but neither BMI at age 7 years itself nor maternal age are causes of R. 
+For example, suppose BMI at age 7 years is partially observed. We will use indicator variable "r" to denote the missingness of BMI at age 7 years (for example, r=1 if BMI at age 7 years is observed, and 0 otherwise). For simplicity, we will assume all other variables are fully observed, so r also indicates a complete record (r=1 if all variables are fully observed, and 0 otherwise). Further suppose that r is related to maternal education level (via some unmeasured variable U, e.g. maternal occupational social class, that is a cause of both maternal education level and r), but neither BMI at age 7 years itself nor maternal age are causes of r. 
 
 Our mDAG is now as follows:
 
-`mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R`
+`mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r`
 
 We will now draw our mDAG and visually check that the relationships are specified as we intended:
 
@@ -84,23 +76,23 @@ plot(dagitty::dagitty('dag {
   matage [pos="-2,-0.5"]
   mated [pos="-1,0.5"]
   U [pos="2,-1.5"]
-  R [pos="2,-0.5"]
+  r [pos="2,-0.5"]
   mated -> bmi7 
   mated -> matage 
   matage -> bmi7 
   U -> mated 
-  U -> R
+  U -> r
   }'))
 ```
 
-<br>
+
 
 **Tips for specifying a "missingness" DAG**
 
 * First specify the DAG for the analysis model, as it would be if there were no missing data 
 
 * Next add missingness indicator(s) to your DAG. If you have multiple variables with missing data, you may want to start by including just 
-the complete records indicator (R) in your DAG
+the complete records indicator (r) in your DAG
 
 * Identify variables related to missingness using:
 
@@ -113,46 +105,35 @@ Our next step is to determine whether complete records analysis (CRA) is a valid
 
 Suppose we decide to estimate the unadjusted association between BMI at age 7 years and maternal age, without including our confounder maternal education in the model. We will use the `midoc` function `checkCRA` applied to our mDAG to check whether CRA is valid for this model, specifying our outcome (`y`), covariates, i.e. our independent variables, (`covs`), complete records indicator (`r`), and mDAG (`mdag`), as follows:
 
-`checkCRA(y="bmi7", covs="matage", r="R",`     
-  `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R")`
-
- The results are shown below.   
-
-```{r echo=FALSE}
-midoc::checkCRA(y="bmi7", covs="matage", r="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R")
+```{r}
+checkCRA(y="bmi7", covs="matage", r="r",
+         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
 ```
 
-<br>
 
-We can see that CRA would not be valid (we can also tell this by inspecting our DAG: there is an open path from `bmi7` to `R` via `mated` and `U` if we only condition on `matage`). `checkCRA` suggests that CRA would be valid if we included `mated`, or `mated` and `U`, in the analysis model. In this particular setting, it is sensible to include `mated` in the analysis model since it is a confounder of the relationship between `matage` and `bmi7`. In other settings, we might not want to include the variables required for valid CRA in our model because they might change its interpretation - in that case, we would need to use a different analysis strategy. Note that `U` is not related to `bmi7` once we condition on `mated` (though it is still related to missingness of `bmi7`), so does not need to be included in our analysis model.   
+
+We can see that CRA would not be valid (we can also tell this by inspecting our DAG: there is an open path from `bmi7` to `r` via `mated` and `U` if we only condition on `matage`). `checkCRA` suggests that CRA would be valid if we included `mated`, or `mated` and `U`, in the analysis model. In this particular setting, it is sensible to include `mated` in the analysis model since it is a confounder of the relationship between `matage` and `bmi7`. In other settings, we might not want to include the variables required for valid CRA in our model because they might change its interpretation - in that case, we would need to use a different analysis strategy. Note that `U` is not related to `bmi7` once we condition on `mated` (though it is still related to missingness of `bmi7`), so does not need to be included in our analysis model.   
 
 If we add `mated` to the model and re-run `checkCRA`, as below, we see that CRA is now valid.
 
-`checkCRA(y="bmi7", covs="matage mated", r="R",`     
-  `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R")`
-
-```{r echo=FALSE}
-midoc::checkCRA(y="bmi7", covs="matage mated", r="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R")
+```{r}
+checkCRA(y="bmi7", covs="matage mated", r="r",
+         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
 ```
 
-<br>
+
 
 **Note**
-If our outcome, BMI at age 7 years, was itself a cause of missingness, CRA would always be invalid, i.e. there would be no other variables we could add to the analysis model to make CRA valid. See below to see the results of `checkCRA` in this case (note, in the code, we have added a path from `bmi7` to `R` to the specified mDAG).
+If our outcome, BMI at age 7 years, was itself a cause of missingness, CRA would always be invalid, i.e. there would be no other variables we could add to the analysis model to make CRA valid. See below to see the results of `checkCRA` in this case (note, in the code, we have added a path from `bmi7` to `r` to the specified mDAG).
 
-`checkCRA(y="bmi7", covs="matage mated", r="R",`
-         `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R bmi7 -> R")`
-         
-```{r echo=FALSE}
-midoc::checkCRA(y="bmi7", covs="matage mated", r="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R bmi7 -> R")
+```{r}
+checkCRA(y="bmi7", covs="matage mated", r="r",
+         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r bmi7 -> r")
 ```
 
 
 ## Step 3 Check whether multiple imputation is likely to be a valid strategy
-Although CRA is valid for our example, we may also wish to perform MI. Remember that MI is valid in principle if each partially observed variable is unrelated to its missingness, given its imputation model predictors. Furthermore, we should include all other analysis model variables in the imputation model for each partially observed variable, so that the analysis and imputation models are "compatible". Therefore, the imputation model for BMI at age 7 years should include maternal age and maternal education. 
+Although CRA is valid for our example, we may also wish to perform MI. Remember that MI is valid in principle if each partially observed variable is unrelated to its missingness, given its imputation model predictors. In practice, given multiple partially observed variables, ...Furthermore, we should include all other analysis model variables in the imputation model for each partially observed variable, so that the analysis and imputation models are "compatible". Therefore, the imputation model for BMI at age 7 years should include maternal age and maternal education. 
 
 We have already verified (using `checkCRA`) that BMI at age 7 years is unrelated to its missingness, given maternal age and maternal education. Therefore, we know that MI will be valid if we use only these variables in the imputation model for BMI at age 7 years (because the analysis model and the imputation model are exactly the same in this case). However, MI using just maternal age and maternal education in the imputation model for BMI at age 7 years will recover no additional information compared to CRA. Therefore, we may wish to include "auxiliary variables" in our imputation model for BMI at age 7 years (i.e. variables that are predictive of BMI at age 7 years, but that are not required for the analysis model) to improve the precision of our MI estimate, compared to the CRA estimate. 
 
@@ -163,7 +144,7 @@ plot(dagitty::dagitty('dag {
   bmi7 [pos="0,-0.5"]
   matage [pos="-2,-0.5"]
   mated [pos="-1,0.5"]
-  R [pos="2,-0.5"]
+  r [pos="2,-0.5"]
   bwt [pos="1,-1"]
   pregsize [pos="0,-1.5"]
   U [pos="2,-1.5"]
@@ -171,54 +152,44 @@ plot(dagitty::dagitty('dag {
   mated -> bmi7
   mated -> matage
   U -> mated
-  U -> R
+  U -> r
   pregsize -> bmi7
   pregsize -> bwt
   U -> bwt
   }'))
 ```
 
-<br>
 
 Note that CRA is still valid for our updated mDAG. We can check this using `checkCRA` once more:
 
-`checkCRA(y="bmi7", covs="matage mated", r="R",`
-         `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R`
-         `pregsize -> bmi7 pregsize -> bwt  U -> bwt")`
-         
-```{r echo=FALSE}
-midoc::checkCRA(y="bmi7", covs="matage mated", r="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+```{r}
+checkCRA(y="bmi7", covs="matage mated", r="r",
+         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r 
+         pregsize -> bmi7 pregsize -> bwt  U -> bwt")
 ```
 
-<br>
+
 
 We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education, specifying the partially observed variable (`dep`), predictors (`preds`), missingness indicator for the partially observed variable (`r_dep`), and mDAG (`mdag`).
 
 We will first consider the imputation model including pregnancy size. The results are shown below. These suggest that MI would be valid in principle if we included pregnancy size as well as the other analysis model variables in the imputation model for BMI at age 7 years. 
 
-`checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="R",`
-         `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R`
-         `pregsize -> bmi7 pregsize -> bwt  U -> bwt")`
-
-```{r echo=FALSE}
-midoc::checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+```{r}
+checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+        mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r 
+        pregsize -> bmi7 pregsize -> bwt  U -> bwt")
 ```
 
 
-We will next consider the imputation model including birth weight. The results are shown below. These suggest that MI would not be valid if we included birth weight as well as the other analysis model variables in the imputation model for BMI at age 7 years (we can also tell this by inspecting our mDAG: since `bwt` shares a common cause with both `bmi7` and `R`, it is a "collider", and hence conditioning on `bwt` opens a path from `bmi7` to `R` via `bwt`). 
+We will next consider the imputation model including birth weight. The results are shown below. These suggest that MI would not be valid if we included birth weight as well as the other analysis model variables in the imputation model for BMI at age 7 years (we can also tell this by inspecting our mDAG: since `bwt` shares a common cause with both `bmi7` and `r`, it is a "collider", and hence conditioning on `bwt` opens a path from `bmi7` to `r` via `bwt`). 
 
-`checkMI(dep="bmi7", preds="matage mated bwt", r_dep="R",`
-         `mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R` 
-         `pregsize -> bmi7 pregsize -> bwt  U -> bwt")`
-         
-```{r echo=FALSE}
-midoc::checkMI(dep="bmi7", preds="matage mated bwt", r_dep="R",
-         mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> R pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+```{r}
+checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
+        mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r 
+        pregsize -> bmi7 pregsize -> bwt  U -> bwt")
 ```
 
-<br>
+
 
 **Note**
 In theory, and as suggested by the `checkMI` results shown above, MI would be valid if we added both birth weight and pregnancy size as auxiliary variables in our imputation model (note that U is not needed, conditional on the other imputation model predictors). However, in practice, this strategy may still result in biased estimates, due to unmeasured confounding of the relationship between BMI at age 7 years and birth weight. We recommend not including colliders of the partially observed variable and its missingness as auxiliary variables [4](https://doi.org/10.3389/fepid.2023.1237447).
@@ -237,19 +208,18 @@ Since maternal education and pregnancy size are binary variables, we only need t
 
 The results are shown below. These suggest that our imputation model is mis-specified.
 
-`checkModSpec(formula=bmi7~matage+mated+pregsize, family=gaussian(identity),` 
-`data=bmi)`
-
-```{r echo=FALSE}
-midoc::checkModSpec(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), data=midoc::bmi)
+```{r}
+checkModSpec(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), 
+             data=bmi)
 ```
 
-<br>
+
 
 A plot of the residuals versus the fitted values from our model, shown below, suggests there may be a quadratic relationship between BMI at age 7 years and maternal age. 
 
 ```{r, echo=FALSE, out.width="400px", out.height="300px", dpi=200}
-fit <- stats::glm(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), data=midoc::bmi)
+fit <- stats::glm(formula=bmi7~matage+mated+pregsize, family=gaussian(identity), 
+              data=bmi)
 plot(fit$fitted.values,fit$residuals,xlab="Fitted values",ylab="Residuals")
 ```
 
@@ -257,34 +227,26 @@ We will use the `midoc` function `checkModSpec` again, this time specifying a qu
 
 The results below suggest there is no longer evidence of model mis-specification. 
 
-`checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gaussian(identity),`
-`data=bmi)`
-
-```{r echo=FALSE}
-midoc::checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gaussian(identity), data=midoc::bmi)
+```{r}
+checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize, family=gaussian(identity), 
+             data=bmi)
 ```
 
-<br>
 
 **Note** We must make sure we account for the non-linear relationship between BMI at age 7 years and maternal education in all other imputation models. For example, the imputation model for maternal education would also need to include a quadratic form of maternal age (this is induced by conditioning on BMI at age 7 years). Although there are no missing values for maternal education in our dataset, we can still explore the specification that we would need using `checkModSpec` as follows (note that we do not include pregnancy size as a predictor of maternal education):
 
-`checkModSpec(formula=mated~bmi7+matage, family=binomial(logit),` 
-`data=bmi)`
-
-```{r echo=FALSE}
-midoc::checkModSpec(formula=mated~bmi7+matage, family=binomial(logit), data=midoc::bmi)
+```{r}
+checkModSpec(formula=mated~bmi7+matage, family=binomial(logit),
+             data=bmi)
 ```
 
 There is some evidence of model mis-specification. 
 
 Once we include a quadratic form of maternal age in our model for maternal education, there is little evidence of model mis-specification:
 
-`checkModSpec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit),` 
-                    `data=bmi)`
-                    
-```{r echo=FALSE}
-midoc::checkModSpec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), 
-                    data=midoc::bmi)
+```{r}
+checkModSpec(formula=mated~bmi7+matage+I(matage^2), family=binomial(logit), 
+             data=bmi)
 ```
 
 <br>
@@ -295,10 +257,13 @@ when using mice().
 For example, a quadratic relationship between `bmi` and `matage` in the imputation
 model for `bmi7` can be specified as follows (this is the same formula we 
 used above to check the specification of our model for `bmi7`):
-`formulas_list <- as.list(c(as.formula(bmi7 ~ matage + I(matage^2) + mated + pregsize)))`
-`mice(bmi[,1:4],method="norm",formulas=formulas_list)`
 
-Note that we do not include `bwt` or the missingness indicator `R` in the imputation model
+```
+formulas_list <- as.list(c(as.formula(bmi7 ~ matage + I(matage^2) + mated + pregsize)))
+mice(bmi[,1:4],method="norm",formulas=formulas_list)
+```
+
+Note that we do not include `bwt` or the missingness indicator `r` in the imputation model
 for `bmi7` (so we specify a subset of the columns of the `bmi` dataset in our call of
 `mice()`)
 
@@ -318,7 +283,7 @@ for `bmi7` (so we specify a subset of the columns of the `bmi` dataset in our ca
   
   * All auxiliary variables that are colliders of the partially observed variable and its missingness
   
-<br>
+
 
 ## Illustration using our worked example
 Finally, we will use the `bmi` data to illustrate how our analysis approach affects the estimated association between maternal age and BMI at age 7 years, adjusted for maternal education level. We will fit a quadratic relationship between BMI at age 7 years and maternal age in our analysis model. We will compare CRA and MI estimates, with MI using either pregnancy size or birth weight as an auxiliary variable, and fitting either a linear or quadratic relationship between BMI at age 7 years and maternal age in the imputation model. We will use 100 imputations so we obtain stable MI estimates. 
@@ -340,4 +305,4 @@ knitr::kable(results, caption = "Parameter estimates for maternal age",
              align="lcc")
 ```
 
-<br>
+
