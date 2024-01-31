@@ -26,7 +26,7 @@ proposeMI <- function(mimodobj, data, diagplot = TRUE) {
   if(mimodobj$family == "gaussian(identity)") {method <- "norm"}
   else if(mimodobj$family == "binomial(logit)"){method <- "logreg"}
 
-  formulas_list <- as.list(c(stats::as.formula(mimodobj$formula)))
+  formulas_list <- as.list(c(stats::as.formula(paste(mimodobj$formula,collapse=" "))))
 
 #Create object which is as below
 #summary(proposeMI.object) gives you this message:
@@ -37,13 +37,13 @@ strwrap("# You may need to specify a subset of the columns in your dataset"),"\n
 based on the proportion of complete records in your dataset"),"\n",
 "\nmethod = ", method,",",
 strwrap("# Specify a method for each incomplete variable. If displayed, the box-and-whisker plots can be used to inform
-your choice of method(s):
-if the imputation model is not predicting extreme values, consider a different imputation model/method e.g. PMM.
+your choice of method(s): for example, if the imputation model does not predict extreme values appropriately,
+consider a different imputation model/method e.g. PMM.
 Note the distribution of imputed and observed values may differ if data are missing at random.
 If you suspect data are missing not at random, the plots can also inform your choice of sensitivity parameter"),"\n",
-strwrap("\nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix'
-\nThe conditional imputation models are:"),"\n",
-mimodobj$formula,"\n",
+strwrap("\nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix'"),"\n",
+strwrap("The conditional imputation models are:"),"\n",
+paste(mimodobj$formula,collapse=" "),"\n",
 strwrap("\nmaxit = 10 , # If you have more than one incomplete variable, you should check
 this number of iterations is sufficient by inspecting the trace plots, if displayed.
 Consider increasing the number of iterations if there is a trend that does not stabilise by the 10th iteration.

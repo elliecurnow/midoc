@@ -10,7 +10,8 @@ exploreDAG(mdag, data)
 \item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
 syntax}
 
-\item{data}{A data frame containing all the variables stated in the DAG}
+\item{data}{A data frame containing all the variables stated in the DAG. All
+variables must be numeric.}
 }
 \value{
 A message indicating whether the relationships between fully observed
