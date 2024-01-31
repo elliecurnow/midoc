@@ -3,7 +3,12 @@
 #' This function summarises the missing data patterns in the specified dataset.
 #' Each row in the output corresponds to a missing data pattern (1=observed,
 #' 0=missing). The number and percentage of observations is also displayed for
-#' each missing data pattern.
+#' each missing data pattern. The first column indicates the number of missing
+#' data patterns. The second column refers to the analysis model outcome
+#' ('y'), with all other variables ('covs') displayed in subsequent columns.
+#' Alternatively, 'y' can be used to display the primary variable of interest,
+#' e.g. 'y' could refer to the exposure, with all other variables listed in
+#' 'covs'.
 #'
 #' @param y The analysis model outcome, specified as a string
 #' @param covs The analysis model covariate(s), specified as a string (space

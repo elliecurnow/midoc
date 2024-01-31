@@ -22,7 +22,12 @@ A summary of the missing data patterns
 This function summarises the missing data patterns in the specified dataset.
 Each row in the output corresponds to a missing data pattern (1=observed,
 0=missing). The number and percentage of observations is also displayed for
-each missing data pattern.
+each missing data pattern. The first column indicates the number of missing
+data patterns. The second column refers to the analysis model outcome
+('y'), with all other variables ('covs') displayed in subsequent columns.
+Alternatively, 'y' can be used to display the primary variable of interest,
+e.g. 'y' could refer to the exposure, with all other variables listed in
+'covs'.
 }
 \examples{
 descMissData(y="bmi7", covs="matage mated", data=bmi)
