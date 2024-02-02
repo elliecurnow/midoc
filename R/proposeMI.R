@@ -40,14 +40,14 @@ strwrap("# Specify a method for each incomplete variable. If displayed, the box-
 your choice of method(s): for example, if the imputation model does not predict extreme values appropriately,
 consider a different imputation model/method e.g. PMM.
 Note the distribution of imputed and observed values may differ if data are missing at random.
-If you suspect data are missing not at random, the plots can also inform your choice of sensitivity parameter"),"\n",
+If you suspect data are missing not at random, the plots can also inform your choice of sensitivity parameter."),"\n",
 strwrap("\nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix'"),"\n",
 strwrap("The conditional imputation models are:"),"\n",
 paste(mimodobj$formula,collapse=" "),"\n",
 strwrap("\nmaxit = 10 , # If you have more than one incomplete variable, you should check
 this number of iterations is sufficient by inspecting the trace plots, if displayed.
 Consider increasing the number of iterations if there is a trend that does not stabilise by the 10th iteration.
-Note that iteration is not required when only one variable is incomplete."),"\n",
+Note that iteration is not required when only one variable is partially observed."),"\n",
 strwrap("\nprintFlag = FALSE , # Change to print=TRUE to display the history as imputation is performed"),"\n",
 strwrap("\nseed = NA) # It is good practice to choose a seed so your results are reproducible"),"\n",fill=TRUE)
 
