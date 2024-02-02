@@ -9,6 +9,8 @@
 #'   imputation and substantive analysis models
 #' @param diagplot If TRUE (the default), displays diagnostic plots for the
 #'   proposed 'mice' call; use diagplot=FALSE to disable the plots
+#' @param printprompt If TRUE (the default), the user is prompted before the
+#'   second plot is displayed; use printprompt=FALSE to remove the prompt
 #'
 #' @return A message describing the proposed 'mice' options, plus an object of
 #'  type 'miprop', which can be used to run 'mice' using the proposed options
@@ -19,7 +21,7 @@
 #' mimod <- checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
 #' family=gaussian(identity), data=bmi)
 #' proposeMI(mimod, data=bmi)
-proposeMI <- function(mimodobj, data, diagplot = TRUE) {
+proposeMI <- function(mimodobj, data, diagplot = TRUE, printprompt = TRUE) {
 
   m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
 
@@ -59,11 +61,15 @@ if (diagplot){
   print(mice::bwplot(imp,
         main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
 
-  #Prompt for second plot after first plot is displayed
-  oask <- grDevices::devAskNewPage(TRUE)
-  print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
-  #Reset original settings
-  grDevices::devAskNewPage(oask)
+  #Optionally prompt for second plot after first plot is displayed
+  if (printprompt){
+    oask <- grDevices::devAskNewPage(TRUE)
+    print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+    #Reset original settings
+    grDevices::devAskNewPage(oask)
+  } else {
+    print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+  }
 }
 
 #Output an object with the proposed specification

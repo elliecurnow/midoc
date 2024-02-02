@@ -4,7 +4,7 @@
 \alias{proposeMI}
 \title{Suggests multiple imputation options}
 \usage{
-proposeMI(mimodobj, data, diagplot = TRUE)
+proposeMI(mimodobj, data, diagplot = TRUE, printprompt = TRUE)
 }
 \arguments{
 \item{mimodobj}{An object of type 'mimod', which stands for 'multiple
@@ -15,6 +15,9 @@ imputation and substantive analysis models}
 
 \item{diagplot}{If TRUE (the default), displays diagnostic plots for the
 proposed 'mice' call; use diagplot=FALSE to disable the plots}
+
+\item{printprompt}{If TRUE (the default), the user is prompted before the
+second plot is displayed; use printprompt=FALSE to remove the prompt}
 }
 \value{
 A message describing the proposed 'mice' options, plus an object of
