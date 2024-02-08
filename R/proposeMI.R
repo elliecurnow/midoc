@@ -18,8 +18,8 @@
 #' @export
 #'
 #' @examples
-#' mimod <- checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-#' family=gaussian(identity), data=bmi)
+#' mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+#' family="gaussian(identity)", data=bmi)
 #' proposeMI(mimod, data=bmi)
 proposeMI <- function(mimodobj, data, diagplot = TRUE, printprompt = TRUE) {
 

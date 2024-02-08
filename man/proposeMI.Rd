@@ -28,7 +28,7 @@ Suggests the optimal \link[mice]{mice} options to perform multiple
 imputation, based on the proposed imputation model and specified dataset.
 }
 \examples{
-mimod <- checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-family=gaussian(identity), data=bmi)
+mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+family="gaussian(identity)", data=bmi)
 proposeMI(mimod, data=bmi)
 }

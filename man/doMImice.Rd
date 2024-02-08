@@ -23,8 +23,8 @@ Performs multiple imputation using \link[mice]{mice}, based on the 'mice'
 options and dataset specified by a call to  \link[midoc]{proposeMI}.
 }
 \examples{
-mimod <- checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-  family=gaussian(identity), data=bmi)
+mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+  family="gaussian(identity)", data=bmi)
 miprop <- proposeMI(mimod, data=bmi)
 
 imp <- doMImice(miprop,123)

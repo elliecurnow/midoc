@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#' mimod <- checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-#'   family=gaussian(identity), data=bmi)
+#' mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+#'   family="gaussian(identity)", data=bmi)
 #' miprop <- proposeMI(mimod, data=bmi)
 #'
 #' imp <- doMImice(miprop,123)

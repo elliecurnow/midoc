@@ -7,13 +7,13 @@
 checkModSpec(formula, family, data, modplot = TRUE)
 }
 \arguments{
-\item{formula}{A formula object: a symbolic description of the model to be
-fitted, with the dependent variable on the left of a ~ operator, and the
-covariates, separated by + operators, on the right}
+\item{formula}{A symbolic description of the model to be fitted, with the
+dependent variable on the left of a ~ operator, and the covariates,
+separated by + operators, on the right, specified as a string}
 
 \item{family}{A description of the error distribution and link function to be
-used in the model; family functions that are supported are
-gaussian(identity) and binomial(logit)}
+used in the model, specified as a string; family functions that are
+supported are "gaussian(identity)" and "binomial(logit)"}
 
 \item{data}{A data frame containing all the variables stated in the formula}
 
@@ -33,11 +33,11 @@ consistent with the proposed parametric model (which may represent the
 analysis or imputation model).
 }
 \examples{
-checkModSpec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
-checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-  family=gaussian(identity), data=bmi)
+checkModSpec(formula="bmi7~matage+mated", family="gaussian(identity)", data=bmi)
+checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+  family="gaussian(identity)", data=bmi)
 
-checkModSpec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
-checkModSpec(formula=mated~bmi7+matage+I(matage^2),
-  family=binomial(logit), data=bmi)
+checkModSpec(formula="mated~bmi7+matage", family="binomial(logit)", data=bmi)
+checkModSpec(formula="mated~bmi7+matage+I(matage^2)",
+  family="binomial(logit)", data=bmi)
 }

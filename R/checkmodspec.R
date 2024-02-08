@@ -32,7 +32,7 @@
 checkModSpec <- function(formula, family, data, modplot=TRUE) {
 
   if(family == "gaussian(identity)"){
-    mod <- stats::glm(as.formula(formula), data=data)
+    mod <- stats::glm(stats::as.formula(formula), data=data)
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
     modfittest <- mfp::mfp(r ~ fp(fitvals, df = 4, select=0.05), data=modfit)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
@@ -54,7 +54,7 @@ Check the specification of each relationship in your model."),"\n",fill=TRUE)
     }
   }
   else if(family == "binomial(logit)"){
-    mod <- stats::glm(as.formula(formula),family = binomial(logit), data=data)
+    mod <- stats::glm(formula=stats::as.formula(formula),family="binomial", data=data)
     modfittest <- blorr::blr_linktest(mod)
     pval <- stats::coef(modfittest)[3,4]
     cat(strwrap("Model mis-specification method: Pregibon's link test"),"\n",
