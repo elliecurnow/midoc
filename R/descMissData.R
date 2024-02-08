@@ -25,12 +25,16 @@
 descMissData <- function(y, covs, data) {
   covslist <- unlist(strsplit(covs," "))
   mdtab <- mice::md.pattern(data[,c(y,covslist)],plot=FALSE)
-  #reorder so outcome is listed first
-  mdtab2 <- mdtab[1:nrow(mdtab)-1,c(y,covslist)]
-  n <- as.numeric(row.names(mdtab[1:nrow(mdtab)-1,]))
-  pct <-  round(n*100/sum(n))
-  pattern <- 1:(nrow(mdtab)-1)
-  print(data.frame(pattern,mdtab2,n,pct),row.names=FALSE)
+
+  #Only print if dataset is not completely observed - if it is, print output as per md.pattern
+  if (mdtab[nrow(mdtab),ncol(mdtab)] != 0){
+    #reorder so outcome is listed first
+    mdtab2 <- mdtab[1:nrow(mdtab)-1,c(y,covslist)]
+    n <- as.numeric(row.names(mdtab[1:nrow(mdtab)-1,]))
+    pct <-  round(n*100/sum(n))
+    pattern <- 1:(nrow(mdtab)-1)
+    print(data.frame(pattern,mdtab2,n,pct),row.names=FALSE)
+  }
 }
 
 
