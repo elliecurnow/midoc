@@ -4,12 +4,12 @@
 #' consistent with the proposed parametric model (which may represent the
 #' analysis or imputation model).
 #'
-#' @param formula A formula object: a symbolic description of the model to be
-#'   fitted, with the dependent variable on the left of a ~ operator, and the
-#'   covariates, separated by + operators, on the right
+#' @param formula A symbolic description of the model to be fitted, with the
+#'   dependent variable on the left of a ~ operator, and the covariates,
+#'   separated by + operators, on the right, specified as a string
 #' @param family A description of the error distribution and link function to be
-#'   used in the model; family functions that are supported are
-#'   gaussian(identity) and binomial(logit)
+#'   used in the model, specified as a string; family functions that are
+#'   supported are "gaussian(identity)" and "binomial(logit)"
 #' @param data A data frame containing all the variables stated in the formula
 #' @param modplot If TRUE and there is evidence of model mis-specification,
 #'   displays a plot which can be used to explore the functional form of each
@@ -22,26 +22,17 @@
 #' @export
 #'
 #' @examples
-#' checkModSpec(formula=bmi7~matage+mated, family=gaussian(identity), data=bmi)
-#' checkModSpec(formula=bmi7~matage+I(matage^2)+mated+pregsize,
-#'   family=gaussian(identity), data=bmi)
+#' checkModSpec(formula="bmi7~matage+mated", family="gaussian(identity)", data=bmi)
+#' checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+#'   family="gaussian(identity)", data=bmi)
 #'
-#' checkModSpec(formula=mated~bmi7+matage, family=binomial(logit), data=bmi)
-#' checkModSpec(formula=mated~bmi7+matage+I(matage^2),
-#'   family=binomial(logit), data=bmi)
+#' checkModSpec(formula="mated~bmi7+matage", family="binomial(logit)", data=bmi)
+#' checkModSpec(formula="mated~bmi7+matage+I(matage^2)",
+#'   family="binomial(logit)", data=bmi)
 checkModSpec <- function(formula, family, data, modplot=TRUE) {
-  if (is.character(family))
-    family <- get(family, mode = "function")
-  if (is.function(family))
-    family <- family()
-  if (is.null(family$family)) {
-    print(family)
-    stop("'family' not recognized")
-  }
-  mod <- stats::glm(formula, family=family, data=data)
-  fam <- deparse(substitute(family))
 
-  if(fam == "gaussian(identity)"){
+  if(family == "gaussian(identity)"){
+    mod <- stats::glm(as.formula(formula), data=data)
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
     modfittest <- mfp::mfp(r ~ fp(fitvals, df = 4, select=0.05), data=modfit)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
@@ -58,11 +49,12 @@ Check the specification of each relationship in your model."),"\n",fill=TRUE)
       if (modplot){
         plot(modfit$fitvals,modfit$r,xlab="",ylab="",
              main="Residuals versus fitted values",
-             sub=list("This plot may suggest the appropriate functional form \nfor the specified model.",cex=0.8))
+             sub=list("This plot may suggest the appropriate functional form \nfor the specified model",cex=0.8))
       }
     }
   }
-  else if(fam == "binomial(logit)"){
+  else if(family == "binomial(logit)"){
+    mod <- stats::glm(as.formula(formula),family = binomial(logit), data=data)
     modfittest <- blorr::blr_linktest(mod)
     pval <- stats::coef(modfittest)[3,4]
     cat(strwrap("Model mis-specification method: Pregibon's link test"),"\n",
@@ -79,13 +71,13 @@ Check the specification of each relationship in your model."),"\n",fill=TRUE)
       if (modplot){
         arm::binnedplot(modfit$fitvals,modfit$r,xlab="",ylab="",col.int="white",
                     main="Residuals versus (binned) fitted values",
-                    sub=list("This plot may suggest the appropriate functional form \nfor the specified model.", cex=0.8))
+                    sub=list("This plot may suggest the appropriate functional form \nfor the specified model", cex=0.8))
       }
     }
   }
 
 #Output an object with formula and family
-mimod <- list(formula = deparse(substitute(formula)),family = fam,
+mimod <- list(formula = formula,family = family,
               datalab=deparse(substitute(data)))
 invisible(mimod)
 }
