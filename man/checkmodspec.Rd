@@ -4,7 +4,7 @@
 \alias{checkModSpec}
 \title{Inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data, modplot = TRUE)
+checkModSpec(formula, family, data, message = TRUE, modplot = TRUE)
 }
 \arguments{
 \item{formula}{A symbolic description of the model to be fitted, with the
@@ -17,15 +17,19 @@ supported are "gaussian(identity)" and "binomial(logit)"}
 
 \item{data}{A data frame containing all the variables stated in the formula}
 
+\item{message}{If TRUE, displays a message indicating whether the
+relationships between the dependent variable and covariates are likely to
+be correctly specified or not; use message = FALSE to suppress the message}
+
 \item{modplot}{If TRUE and there is evidence of model mis-specification,
 displays a plot which can be used to explore the functional form of each
 covariate in the specified model; use modplot = FALSE to disable the plot}
 }
 \value{
-A message indicating whether the relationships between the dependent
-variable and covariates are likely to be correctly specified or not, plus
-an object of type 'miprop' (a list containing the specified formula,
-family, and dataset name)
+An object of type 'miprop' (a list containing the
+specified formula, family, and dataset name), plus, optionally, messages
+and plots indicating whether the relationships between the dependent
+variable and covariates are likely to be correctly specified or not
 }
 \description{
 Explore whether the observed relationships in the specified dataset are
