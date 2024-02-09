@@ -34,7 +34,7 @@ doMImice <- function(mipropobj, seed, substmod = " ") {
   #Optionally return the pooled estimates
   #substexpr <- deparse(substitute(substmod))
   if(substmod != " "){
-    cat("Given the substantive model:", substmod, "\n", strwrap("\nmultiple imputation estimates are as follows:"),"\n",fill=TRUE)
+    cat("Given the substantive model:", substmod, "\n", strwrap("multiple imputation estimates are as follows:"),"\n",fill=TRUE)
     print(summary(mice::pool(with(mids,parse(text=substmod, keep.source=FALSE))),conf.int=TRUE))
   }
   else {
