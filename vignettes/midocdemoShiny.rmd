@@ -62,7 +62,7 @@ Here, we will demonstrate the key features of `midoc` using a worked example.
 
 In this example, we wish to estimate the association between maternal age at first pregnancy (our exposure) and child's body mass index (BMI) at age 7 years (our outcome). For simplicity, we only consider one confounder of the relationship between maternal age and BMI at age 7 years, maternal education level. Note that simulated data for this study are included in the `midoc` package in the `bmi` dataset. The dataset contains 1000 observations, with realistic values for each variable, and exaggerated relationships between variables (to highlight the consequences of our choice of analysis approach). 
 
-**Note** This is an interactive version of the `midoc` vignette: *Multiple Imputation DOCtor (midoc)*. In this version, you can apply features of `midoc` using your own DAG and data. Further functionality will be added in the next iteration of `midoc`.  
+**Note** This is an interactive version of the `midoc` vignette: *Multiple Imputation DOCtor (midoc)*. In this version, you can apply features of `midoc` using your own DAG and data.  
 
 
 ## Step 1 Specify the analysis and missingness models using a directed acyclic graph
@@ -700,11 +700,170 @@ mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 miprop <- proposeMI(mimod, data=bmi, printprompt=FALSE)
 ```
 
-We will assume no further adjustment is required to the proposed "mice" call. We will use the `midoc` function `doMImice` to perform MI, specifying our proposed "mice" call (`miprop`) and the seed for our "mice" call (`seed`) (so that our results are reproducible). We will also specify our substantive model of interest (`substmod`): a regression of BMI at 7 years on maternal age (fitting a quadratic relationship) and maternal education. This is an optional step: if we specify the substantive model, it will be fitted automatically to each imputed dataset and the pooled results will be displayed (equivalent to using the "mice" functions `with` and `pool`). If the substantive model is not specified, only the imputation step will be performed. 
+**You can explore the optimal "mice" options for your own dataset, based on your specified imputation model, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that the diagnostic plots are not displayed (i.e. `diagplot` is set to `FALSE`). Further note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+
+```{r, include=FALSE}
+
+ui <- shiny::fluidPage(
+  
+  # App title ----
+  shiny::titlePanel("Shiny app to suggest optimal 'mice' options"),
+
+  # Sidebar layout with input and output definitions ----
+  shiny::sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    shiny::sidebarPanel(
+          
+          shiny::textAreaInput(inputId = "formula",
+                  label = "Imputation Model formula",
+                  value = "bmi7 ~ matage + I(matage^2) + mated + pregsize"),
+          
+          shiny::selectInput(inputId = "family",
+                  label = "Imputation Model family",
+                  choices = c("gaussian(identity)","binomial(logit)"),
+                  selected = "gaussian(identity)"),
+
+          shiny::fileInput(inputId = "datafile", 
+                           label = "Upload CSV file",
+                           accept = c("text/csv",
+                            "text/comma-separated-values,
+                            .csv"))
+          
+          ),
+
+    # Main panel for displaying outputs ----
+    shiny::mainPanel(
+
+      # Output: Print result ----
+      shiny::verbatimTextOutput(outputId = "proposemi")
+      
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+  
+    data <- reactive({
+        if (!is.null(input$datafile)) {
+          read.csv(input$datafile$datapath)
+        } else {
+          return(bmi)
+          }
+      })
+    
+    mimod <- reactive(midoc::checkModSpec(input$formula,input$family,data(),message=FALSE,modplot=FALSE))
+    
+    output$proposemi <- shiny::renderPrint({
+
+    midoc::proposeMI(mimod(),data(),diagplot=FALSE)
+  
+    })
+}
+```
+
+```{r, echo=FALSE}
+
+shiny::shinyApp(ui = ui, server = server)
+
+```
+
+
+
+Returning to our example, we will assume no further adjustment is required to the proposed "mice" call. We will use the `midoc` function `doMImice` to perform MI, specifying our proposed "mice" call (`miprop`) and the seed for our "mice" call (`seed`) (so that our results are reproducible). We will also specify our substantive model of interest (`substmod`): a regression of BMI at 7 years on maternal age (fitting a quadratic relationship) and maternal education. This is an optional step: if we specify the substantive model, it will be fitted automatically to each imputed dataset and the pooled results will be displayed (equivalent to using the "mice" functions `with` and `pool`). If the substantive model is not specified, only the imputation step will be performed. 
 
 ```{r}
-doMImice(miprop, 123, substmod=lm(bmi7 ~ matage + I(matage^2) + mated))
+doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 ```
+
+**You can perform multiple imputation using "mice" for your own dataset, based on your specified imputation and analysis models, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+
+```{r, include=FALSE}
+
+ui <- shiny::fluidPage(
+  
+  # App title ----
+  shiny::titlePanel("Shiny app to perform multiple imputation using 'mice'"),
+
+  # Sidebar layout with input and output definitions ----
+  shiny::sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    shiny::sidebarPanel(
+          
+          shiny::textAreaInput(inputId = "impformula",
+                  label = "Imputation Model formula",
+                  value = "bmi7 ~ matage + I(matage^2) + mated + pregsize"),
+          
+          shiny::selectInput(inputId = "impfamily",
+                  label = "Imputation Model family",
+                  choices = c("gaussian(identity)","binomial(logit)"),
+                  selected = "gaussian(identity)"),
+          
+          shiny::textAreaInput(inputId = "substmod",
+                  label = "Substantive Model",
+                  value = "lm(bmi7 ~ matage + I(matage^2) + mated)"),
+          
+          shiny::numericInput(inputId = "seed",
+                  label = "Set the seed of the 'mice' call",
+                  value = 123),
+
+          shiny::fileInput(inputId = "datafile", 
+                           label = "Upload CSV file",
+                           accept = c("text/csv",
+                            "text/comma-separated-values,
+                            .csv"))
+          
+          ),
+
+    # Main panel for displaying outputs ----
+    shiny::mainPanel(
+
+      # Output: Print result ----
+      shiny::verbatimTextOutput(outputId = "domimice")
+      
+    )
+  )
+)
+
+```
+
+```{r, include=FALSE}
+
+server <- function(input, output) {
+  
+    data <- reactive({
+        if (!is.null(input$datafile)) {
+          read.csv(input$datafile$datapath)
+        } else {
+          return(bmi)
+          }
+      })
+    
+    mimod <- reactive(midoc::checkModSpec(input$impformula,input$impfamily,data(),message=FALSE,modplot=FALSE))
+    
+    miprop <- reactive(midoc::proposeMI(mimod(),data(),message=FALSE,diagplot=FALSE))
+    
+    output$domimice <- shiny::renderPrint({
+
+    midoc::doMImice(miprop(),input$seed,input$substmod)
+  
+    })
+}
+```
+
+```{r, echo=FALSE}
+
+shiny::shinyApp(ui = ui, server = server)
+
+```
+
+
+
 
 ## Illustration using our worked example
 Finally, we illustrate how our choice of analysis approach affects the estimated association between maternal age and BMI at age 7 years, adjusted for maternal education level. We compare CRA and MI estimates. When performing MI, we used either pregnancy size or birth weight as an auxiliary variable and fitted either a linear or quadratic relationship between BMI at age 7 years and maternal age in the imputation model. For each analysis approach, we fitted the same substantive analysis model that we used above. 

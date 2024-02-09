@@ -319,7 +319,7 @@ miprop <- proposeMI(mimod, data=bmi)
 We will assume no further adjustment is required to the proposed "mice" call. We will use the `midoc` function `doMImice` to perform MI, specifying our proposed "mice" call (`miprop`) and the seed for our "mice" call (`seed`) (so that our results are reproducible). We will also specify our substantive model of interest (`substmod`): a regression of BMI at 7 years on maternal age (fitting a quadratic relationship) and maternal education. This is an optional step: if we specify the substantive model, it will be fitted automatically to each imputed dataset and the pooled results will be displayed (equivalent to using the "mice" functions `with` and `pool`). If the substantive model is not specified, only the imputation step will be performed. 
 
 ```{r}
-doMImice(miprop, 123, substmod=lm(bmi7 ~ matage + I(matage^2) + mated))
+doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 ```
 
 ## Illustration using our worked example
