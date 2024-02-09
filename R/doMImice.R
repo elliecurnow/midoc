@@ -6,8 +6,8 @@
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param seed An integer that is used to set the seed of the 'mice' call
 #' @param substmod Optionally, a symbolic description of the substantive model
-#'   to be fitted; if supplied, the model will be fitted to each imputed dataset
-#'   and the results pooled
+#'   to be fitted, specified as a string; if supplied, the model will be fitted
+#'   to each imputed dataset and the results pooled
 #'
 #' @return A 'mice' object of type 'mids'
 #' @export
@@ -19,8 +19,8 @@
 #'
 #' imp <- doMImice(miprop,123)
 #'
-#' doMImice(miprop, 123, substmod=lm(bmi7 ~ matage + I(matage^2) + mated))
-doMImice <- function(mipropobj, seed, substmod = NULL) {
+#' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
+doMImice <- function(mipropobj, seed, substmod = " ") {
 
   mids <- mice::mice(
         data = mipropobj$data,
@@ -32,10 +32,10 @@ doMImice <- function(mipropobj, seed, substmod = NULL) {
         seed = seed)
 
   #Optionally return the pooled estimates
-  substexpr <- deparse(substitute(substmod))
-  if(substexpr != "NULL"){
-    cat("Given the substantive model:", substexpr, strwrap("\nmultiple imputation estimates are as follows:"),"\n",fill=TRUE)
-    print(summary(mice::pool(with(mids,parse(text=substexpr, keep.source=FALSE))),conf.int=TRUE))
+  #substexpr <- deparse(substitute(substmod))
+  if(substmod != " "){
+    cat("Given the substantive model:", substmod, "\n", strwrap("\nmultiple imputation estimates are as follows:"),"\n",fill=TRUE)
+    print(summary(mice::pool(with(mids,parse(text=substmod, keep.source=FALSE))),conf.int=TRUE))
   }
   else {
     cat(strwrap("Now you have created your multiply imputed datasets, you can perform your analysis

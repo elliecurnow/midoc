@@ -4,7 +4,7 @@
 \alias{proposeMI}
 \title{Suggests multiple imputation options}
 \usage{
-proposeMI(mimodobj, data, diagplot = TRUE, printprompt = TRUE)
+proposeMI(mimodobj, data, message = TRUE, diagplot = TRUE, printprompt = TRUE)
 }
 \arguments{
 \item{mimodobj}{An object of type 'mimod', which stands for 'multiple
@@ -13,6 +13,9 @@ imputation model', created by a call to \link[midoc]{checkModSpec}}
 \item{data}{A data frame containing all the variables required for the
 imputation and substantive analysis models}
 
+\item{message}{If TRUE (the default), displays a message describing the
+proposed 'mice' options; use message=FALSE to suppress the message}
+
 \item{diagplot}{If TRUE (the default), displays diagnostic plots for the
 proposed 'mice' call; use diagplot=FALSE to disable the plots}
 
@@ -20,8 +23,9 @@ proposed 'mice' call; use diagplot=FALSE to disable the plots}
 second plot is displayed; use printprompt=FALSE to remove the prompt}
 }
 \value{
-A message describing the proposed 'mice' options, plus an object of
-type 'miprop', which can be used to run 'mice' using the proposed options
+An object of type 'miprop', which can be used to run 'mice' using the
+proposed options, plus, optionally, a message and diagnostic plots describing
+the proposed 'mice' options
 }
 \description{
 Suggests the optimal \link[mice]{mice} options to perform multiple

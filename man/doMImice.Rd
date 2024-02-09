@@ -4,7 +4,7 @@
 \alias{doMImice}
 \title{Performs multiple imputation}
 \usage{
-doMImice(mipropobj, seed, substmod = NULL)
+doMImice(mipropobj, seed, substmod = " ")
 }
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}
@@ -12,8 +12,8 @@ doMImice(mipropobj, seed, substmod = NULL)
 \item{seed}{An integer that is used to set the seed of the 'mice' call}
 
 \item{substmod}{Optionally, a symbolic description of the substantive model
-to be fitted; if supplied, the model will be fitted to each imputed dataset
-and the results pooled}
+to be fitted, specified as a string; if supplied, the model will be fitted
+to each imputed dataset and the results pooled}
 }
 \value{
 A 'mice' object of type 'mids'
@@ -29,5 +29,5 @@ miprop <- proposeMI(mimod, data=bmi)
 
 imp <- doMImice(miprop,123)
 
-doMImice(miprop, 123, substmod=lm(bmi7 ~ matage + I(matage^2) + mated))
+doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 }

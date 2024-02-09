@@ -11,10 +11,10 @@
 #'   used in the model, specified as a string; family functions that are
 #'   supported are "gaussian(identity)" and "binomial(logit)"
 #' @param data A data frame containing all the variables stated in the formula
-#' @param message If TRUE, displays a message indicating whether the
+#' @param message If TRUE (the default), displays a message indicating whether the
 #'   relationships between the dependent variable and covariates are likely to
 #'   be correctly specified or not; use message = FALSE to suppress the message
-#' @param modplot If TRUE and there is evidence of model mis-specification,
+#' @param modplot If TRUE (the default) and there is evidence of model mis-specification,
 #'   displays a plot which can be used to explore the functional form of each
 #'   covariate in the specified model; use modplot = FALSE to disable the plot
 #'
