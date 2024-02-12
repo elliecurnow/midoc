@@ -84,7 +84,7 @@ descMissData(y="bmi7", covs="matage mated", data=bmi)
 
 We see that there are two missing data patterns: either all variables are observed, or BMI at age 7 years is missing and all covariates are observed. 
 
-**You can list the missing data patterns in your own dataset using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can list the missing data patterns in your own dataset using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed.**
 
 ```{r, include=FALSE}
 
@@ -111,7 +111,10 @@ ui <- shiny::fluidPage(
                            label = "Upload CSV file",
                            accept = c("text/csv",
                             "text/comma-separated-values,
-                            .csv"))
+                            .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           
           ),
 
@@ -130,20 +133,19 @@ ui <- shiny::fluidPage(
 ```{r, include=FALSE}
 
 server <- function(input, output) {
-  
-    data <- reactive({
+    data <- shiny::reactive({
         if (!is.null(input$datafile)) {
           read.csv(input$datafile$datapath)
         } else {
           return(bmi)
           }
-      })
-      
-    output$descmissdata <- shiny::renderPrint({
-
-    midoc::descMissData(input$y,input$covs,data())
-  
     })
+    
+    output$descmissdata <- shiny::bindEvent(shiny::renderPrint({
+      
+        midoc::descMissData(input$y,input$covs,data())
+  
+        }), input$go)
 }
 ```
 
@@ -182,7 +184,7 @@ plot(dagitty::dagitty('dag {
   }'))
 ```
 
-**You can draw your own DAG using a Shiny app, by editing the text in the box below. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can draw your own DAG using a Shiny app, by editing the text in the box below.**
 
 ```{r, include=FALSE}
 
@@ -198,7 +200,10 @@ ui <- shiny::fluidPage(
     shiny::sidebarPanel(
           shiny::textAreaInput("mdag",
                   label = "Directed acyclic graph",
-                  value = 'mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r')
+                  value = 'mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r'),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           ),
 
     # Main panel for displaying outputs ----
@@ -224,7 +229,7 @@ server <- function(input, output) {
     
     #output$testvar = renderText(print(mdagspec()))
     
-    output$mdagplot <- shiny::renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T)))
+    output$mdagplot <- shiny::bindEvent(shiny::renderPlot(plot(dagitty::dagitty(mdagspec(),layout=T))), input$go)
 
 }
 ```
@@ -244,7 +249,7 @@ exploreDAG(mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r"
 
 Based on the relationships between fully observed variables maternal age, maternal education, and missingness of BMI at age 7 years, we can see that there is little evidence of inconsistency between our dataset and proposed mDAG. In particular, our mDAG assumes that maternal age (`matage`) is unrelated to missingness of BMI at age 7 years (`r`), given maternal education (`mated`); our results suggest this is plausible. Note that we cannot use our observed data to explore whether BMI at age 7 years is unrelated to its own missingness - we would need the missing values of BMI at age 7 years in order to do this. 
 
-**You can explore whether relationships in your own dataset are consistent with your proposed mDAG using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can explore whether relationships in your own dataset are consistent with your proposed mDAG using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed.**
 
 ```{r, include=FALSE}
 
@@ -267,7 +272,10 @@ ui <- shiny::fluidPage(
                            label = "Upload CSV file",
                            accept = c("text/csv",
                             "text/comma-separated-values,
-                            .csv"))
+                            .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           
           ),
 
@@ -287,19 +295,19 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
   
-    data <- reactive({
+    data <- shiny::reactive({
         if (!is.null(input$datafile)) {
           read.csv(input$datafile$datapath)
         } else {
           return(bmi)
           }
       })
-      
-    output$exploredag <- shiny::renderPrint({
 
-    midoc::exploreDAG(input$mdag,data())
+    output$exploredag <- shiny::bindEvent(shiny::renderPrint({ 
+
+      midoc::exploreDAG(input$mdag,data())
   
-    })
+    }), input$go)
 }
 ```
 
@@ -353,7 +361,7 @@ checkCRA(y="bmi7", covs="matage mated", r="r",
          mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r bmi7 -> r")
 ```
 
-**You can check whether CRA is valid for your own DAG and analysis model using a Shiny app, by editing the text in the box below. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can check whether CRA is valid for your own DAG and analysis model using a Shiny app, by editing the text in the box below.**
 
 ```{r, include=FALSE}
 
@@ -381,7 +389,10 @@ ui <- shiny::fluidPage(
 
       shiny::textAreaInput(inputId = "mdag",
                   label = "Directed acyclic graph",
-                  value = "mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+                  value = "mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r"),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
     ),
 
     # Main panel for displaying outputs ----
@@ -400,11 +411,11 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
-  output$checkcra <- shiny::renderPrint({
+  output$checkcra <- shiny::bindEvent(shiny::renderPrint({
 
-  midoc::checkCRA(input$y,input$covs,input$r_cra,input$mdag)
+    midoc::checkCRA(input$y,input$covs,input$r_cra,input$mdag)
   
-    })
+    }), input$go)
 
 }
 ```
@@ -493,7 +504,7 @@ checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
 **Note**
 In theory, and as suggested by the `checkMI` results shown above, MI would be valid if we added both birth weight and pregnancy size as auxiliary variables in our imputation model (note that U is not needed, conditional on the other imputation model predictors). However, in practice, this strategy may still result in biased estimates, due to unmeasured confounding of the relationship between BMI at age 7 years and birth weight. We recommend not including colliders of the partially observed variable and its missingness as auxiliary variables [5](https://doi.org/10.3389/fepid.2023.1237447).
 
-**You can check whether MI is valid for your own DAG and imputation models (checking the imputation model for each partially observed variable in turn) using a Shiny app, by editing the text in the box below. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can check whether MI is valid for your own DAG and imputation models (checking the imputation model for each partially observed variable in turn) using a Shiny app, by editing the text in the box below.**
 
 ```{r, include=FALSE}
 
@@ -521,7 +532,10 @@ ui <- shiny::fluidPage(
 
       shiny::textAreaInput(inputId = "mdag",
                   label = "Directed acyclic graph",
-                  value = "mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+                  value = "mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r pregsize -> bmi7 pregsize -> bwt  U -> bwt"),
+          
+      shiny::actionButton(inputId = "go",
+                          label = "Create output")
     ),
 
     # Main panel for displaying outputs ----
@@ -540,11 +554,11 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
 
-  output$checkmi <- shiny::renderPrint({
+  output$checkmi <- shiny::bindEvent(shiny::renderPrint({
 
-  midoc::checkMI(input$dep,input$preds,input$r_dep,input$mdag)
+    midoc::checkMI(input$dep,input$preds,input$r_dep,input$mdag)
   
-    })
+    }), input$go)
 
 }
 ```
@@ -602,7 +616,7 @@ checkModSpec(formula="mated~bmi7+matage+I(matage^2)", family="binomial(logit)",
              data=bmi)
 ```
 
-**You can explore whether relationships in your own dataset are consistent with your proposed model using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that the diagnostic plot is not displayed (i.e. `modplot` is set to `FALSE`). Further note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can explore whether relationships in your own dataset are consistent with your proposed model using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that the diagnostic plot is not displayed (i.e. `modplot` is set to `FALSE`). Further note that if you do not upload a file, the default `bmi` dataset will be analysed.**
 
 ```{r, include=FALSE}
 
@@ -630,7 +644,10 @@ ui <- shiny::fluidPage(
                            label = "Upload CSV file",
                            accept = c("text/csv",
                             "text/comma-separated-values,
-                            .csv"))
+                            .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           
           ),
 
@@ -650,7 +667,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
   
-    data <- reactive({
+    data <- shiny::reactive({
         if (!is.null(input$datafile)) {
           read.csv(input$datafile$datapath)
         } else {
@@ -658,11 +675,11 @@ server <- function(input, output) {
           }
       })
       
-    output$checkmodspec <- shiny::renderPrint({
+    output$checkmodspec <- shiny::bindEvent(shiny::renderPrint({
 
-    midoc::checkModSpec(input$formula,input$family,data(),modplot=FALSE)
+      midoc::checkModSpec(input$formula,input$family,data(),modplot=FALSE)
   
-    })
+    }), input$go)
 }
 ```
 
@@ -700,7 +717,7 @@ mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 miprop <- proposeMI(mimod, data=bmi, printprompt=FALSE)
 ```
 
-**You can explore the optimal "mice" options for your own dataset, based on your specified imputation model, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that the diagnostic plots are not displayed (i.e. `diagplot` is set to `FALSE`). Further note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can explore the optimal "mice" options for your own dataset, based on your specified imputation model, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that the diagnostic plots are not displayed (i.e. `diagplot` is set to `FALSE`). Further note that if you do not upload a file, the default `bmi` dataset will be analysed.**
 
 ```{r, include=FALSE}
 
@@ -728,7 +745,10 @@ ui <- shiny::fluidPage(
                            label = "Upload CSV file",
                            accept = c("text/csv",
                             "text/comma-separated-values,
-                            .csv"))
+                            .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           
           ),
 
@@ -748,7 +768,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
   
-    data <- reactive({
+    data <- shiny::reactive({
         if (!is.null(input$datafile)) {
           read.csv(input$datafile$datapath)
         } else {
@@ -756,13 +776,13 @@ server <- function(input, output) {
           }
       })
     
-    mimod <- reactive(midoc::checkModSpec(input$formula,input$family,data(),message=FALSE,modplot=FALSE))
+    mimod <- shiny::reactive(midoc::checkModSpec(input$formula,input$family,data(),message=FALSE,modplot=FALSE))
     
-    output$proposemi <- shiny::renderPrint({
+    output$proposemi <- shiny::bindEvent(shiny::renderPrint({
 
-    midoc::proposeMI(mimod(),data(),diagplot=FALSE)
+      midoc::proposeMI(mimod(),data(),diagplot=FALSE)
   
-    })
+    }), input$go)
 }
 ```
 
@@ -780,7 +800,7 @@ Returning to our example, we will assume no further adjustment is required to th
 doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 ```
 
-**You can perform multiple imputation using "mice" for your own dataset, based on your specified imputation and analysis models, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed. Any "in-process" error messages can be ignored (i.e. while you update the input values).**
+**You can perform multiple imputation using "mice" for your own dataset, based on your specified imputation and analysis models, using a Shiny app, by uploading your dataset (in CSV format) and editing the text in the box below. Note that if you do not upload a file, the default `bmi` dataset will be analysed.**
 
 ```{r, include=FALSE}
 
@@ -816,7 +836,10 @@ ui <- shiny::fluidPage(
                            label = "Upload CSV file",
                            accept = c("text/csv",
                             "text/comma-separated-values,
-                            .csv"))
+                            .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "Create output")
           
           ),
 
@@ -836,7 +859,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output) {
   
-    data <- reactive({
+    data <- shiny::reactive({
         if (!is.null(input$datafile)) {
           read.csv(input$datafile$datapath)
         } else {
@@ -844,15 +867,15 @@ server <- function(input, output) {
           }
       })
     
-    mimod <- reactive(midoc::checkModSpec(input$impformula,input$impfamily,data(),message=FALSE,modplot=FALSE))
+    mimod <- shiny::reactive(midoc::checkModSpec(input$impformula,input$impfamily,data(),message=FALSE,modplot=FALSE))
     
-    miprop <- reactive(midoc::proposeMI(mimod(),data(),message=FALSE,diagplot=FALSE))
+    miprop <- shiny::reactive(midoc::proposeMI(mimod(),data(),message=FALSE,diagplot=FALSE))
     
-    output$domimice <- shiny::renderPrint({
+    output$domimice <- shiny::bindEvent(shiny::renderPrint({
 
-    midoc::doMImice(miprop(),input$seed,input$substmod)
+      midoc::doMImice(miprop(),input$seed,input$substmod)
   
-    })
+    }), input$go)
 }
 ```
 
