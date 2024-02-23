@@ -9,10 +9,10 @@
 #'   imputation and substantive analysis models
 #' @param message If TRUE (the default), displays a message describing the
 #'   proposed 'mice' options; use message=FALSE to suppress the message
-#' @param diagplot If TRUE (the default), displays diagnostic plots for the
-#'   proposed 'mice' call; use diagplot=FALSE to disable the plots
-#' @param printprompt If TRUE (the default), the user is prompted before the
-#'   second plot is displayed; use printprompt=FALSE to remove the prompt
+#' @param plot If TRUE (the default), displays diagnostic plots for the
+#'   proposed 'mice' call; use plot=FALSE to disable the plots
+#' @param plotprompt If TRUE (the default), the user is prompted before the
+#'   second plot is displayed; use plotprompt=FALSE to remove the prompt
 #'
 #' @return An object of type 'miprop', which can be used to run 'mice' using the
 #' proposed options, plus, optionally, a message and diagnostic plots describing
@@ -21,10 +21,12 @@
 #' @export
 #'
 #' @examples
+#' # First specify the imputation model as a 'mimod' object
 #' mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
-#' family="gaussian(identity)", data=bmi)
+#'   family="gaussian(identity)", data=bmi)
+#' # Next specify the optimal 'mice' options as a 'miprop' object
 #' proposeMI(mimod, data=bmi)
-proposeMI <- function(mimodobj, data, message = TRUE, diagplot = TRUE, printprompt = TRUE) {
+proposeMI <- function(mimodobj, data, message = TRUE, plot = TRUE, plotprompt = TRUE) {
 
   m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
 
@@ -59,7 +61,7 @@ proposeMI <- function(mimodobj, data, message = TRUE, diagplot = TRUE, printprom
   }
 
   #Optionally create a plot of observed versus imputed values and a trace plot for five imputed datasets
-  if (diagplot){
+  if (plot){
     imp <- mice::mice(data = data, method = method,
                       formulas = formulas_list, maxit = 20, printFlag = FALSE)
     #changed from bwplot to densityplot
@@ -67,7 +69,7 @@ proposeMI <- function(mimodobj, data, message = TRUE, diagplot = TRUE, printprom
           main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
 
     #Optionally prompt for second plot after first plot is displayed
-    if (printprompt){
+    if (plotprompt){
       oask <- grDevices::devAskNewPage(TRUE)
       print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
       #Reset original settings

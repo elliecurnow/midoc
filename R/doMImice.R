@@ -10,15 +10,20 @@
 #'   to each imputed dataset and the results pooled
 #'
 #' @return A 'mice' object of type 'mids'
+#'
 #' @export
 #'
 #' @examples
+#' # First specify the imputation model as a 'mimod' object
 #' mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 #'   family="gaussian(identity)", data=bmi)
+#' # Next specify the optimal 'mice' options as a 'miprop' object
 #' miprop <- proposeMI(mimod, data=bmi)
-#'
+#' # Create the set of imputed datasets using the proposed 'mice' options
 #' imp <- doMImice(miprop,123)
 #'
+#' # Additionally, fit the substantive model to each imputed dataset and display
+#' # the pooled results
 #' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 doMImice <- function(mipropobj, seed, substmod = " ") {
 

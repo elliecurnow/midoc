@@ -22,22 +22,31 @@
 #'
 #' @examples
 #' checkCRA(y="bmi7", covs="matage", r_cra="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r")
 #' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r")
 #' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r bmi7 -> r")
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r bmi7 -> r")
 checkCRA <- function(y, covs, r_cra, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   covsvec <- unlist(strsplit(covs," "))
   #If r does not depend on y conditional on covariates, then CRA is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), y, r_cra, covsvec)){
-    cat(strwrap("The analysis model outcome and complete record indicator are independent
+    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
+the analysis model outcome and complete record indicator are independent
 given analysis model covariates. Hence, complete records analysis is valid."),"\n",fill=TRUE)
   }
   else {
-    cat(strwrap("The analysis model outcome and complete record indicator are not independent
-given analysis model covariates. Hence, complete records analysis may not be valid."),"\n", fill=TRUE)
+    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
+the analysis model outcome and complete record indicator are not independent
+given analysis model covariates.
+Hence, in general, complete records analysis is not valid."),"\n",
+    strwrap("In special cases, depending on the type of analysis model and estimand of interest, complete
+records analysis may still be valid. See, for example, Bartlett et al. (2015)
+(https://doi.org/10.1093/aje/kwv114) for further details."),"\n", fill=TRUE)
 
     adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r_cra),outcome=y,type = "all")
     if(length(adjsets)==0){

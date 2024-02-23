@@ -26,27 +26,29 @@
 #'
 #' @examples
 #' checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
-#'  pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
 #' checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
-#'  pregsize -> bmi7 pregsize -> bwt  U -> bwt")
-#' checkMI(dep="matage", preds="bmi7 mated bwt", r_dep="r",
-#'  mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
-#'  pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+#' checkMI(dep="matage", preds="bmi7 mated", r_dep="r",
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
 checkMI <- function(dep, preds, r_dep, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   predsvec <- unlist(strsplit(preds," "))
   #If r_dep does not depend on dep conditional on predictors, then MI is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), dep, r_dep, predsvec)){
-    cat(strwrap("The incomplete variable and its missingness indicator are independent
+    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
+the incomplete variable and its missingness indicator are independent
 given imputation model predictors. Hence, multiple imputation methods which
 assume data are missing at random are valid in principle."), fill=TRUE)
   } else {
-    cat(strwrap("The incomplete variable and its missingness indicator are not independent
+    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
+the incomplete variable and its missingness indicator are not independent
 given imputation model predictors. Hence, multiple imputation methods which
-assume data are missing at random may not be valid.
-Consider using a different imputation model and/or strategy (e.g. not-at-random
+assume data are missing at random are not valid."),"\n",
+      strwrap("Consider using a different imputation model and/or strategy (e.g. not-at-random
 fully conditional specification)."),"\n",fill=TRUE)
       adjsets_r <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,r_dep),outcome=dep,type = "all")
       adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")

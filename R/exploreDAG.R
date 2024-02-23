@@ -15,9 +15,11 @@
 #' @export
 #'
 #' @examples
-#' exploreDAG(mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r", data=bmi)
-#' exploreDAG(mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
-#'  pregsize -> bmi7 pregsize -> bwt  U -> bwt", data=bmi)
+#' exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r", data=bmi)
+#' exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt",
+#'   data=bmi)
 exploreDAG <- function(mdag, data) {
   mod <- dagitty::dagitty(paste('dag {',mdag,'}'), layout=T)
 
@@ -32,18 +34,34 @@ exploreDAG <- function(mdag, data) {
                   tests)
   comptestsres <- dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis",abbreviate.names=FALSE)
   if(nrow(comptestsres)==0){
-    cat(strwrap("None of the fully observed variables are conditionally independent"))
+    cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
+conditional independencies
+(where, for example, 'X _||_ Y | Z' should be read as
+'X is independent of Y conditional on Z'):"),"\n",fill=TRUE)
+    print(tests)
+    cat("\n")
+    cat(strwrap("None of the fully observed variables are conditionally independent. \nConsider whether
+it is valid and possible to explore relationships between partially observed variables
+using the observed data, e.g. avoiding perfect prediction."),"\n",fill=TRUE)
   }else{
-  cat(strwrap("Method for exploring the relationships between fully observed variables given
-the proposed directed acyclic graph (DAG): linear conditional independence.
-See ??dagitty::localTests for further details."),"\n",fill=TRUE)
-  print(dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis",abbreviate.names=FALSE))
-  cat("\n",strwrap("A large p-value for a conditional model means there is little evidence of
-inconsistency between your data and the proposed DAG."),"\n",
-strwrap("A small p-value for a conditional model means your data may not be consistent
-with the proposed DAG. Note that these results assume that relationships between variables are linear.
-Consider exploring the specification of your DAG and each relationship in your model."),"\n",
-strwrap("Consider also exploring relationships with partially observed variables
-using the observed data, if valid and possible, i.e. avoiding perfect prediction."),"\n",fill=TRUE)
+    cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
+conditional independencies
+(where, for example, 'X _||_ Y | Z' should be read as
+'X is independent of Y conditional on Z'):"),"\n",fill=TRUE)
+    print(tests)
+    cat("\n")
+    cat(strwrap("Of these, the following relationships involve fully observed variables and are
+explored using the specified dataset."),"\n",fill=TRUE)
+    print(dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis",abbreviate.names=FALSE))
+    cat("\n")
+    cat(strwrap("Method for exploring the consistency of the specified dataset with
+the proposed DAG: linear conditional independence. See ??dagitty::localTests for further details."),"\n",
+    strwrap("Interpretation: A large p-value for a conditional model means there is little evidence of
+inconsistency between your data and the proposed DAG. \nA small p-value for a conditional model
+means your data may not be consistent with the proposed DAG."),"\n",
+strwrap("Note that these results assume that relationships between variables are linear.
+Consider exploring the specification of each relationship in your model. \nAlso consider whether
+it is valid and possible to explore relationships between partially observed variables
+using the observed data, e.g. avoiding perfect prediction."),"\n",fill=TRUE)
   }
 }
