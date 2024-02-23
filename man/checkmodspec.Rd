@@ -4,7 +4,7 @@
 \alias{checkModSpec}
 \title{Inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data, message = TRUE, modplot = TRUE)
+checkModSpec(formula, family, data, message = TRUE, plot = TRUE)
 }
 \arguments{
 \item{formula}{A symbolic description of the model to be fitted, with the
@@ -21,9 +21,9 @@ supported are "gaussian(identity)" and "binomial(logit)"}
 relationships between the dependent variable and covariates are likely to
 be correctly specified or not; use message = FALSE to suppress the message}
 
-\item{modplot}{If TRUE (the default) and there is evidence of model mis-specification,
+\item{plot}{If TRUE (the default) and there is evidence of model mis-specification,
 displays a plot which can be used to explore the functional form of each
-covariate in the specified model; use modplot = FALSE to disable the plot}
+covariate in the specified model; use plot = FALSE to disable the plot}
 }
 \value{
 An object of type 'miprop' (a list containing the
@@ -37,11 +37,13 @@ consistent with the proposed parametric model (which may represent the
 analysis or imputation model).
 }
 \examples{
-checkModSpec(formula="bmi7~matage+mated", family="gaussian(identity)", data=bmi)
+checkModSpec(formula="bmi7~matage+mated+pregsize",
+  family="gaussian(identity)", data=bmi)
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
   family="gaussian(identity)", data=bmi)
 
-checkModSpec(formula="mated~bmi7+matage", family="binomial(logit)", data=bmi)
-checkModSpec(formula="mated~bmi7+matage+I(matage^2)",
+checkModSpec(formula="pregsize~bmi7+matage+mated",
+  family="binomial(logit)", data=bmi)
+checkModSpec(formula="pregsize~bmi7+matage+I(matage^2)+mated",
   family="binomial(logit)", data=bmi)
 }

@@ -2,10 +2,12 @@
 % Please edit documentation in R/midocdemo.R
 \name{midocdemo}
 \alias{midocdemo}
-\title{Run a Shiny demo of midoc}
+\title{Run an interactive vignette for the midoc package}
 \usage{
 midocdemo()
 }
 \description{
-Run a Shiny demo of midoc
+Runs an interactive version of the midoc vignette: Multiple Imputation DOCtor
+(midoc). In the interactive version, you can apply midoc functions using your
+own DAG and data.
 }

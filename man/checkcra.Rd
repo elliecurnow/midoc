@@ -34,9 +34,12 @@ covariates (in causal inference this is referred to as 'd-separation').
 }
 \examples{
 checkCRA(y="bmi7", covs="matage", r_cra="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r")
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r")
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r")
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r bmi7 -> r")
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r bmi7 -> r")
 }

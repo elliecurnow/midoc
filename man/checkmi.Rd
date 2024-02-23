@@ -38,12 +38,12 @@ predictors.
 }
 \examples{
 checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
- pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
 checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
- pregsize -> bmi7 pregsize -> bwt  U -> bwt")
-checkMI(dep="matage", preds="bmi7 mated bwt", r_dep="r",
- mdag="mated -> bmi7 mated -> matage matage -> bmi7 U -> mated U -> r
- pregsize -> bmi7 pregsize -> bwt  U -> bwt")
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+checkMI(dep="matage", preds="bmi7 mated", r_dep="r",
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
 }
