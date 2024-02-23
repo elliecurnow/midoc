@@ -37,7 +37,7 @@ exploreDAG <- function(mdag, data) {
     cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
 conditional independencies
 (where, for example, 'X _||_ Y | Z' should be read as
-'X is independent of Y conditional on Z'):"),"\n",fill=TRUE)
+'X is independent of Y conditional on Z'). Note that variable names are abbreviated:"),"\n",fill=TRUE)
     print(tests)
     cat("\n")
     cat(strwrap("None of the fully observed variables are conditionally independent. \nConsider whether
@@ -47,7 +47,7 @@ using the observed data, e.g. avoiding perfect prediction."),"\n",fill=TRUE)
     cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
 conditional independencies
 (where, for example, 'X _||_ Y | Z' should be read as
-'X is independent of Y conditional on Z'):"),"\n",fill=TRUE)
+'X is independent of Y conditional on Z'). Note that variable names are abbreviated:"),"\n",fill=TRUE)
     print(tests)
     cat("\n")
     cat(strwrap("Of these, the following relationships involve fully observed variables and are
