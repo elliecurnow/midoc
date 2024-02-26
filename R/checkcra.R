@@ -7,7 +7,9 @@
 #'
 #' In general, complete records analysis is valid if the analysis model outcome
 #' and complete record indicator are unrelated, conditional on the specified
-#' covariates (in causal inference this is referred to as 'd-separation').
+#' covariates. This is determined using the proposed DAG by checking whether the
+#' analysis model and complete record indicator are 'd-separated', given the
+#' covariates.
 #'
 #' @param y The analysis model outcome, specified as a string
 #' @param covs The analysis model covariate(s), specified as a string (space

@@ -30,7 +30,9 @@ missingness, as well as all required missingness indicators.
 \details{
 In general, complete records analysis is valid if the analysis model outcome
 and complete record indicator are unrelated, conditional on the specified
-covariates (in causal inference this is referred to as 'd-separation').
+covariates. This is determined using the proposed DAG by checking whether the
+analysis model and complete record indicator are 'd-separated', given the
+covariates.
 }
 \examples{
 checkCRA(y="bmi7", covs="matage", r_cra="r",
