@@ -6,7 +6,7 @@
 #'
 #' @export
 #'
-runShinyVignette <- function() {
+midocVignette <- function() {
   appDir <- system.file("doc/midocdemoShiny.rmd", package = "midoc", mustWork=TRUE)
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `midoc`.", call. = FALSE)
