@@ -7,7 +7,8 @@
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
 #'   syntax
 #' @param data A data frame containing all the variables stated in the DAG. All
-#'   variables must be numeric.
+#'   ordinal variables must be integer-coded and all categorical variables must
+#'   be dummy-coded.
 #'
 #' @return A message indicating whether the relationships between fully observed
 #'   variables in the specified dataset are consistent with the proposed DAG
@@ -32,7 +33,7 @@ exploreDAG <- function(mdag, data) {
   tests <- dagitty::impliedConditionalIndependencies(mod)
   comptests <- Filter(function(x) all(x$X %in% compvar) & all(x$Y %in% compvar) & all(x$Z %in% compvar),
                   tests)
-  comptestsres <- dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis",abbreviate.names=FALSE)
+  comptestsres <- dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis.pillai",abbreviate.names=FALSE)
   if(nrow(comptestsres)==0){
     cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
 conditional independencies
@@ -51,11 +52,11 @@ conditional independencies
     print(tests)
     cat("\n")
     cat(strwrap("Of these, the following relationships involve fully observed variables and are
-explored using the specified dataset."),"\n",fill=TRUE)
-    print(dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis",abbreviate.names=FALSE))
+explored using the specified dataset:"),"\n",fill=TRUE)
+    print(dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis.pillai",abbreviate.names=FALSE))
     cat("\n")
     cat(strwrap("Method for exploring the consistency of the specified dataset with
-the proposed DAG: linear conditional independence. See ??dagitty::localTests for further details."),"\n",
+the proposed DAG: canonical correlations approach for mixed data. See ??dagitty::localTests for further details."),"\n",
     strwrap("Interpretation: A large p-value for a conditional model means there is little evidence of
 inconsistency between your data and the proposed DAG. \nA small p-value for a conditional model
 means your data may not be consistent with the proposed DAG."),"\n",
