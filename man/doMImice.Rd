@@ -24,10 +24,11 @@ options and dataset specified by a call to  \link[midoc]{proposeMI}.
 }
 \examples{
 # First specify the imputation model as a 'mimod' object
-mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+mimod_bmi7 <- checkModSpec(
+  formula="bmi7~matage+I(matage^2)+mated+pregsize",
   family="gaussian(identity)", data=bmi)
-# Next specify the optimal 'mice' options as a 'miprop' object
-miprop <- proposeMI(mimod, data=bmi)
+# Save the proposed 'mice' options as a 'miprop' object
+miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 # Create the set of imputed datasets using the proposed 'mice' options
 imp <- doMImice(miprop,123)
 

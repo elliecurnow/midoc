@@ -11,7 +11,8 @@ exploreDAG(mdag, data)
 syntax}
 
 \item{data}{A data frame containing all the variables stated in the DAG. All
-variables must be numeric.}
+ordinal variables must be integer-coded and all categorical variables must
+be dummy-coded.}
 }
 \value{
 A message indicating whether the relationships between fully observed

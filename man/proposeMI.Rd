@@ -7,11 +7,12 @@
 proposeMI(mimodobj, data, message = TRUE, plot = TRUE, plotprompt = TRUE)
 }
 \arguments{
-\item{mimodobj}{An object of type 'mimod', which stands for 'multiple
-imputation model', created by a call to \link[midoc]{checkModSpec}}
+\item{mimodobj}{An object, or list of objects, of type 'mimod', which stands
+for 'multiple imputation model', created by a call to
+\link[midoc]{checkModSpec}}
 
-\item{data}{A data frame containing all the variables required for the
-imputation and substantive analysis models}
+\item{data}{A data frame containing all the variables required for imputation
+and the substantive analysis}
 
 \item{message}{If TRUE (the default), displays a message describing the
 proposed 'mice' options; use message=FALSE to suppress the message}
@@ -28,13 +29,22 @@ proposed options, plus, optionally, a message and diagnostic plots describing
 the proposed 'mice' options
 }
 \description{
-Suggests the optimal \link[mice]{mice} options to perform multiple
-imputation, based on the proposed imputation model and specified dataset.
+Suggests the \link[mice]{mice} options to perform multiple
+imputation, based on the proposed set of imputation models (one for each
+partially observed variable) and specified dataset.
 }
 \examples{
-# First specify the imputation model as a 'mimod' object
-mimod <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+# First specify each imputation model as a 'mimod' object
+mimod_bmi7 <- checkModSpec(
+formula="bmi7~matage+I(matage^2)+mated+pregsize",
   family="gaussian(identity)", data=bmi)
-# Next specify the optimal 'mice' options as a 'miprop' object
-proposeMI(mimod, data=bmi)
+mimod_pregsize <- checkModSpec(
+formula="pregsize~bmi7+matage+I(matage^2)+mated",
+  family="binomial(logit)", data=bmi)
+
+# Display the proposed 'mice' options
+# Specifying a single imputation model
+proposeMI(mimodobj=mimod_bmi7, data=bmi)
+# Specifying more than one imputation model
+proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize), data=bmi)
 }
