@@ -43,6 +43,11 @@ bmi<-data.frame(bmi7=bmi7_m1,matage=matage_sc,mated,pregsize,bwt=bwt_sc)
 bmi$r <- ifelse(apply(bmi,1,anyNA)==F,1,0)
 summary(bmi$r)
 
+#Define binary variables
+bmi$mated <- as.factor(bmi$mated)
+bmi$pregsize <- as.factor(bmi$pregsize)
+bmi$r <- as.factor(bmi$r)
+
 usethis::use_data(bmi, overwrite = TRUE)
 
 #Run analyses for vignette results table - marginal model
