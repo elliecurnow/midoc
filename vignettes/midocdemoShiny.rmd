@@ -76,7 +76,9 @@ We will start by specifying the relationships between our variables, assuming th
 
 We will assume maternal age (`matage`) causes BMI at age 7 years (`bmi7`), and maternal education level (`mated`) causes both maternal age and BMI at age 7 years. We can express these relationships using "dagitty" syntax, as follows:
 
-`mated -> bmi7 mated -> matage matage -> bmi7`
+```{r, eval=FALSE, R.options=list(width=80)}
+matage -> bmi7 mated -> matage mated -> bmi7
+```
 
 Next, for each partially observed variable, we will specify the variables related to its probability of being missing (its "missingness") by adding these relationships to our DAG. This type of DAG is often referred to as a "missingness" DAG (mDAG) [1](https://doi.org/10.1177/0962280210394469), [2](https://doi.org/10.1093/ije/dyad008). 
 
@@ -163,11 +165,15 @@ Returning to our worked example, we will use indicator variable "R" to denote th
 
 Our mDAG is now as follows (note that we follow the convention of using lower case names for variables in our code, so R becomes "r", and so on):
 
-`matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas -> mated sep_unmeas -> r`
+```{r, eval=FALSE, R.options=list(width=80)}
+matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas -> mated sep_unmeas -> r
+```
 
 Note that if instead you believe maternal education is a direct cause of R, the mDAG would be as follows:
 
-`matage -> bmi7 mated -> matage mated -> bmi7 mated -> r`
+```{r, eval=FALSE, R.options=list(width=80)}
+matage -> bmi7 mated -> matage mated -> bmi7 mated -> r
+```
 
 We will now draw our mDAG and visually check that the relationships are specified as we intended:
 
@@ -811,7 +817,17 @@ shiny::shinyApp(ui = ui, server = server)
 
 ```
 
+**Note** Given multiple partially observed variables, we can specify a list of imputation models (one for each partially observed variable) in `proposeMI` (although note that the Shiny app above only allows a single imputation model to be specified). For example, suppose pregnancy size was also partially observed (assuming, for simplicity, that pregnancy size was missing completely at random). Then we could construct our proposed "mice" call using `proposeMI`, as follows:
 
+```{r, eval=FALSE}
+mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize", 
+                      family="gaussian(identity)", data=bmi,
+                      message=FALSE)
+mimod_pregsize <- checkModSpec(formula="pregsize~bmi7+matage+I(matage^2)+mated",
+                      family="binomial(logit)", data=bmi,
+                      message=FALSE)
+proposeMI(mimodobj=list(mimod_bmi7, mimod_pregsize), data=bmi)
+```
 
 Returning to our example, we will assume no further adjustment is required to the proposed "mice" call. We will use the `midoc` function `doMImice` to perform MI, specifying our proposed "mice" call (`miprop`) and the seed for our "mice" call (`seed`) (so that our results are reproducible). We will also specify our substantive model of interest (`substmod`): a regression of BMI at 7 years on maternal age (fitting a quadratic relationship) and maternal education. This is an optional step: if we specify the substantive model, it will be fitted automatically to each imputed dataset and the pooled results will be displayed (equivalent to using the "mice" functions `with` and `pool`). If the substantive model is not specified, only the imputation step will be performed. 
 
