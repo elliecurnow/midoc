@@ -15,7 +15,7 @@ bmi7 <- rnorm(1000, -0.4 - pregsize + 0.4*matage - 0.8*mated + 0.6*matage^2,1)
 # bwt - strongly associated with U and pregsize
 bwt <- rnorm(1000, 10*pregsize + 10*U, 1)
 
-#rescale bmi7, bwt, and matage to more realistic values (x scaled so par est interprested as per 1 SD change relative to mean age of 30)
+#rescale bmi7, bwt, and matage to more realistic values (x scaled so par est interpreted as per 1 SD change relative to mean age of 30)
 mean(bmi7)
 sd(bmi7)
 bmi7_sc=((bmi7-0.27)/1.84)*2+18
