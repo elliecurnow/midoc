@@ -12,14 +12,18 @@ articles:
   href: articles/midoc.html
 reference:
   - title: Explore Data
-  contents:
-  - descMissData
-  - exploreDAG
+    contents:
+    - descMissData
+    - exploreDAG
   - title: Check Validity
-  contents:
-  - checkCRA
-  - checkMI
+    contents:
+    - checkCRA
+    - checkMI
   - title: Implement MI
-  contents:
-  - proposeMI
-  - doMImice
+    contents:
+    - proposeMI
+    - doMImice
+  -  title: Examples and Vignettes
+     contents:
+     - bmi
+     - midocVignette
