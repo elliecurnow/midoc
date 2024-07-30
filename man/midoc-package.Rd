@@ -8,6 +8,13 @@
 \description{
 midoc will guide researchers through their analyses, examining the structure of the dataset to advise on whether multiple imputation is needed, and if so how to perform it. Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. However, using MI in practice can be complex. Application of MI involves multiple decisions which are rarely justified or even documented, and for which little guidance is available. midoc is a decision-making system which incorporates expert, up-to-date guidance to help researchers choose the most appropriate analysis method when there are missing data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://elliecurnow.github.io/midoc/}
+}
+
+}
 \author{
 \strong{Maintainer}: Elinor Curnow \email{elinor.curnow@bristol.ac.uk} (\href{https://orcid.org/0000-0002-3109-3647}{ORCID})
 
