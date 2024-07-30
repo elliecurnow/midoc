@@ -20,23 +20,27 @@ navbar:
     - text: Multiple Imputation Doctor (midoc)
       href: articles/midoc.html
   reference:
-    - title: "Explore"
-    desc: Explore missing data patterns and mechanisms
-    contents:
-    - descMissData
-    - exploreDAG
-    - title: "Check"
-    desc: Check whether complete records analysis and multiple imputation are valid 
-    contents:
-    - checkCRA
-    - checkMI
-    - title: "Implement"
-    desc: Implement a suitable multiple imputation strategy 
-    contents:
-    - proposeMI
-    - doMImice
-    - title: "Examples and Vignettes"
-    desc: Example dataset and interactive vignette
-    contents:
-    - bmi
-    - midocVignette
+    - title: Explore
+      desc: >
+        Explore missing data patterns and mechanisms
+      contents:
+      - descMissData
+      - exploreDAG
+    - title: Check
+      desc: >
+        Check whether complete records analysis and multiple imputation are valid 
+      contents:
+      - checkCRA
+      - checkMI
+    - title: Implement
+        desc: >
+          Implement a suitable multiple imputation strategy 
+        contents:
+        - proposeMI
+        - doMImice
+    -  title: Examples and Vignettes
+        desc: >
+          Example dataset and interactive vignette
+        contents:
+        - bmi
+        - midocVignette
