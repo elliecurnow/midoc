@@ -18,16 +18,16 @@ navbar:
     menu:
     - text: Multiple Imputation Doctor (midoc)
       href: articles/midoc.html
-  reference:
-    - title: Explore
+    reference:
+    - title: Explore Data
       contents:
       - descMissData
       - exploreDAG
-    - title: Check
+    - title: Check Validity
       contents:
       - checkCRA
       - checkMI
-    - title: Implement
+    - title: Implement MI
       contents:
       - proposeMI
       - doMImice
