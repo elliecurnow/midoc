@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Multiple Imputation DOCtor (midoc) • midoc</title>
+<title>Multiple Imputation DOCtor (midoc) Shiny version • midoc</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Multiple Imputation DOCtor (midoc)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Multiple Imputation DOCtor (midoc) Shiny version">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="../articles/midoc.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/midoc.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -56,13 +56,13 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Multiple Imputation DOCtor (midoc)</h1>
+      <h1>Multiple Imputation DOCtor (midoc) Shiny version</h1>
                         <h4 data-toc-skip class="author">Elinor Curnow,
 Jon Heron, Rosie Cornish, Kate Tilling, and James Carpenter</h4>
             
       
 
-      <div class="d-none name"><code>midoc.rmd</code></div>
+      <div class="d-none name"><code>midocdemoShiny.rmd</code></div>
     </div>
 
     
@@ -94,10 +94,14 @@ Jon Heron, Rosie Cornish, Kate Tilling, and James Carpenter</h4>
   caption{
   color: black;
   font-weight: bold;
-}
+  }
+  .main-container {
+  max-width: 90% !important;
+  margin: auto;
+  }
 </style>
 <div class="section level2">
-<h2 id="about-midoc">About midoc<a class="anchor" aria-label="anchor" href="#about-midoc"></a>
+<h2 id="section-about-midoc">About midoc<a class="anchor" aria-label="anchor" href="#section-about-midoc"></a>
 </h2>
 <p>Missing data is a common issue in health and social research, often
 addressed by multiple imputation (MI). MI is a flexible and general
@@ -113,7 +117,7 @@ examining both the hypothesised causal relationships and the observed
 data to advise on whether MI is needed, and if so how to perform it. We
 assume you are interested in obtaining unbiased estimates of regression
 coefficients - note that bias is not necessarily a concern if your
-interest is in prediction (<em>i.e.</em> diagnostic/prognostic
+interest is in prediction only (<em>i.e.</em> diagnostic/prognostic
 modelling).</p>
 <p>Here, we will demonstrate the key features of <code>midoc</code>
 using a worked example.</p>
@@ -126,16 +130,14 @@ are included in the <code>midoc</code> package in the <code>bmi</code>
 dataset. The dataset contains 1000 observations, with realistic values
 for each variable, and exaggerated relationships between variables (to
 highlight the consequences of our choice of analysis approach).</p>
-<p><strong>Note</strong> An interactive version of this vignette:
-<em>Multiple Imputation DOCtor (midoc) Shiny version</em> is also
-available to run locally (you can run this using the <code>midoc</code>
-command <code><a href="../reference/midocVignette.html">midocVignette()</a></code>). In the interactive version, you
-can apply features of <code>midoc</code> described here using your own
-DAG and data.</p>
+<p><strong>Note</strong> This is an interactive version of the
+<code>midoc</code> vignette: <em>Multiple Imputation DOCtor
+(midoc)</em>. In this version, you can apply features of
+<code>midoc</code> using your own DAG and data.</p>
 </div>
 <div class="section level2">
-<h2 id="step-1-specify-the-analysis-and-missingness-models-using-a-directed-acyclic-graph">Step 1 Specify the analysis and missingness models using a directed
-acyclic graph<a class="anchor" aria-label="anchor" href="#step-1-specify-the-analysis-and-missingness-models-using-a-directed-acyclic-graph"></a>
+<h2 id="section-step-1-specify-the-analysis-and-missingness-models-using-a-directed-acyclic-graph">Step 1 Specify the analysis and missingness models using a directed
+acyclic graph<a class="anchor" aria-label="anchor" href="#section-step-1-specify-the-analysis-and-missingness-models-using-a-directed-acyclic-graph"></a>
 </h2>
 <p>First, we will construct a causal diagram, or directed acyclic graph
 (DAG) for our example, using syntax as per the <a href="https://doi.org/10.1093/ije/dyw341" class="external-link">dagitty</a> package.</p>
@@ -145,7 +147,7 @@ assuming there are no missing data.</p>
 years (<code>bmi7</code>), and maternal education level
 (<code>mated</code>) causes both maternal age and BMI at age 7 years. We
 can express these relationships using “dagitty” syntax, as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7</span></code></pre></div>
+<div class="sourceCode" id="section-cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="section-cb1-1"><a href="#section-cb1-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7</span></code></pre></div>
 <p>Next, for each partially observed variable, we will specify the
 variables related to its probability of being missing (its
 “missingness”) by adding these relationships to our DAG. This type of
@@ -155,44 +157,54 @@ DAG is often referred to as a “missingness” DAG (mDAG) <a href="https://doi.
 partially observed, specifying our outcome (<code>y</code>), covariates,
 <em>i.e.</em> our independent variables, (<code>covs</code>), and
 dataset (<code>data</code>), as follows.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code> pattern bmi7 matage mated   n pct
        1    1      1     1 592  59
        2    0      1     1 408  41</code></pre>
 <p>We see that there are two missing data patterns: either all variables
 are observed, or BMI at age 7 years is missing and all covariates are
-observed. We will use indicator variable “R” to denote the missingness
-of BMI at age 7 years (for example, R=1 if BMI at age 7 years is
-observed, and 0 otherwise). In this specific example, R also indicates a
-complete record (R=1 if all variables are fully observed, and 0
-otherwise) because all other variables are fully observed. We will
-suppose that R is related to maternal education level via socio-economic
-position (SEP), <em>i.e.</em> SEP is a cause of both maternal education
-level and R, but neither BMI at age 7 years itself nor maternal age are
-causes of R. We will further suppose that SEP is missing (unmeasured)
-for all individuals in our dataset; to remind us of this fact, we will
-name this variable <code>sep_unmeas</code>.</p>
+observed.</p>
+<p><strong>You can list the missing data patterns in your own dataset
+using a Shiny app, by uploading your dataset (in CSV format) and editing
+the text in the box below. Note that if you do not upload a file, the
+default <code>bmi</code> dataset will be analysed.</strong></p>
+<iframe data-deferred-src="app9f843966626ebf3228f01dcd2d7e8dcc/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<p>Returning to our worked example, we will use indicator variable “R”
+to denote the missingness of BMI at age 7 years (for example, R=1 if BMI
+at age 7 years is observed, and 0 otherwise). In this specific example,
+R also indicates a complete record (R=1 if all variables are fully
+observed, and 0 otherwise) because all other variables are fully
+observed. We will suppose that R is related to maternal education level
+via socio-economic position (SEP), <em>i.e.</em> SEP is a cause of both
+maternal education level and R, but neither BMI at age 7 years itself
+nor maternal age are causes of R. We will further suppose that SEP is
+missing (unmeasured) for all individuals in our dataset; to remind us of
+this fact, we will name this variable <code>sep_unmeas</code>.</p>
 <p>Our mDAG is now as follows (note that we follow the convention of
 using lower case names for variables in our code, so R becomes “r”, and
 so on):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7 sep_unmeas <span class="ot">-&gt;</span> mated sep_unmeas <span class="ot">-&gt;</span> r</span></code></pre></div>
+<div class="sourceCode" id="section-cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="section-cb4-1"><a href="#section-cb4-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7 sep_unmeas <span class="ot">-&gt;</span> mated sep_unmeas <span class="ot">-&gt;</span> r</span></code></pre></div>
 <p>Note that if instead you believe maternal education is a direct cause
 of R, the mDAG would be as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> r</span></code></pre></div>
+<div class="sourceCode" id="section-cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="section-cb5-1"><a href="#section-cb5-1" tabindex="-1"></a>matage <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> matage mated <span class="ot">-&gt;</span> bmi7 mated <span class="ot">-&gt;</span> r</span></code></pre></div>
 <p>We will now draw our mDAG and visually check that the relationships
 are specified as we intended:</p>
 <p><strong>Note</strong> We have used additional commands to specify the
 layout of the mDAG shown below - although this is not necessary when
 using <code>midoc</code>, go to the dagitty <a href="https://www.dagitty.net/" class="external-link">website</a> if you would like to find
 out more about using “dagitty” to draw mDAGs.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-7-1.png" width="500px" height="400px"></p>
+<p><img src="midocdemoShiny_files/figure-html/unnamed-chunk-10-1.png" width="500px" height="400px"></p>
+<p><strong>You can draw your own DAG using a Shiny app, by editing the
+text in the box below.</strong></p>
+<iframe data-deferred-src="app165933cc45ca4bf0341eda97053292b7/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p>As a final check of our mDAG, we will use the <code>midoc</code>
 function <code>exploreDAG</code> to explore whether relationships in the
 dataset are consistent with the proposed mDAG, specifying both our mDAG
 (<code>mdag</code>) and dataset (<code>data</code>), as follows.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="section-cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">           sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>The proposed directed acyclic graph (DAG) implies the following 
 conditional independencies (where, for example, 'X _||_ Y | Z' should 
 be read as 'X is independent of Y conditional on Z'). Note that 
@@ -236,6 +248,12 @@ results suggest this is plausible. Note that we cannot use our observed
 data to explore whether BMI at age 7 years is unrelated to its own
 missingness - we would need the missing values of BMI at age 7 years in
 order to do this.</p>
+<p><strong>You can explore whether relationships in your own dataset are
+consistent with your proposed mDAG using a Shiny app, by uploading your
+dataset (in CSV format) and editing the text in the box below. Note that
+if you do not upload a file, the default <code>bmi</code> dataset will
+be analysed.</strong></p>
+<iframe data-deferred-src="appc5ed28a3aca78e3675cfff93fcd8782b/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Tips for specifying a “missingness” DAG</strong></p>
 <ul>
 <li><p>First specify the DAG for the analysis model, as it would be if
@@ -259,8 +277,8 @@ large proportion of missing data to avoid perfect prediction</p></li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="step-2-check-whether-complete-records-analysis-is-likely-to-be-a-valid-strategy">Step 2 Check whether complete records analysis is likely to be a
-valid strategy<a class="anchor" aria-label="anchor" href="#step-2-check-whether-complete-records-analysis-is-likely-to-be-a-valid-strategy"></a>
+<h2 id="section-step-2-check-whether-complete-records-analysis-is-likely-to-be-a-valid-strategy">Step 2 Check whether complete records analysis is likely to be a
+valid strategy<a class="anchor" aria-label="anchor" href="#section-step-2-check-whether-complete-records-analysis-is-likely-to-be-a-valid-strategy"></a>
 </h2>
 <p>Our next step is to determine whether complete records analysis (CRA)
 is a valid strategy, using our mDAG. Remember that, in general, CRA will
@@ -278,9 +296,10 @@ is valid for this model, specifying our outcome (<code>y</code>),
 covariates, <em>i.e.</em> our independent variables,
 (<code>covs</code>), complete records indicator (<code>r_cra</code>),
 and mDAG (<code>mdag</code>), as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkcra.html">checkCRA</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></code></pre></div>
+<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">         sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model 
 outcome and complete record indicator are not independent given 
 analysis model covariates. Hence, in general, complete records analysis 
@@ -319,9 +338,10 @@ missingness of <code>bmi7</code>), so does not need to be included in
 our analysis model.</p>
 <p>If we add <code>mated</code> to the model and re-run
 <code>checkCRA</code>, as below, we see that CRA is now valid.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkcra.html">checkCRA</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></code></pre></div>
+<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">         sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model 
 outcome and complete record indicator are independent given analysis 
 model covariates. Hence, complete records analysis is valid. </code></pre>
@@ -331,9 +351,10 @@ would be no other variables we could add to the analysis model to make
 CRA valid. See below to see the results of <code>checkCRA</code> in this
 case (note, in the code, we have added a path from <code>bmi7</code> to
 <code>r</code> to the specified mDAG).</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkcra.html">checkCRA</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r bmi7 -&gt; r"</span><span class="op">)</span></span></code></pre></div>
+<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">         sep_unmeas -&gt; mated sep_unmeas -&gt; r bmi7 -&gt; r"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model 
 outcome and complete record indicator are not independent given 
 analysis model covariates. Hence, in general, complete records analysis 
@@ -347,10 +368,14 @@ for further details.
 There are no other variables which could be added to the model to make 
 the analysis model outcome and complete record indicator conditionally 
 independent.  Consider using a different strategy e.g. multiple imputation.</code></pre>
+<p><strong>You can check whether CRA is valid for your own DAG and
+analysis model using a Shiny app, by editing the text in the box
+below.</strong></p>
+<iframe data-deferred-src="app3c2cb1f79985cb66973db41f7e7db125/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
-<h2 id="step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
-strategy<a class="anchor" aria-label="anchor" href="#step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy"></a>
+<h2 id="section-step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
+strategy<a class="anchor" aria-label="anchor" href="#section-step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy"></a>
 </h2>
 <p>Although CRA is valid for our example, we may also wish to perform
 MI. Remember that MI is valid in principle if each partially observed
@@ -391,8 +416,9 @@ variables: pregnancy size - singleton or multiple birth -
 (<code>pregsize</code>) and birth weight (<code>bwt</code>). We will
 inspect the missing data patterns in our dataset once again, having
 included our auxiliary variables, using <code>descMissData</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated pregsize bwt"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="section-cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated pregsize bwt"</span>, </span>
+<span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code> pattern bmi7 matage mated pregsize bwt   n pct
        1    1      1     1        1   1 592  59
        2    0      1     1        1   1 408  41</code></pre>
@@ -402,13 +428,15 @@ not its missingness, whereas we assume birth weight is related to both
 BMI at 7 years (via pregnancy size) and its missingness (via SEP). We
 will now add these variables to our mDAG. Below, we have shown our
 updated mDAG.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" width="500px" height="400px"></p>
+<p><img src="midocdemoShiny_files/figure-html/unnamed-chunk-25-1.png" width="500px" height="400px"></p>
 <p>We will also once again explore whether relationships in the dataset
 are consistent with the updated mDAG using <code>exploreDAG</code>, as
 follows.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
-<span><span class="st">           pregsize -&gt; bmi7 pregsize -&gt; bwt  sep_unmeas -&gt; bwt"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="section-cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">            sep_unmeas -&gt; mated  sep_unmeas-&gt; r </span></span>
+<span><span class="st">            pregsize -&gt; bmi7 pregsize -&gt; bwt sep_unmeas -&gt; bwt"</span>, </span>
+<span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>The proposed directed acyclic graph (DAG) implies the following 
 conditional independencies (where, for example, 'X _||_ Y | Z' should 
 be read as 'X is independent of Y conditional on Z'). Note that 
@@ -459,10 +487,11 @@ data, e.g. avoiding perfect prediction. </code></pre>
 <p>Our results suggest that our updated mDAG is plausible.</p>
 <p>Note that CRA is still valid for our updated mDAG. We can check this
 using <code>checkCRA</code> once more:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkcra.html">checkCRA</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
-<span><span class="st">         pregsize -&gt; bmi7 pregsize -&gt; bwt  sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
+<span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">         sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
+<span><span class="st">         pregsize -&gt; bmi7 pregsize -&gt; bwt sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model 
 outcome and complete record indicator are independent given analysis 
 model covariates. Hence, complete records analysis is valid. </code></pre>
@@ -477,10 +506,11 @@ variable (<code>r_dep</code>), and mDAG (<code>mdag</code>).</p>
 The results are shown below. These suggest that MI would be valid in
 principle if we included pregnancy size as well as the other analysis
 model variables in the imputation model for BMI at age 7 years.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmi.html">checkMI</a></span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage mated pregsize"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
-<span><span class="st">        pregsize -&gt; bmi7 pregsize -&gt; bwt  sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
+<span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">        sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
+<span><span class="st">        pregsize -&gt; bmi7 pregsize -&gt; bwtsep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the incomplete 
 variable and its missingness indicator are independent given imputation 
 model predictors. Hence, multiple imputation methods which assume data 
@@ -493,10 +523,11 @@ inspecting our mDAG: since <code>bwt</code> shares a common cause with
 both <code>bmi7</code> and <code>r</code>, it is a “collider”, and hence
 conditioning on <code>bwt</code> opens a path from <code>bmi7</code> to
 <code>r</code> via <code>bwt</code>).</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmi.html">checkMI</a></span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage mated bwt"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
-<span><span class="st">        pregsize -&gt; bmi7 pregsize -&gt; bwt  sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
+<span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 </span></span>
+<span><span class="st">        sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
+<span><span class="st">        pregsize -&gt; bmi7 pregsize -&gt; bwt sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the incomplete 
 variable and its missingness indicator are not independent given 
 imputation model predictors. Hence, multiple imputation methods which 
@@ -522,9 +553,14 @@ still result in biased estimates, due to unmeasured confounding of the
 relationship between BMI at age 7 years and birth weight. We recommend
 not including colliders of the partially observed variable and its
 missingness as auxiliary variables <a href="https://doi.org/10.3389/fepid.2023.1237447" class="external-link">6</a>.</p>
+<p><strong>You can check whether MI is valid for your own DAG and
+imputation models (checking the imputation model for each partially
+observed variable in turn) using a Shiny app, by editing the text in the
+box below.</strong></p>
+<iframe data-deferred-src="appadc3cc88a6d4b615106128d6daafbaab/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
-<h2 id="step-4-check-that-all-relationships-are-correctly-specified">Step 4 Check that all relationships are correctly specified<a class="anchor" aria-label="anchor" href="#step-4-check-that-all-relationships-are-correctly-specified"></a>
+<h2 id="section-step-4-check-that-all-relationships-are-correctly-specified">Step 4 Check that all relationships are correctly specified<a class="anchor" aria-label="anchor" href="#section-step-4-check-that-all-relationships-are-correctly-specified"></a>
 </h2>
 <p>So far, we have explored whether CRA and MI are valid <em>in
 principle</em> using our mDAG, without making any assumptions about the
@@ -559,8 +595,9 @@ is mis-specified. A plot of the residuals versus the fitted values from
 our model (which is automatically displayed if there is evidence of
 model mis-specification), suggests there may be a quadratic relationship
 between BMI at age 7 years and maternal age.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>, family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
+<div class="sourceCode" id="section-cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>, </span>
+<span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Model mis-specification method: regression of model residuals on a 
 fractional polynomial of the fitted values 
@@ -568,14 +605,15 @@ fractional polynomial of the fitted values
 
 A small p-value means the model may be mis-specified. Check the 
 specification of each relationship in your model. </code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="midocdemoShiny_files/figure-html/unnamed-chunk-33-1.png" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
 7 years and maternal age.</p>
 <p>The results below suggest there is no longer evidence of model
 mis-specification.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
+<div class="sourceCode" id="section-cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
+<span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Model mis-specification method: regression of model residuals on a 
 fractional polynomial of the fitted values 
@@ -591,8 +629,9 @@ years). Although there are no missing values for pregnancy size in our
 dataset, we can still explore the specification that we would need using
 <code>checkModSpec</code> as follows (note that we have suppressed the
 plot in this case using the <code>plot = FALSE</code> option):</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+bmi7+mated"</span>, family<span class="op">=</span><span class="st">"binomial(logit)"</span>,</span>
+<div class="sourceCode" id="section-cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+bmi7+mated"</span>, </span>
+<span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>,</span>
 <span>             data<span class="op">=</span><span class="va">bmi</span>, plot<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Model mis-specification method: Pregibon's link test 
  P-value: 0.03831304 
@@ -602,13 +641,22 @@ specification of each relationship in your model. </code></pre>
 <p>There is some evidence of model mis-specification.</p>
 <p>Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+I(matage^2)+bmi7+mated"</span>, family<span class="op">=</span><span class="st">"binomial(logit)"</span>, </span>
+<div class="sourceCode" id="section-cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+I(matage^2)+bmi7+mated"</span>, </span>
+<span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Model mis-specification method: Pregibon's link test 
  P-value: 0.5553561 
 
 A large p-value means there is little evidence of model mis-specification. </code></pre>
+<p><strong>You can explore whether relationships in your own dataset are
+consistent with your proposed model using a Shiny app, by uploading your
+dataset (in CSV format) and editing the text in the box below. Note that
+the diagnostic plot is not displayed (<em>i.e.</em> <code>plot</code> is
+set to <code>FALSE</code>). Further note that if you do not upload a
+file, the default <code>bmi</code> dataset will be
+analysed.</strong></p>
+<iframe data-deferred-src="appee39bd19cdcfc216bdc85e816157278a/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Tips for imputation model variable selection</strong></p>
 <ul>
 <li>
@@ -644,7 +692,7 @@ observed variable and its missingness</p></li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="step-5-perform-mi-using-the-proposed-imputation-model">Step 5 Perform MI using the proposed imputation model<a class="anchor" aria-label="anchor" href="#step-5-perform-mi-using-the-proposed-imputation-model"></a>
+<h2 id="section-step-5-perform-mi-using-the-proposed-imputation-model">Step 5 Perform MI using the proposed imputation model<a class="anchor" aria-label="anchor" href="#section-step-5-perform-mi-using-the-proposed-imputation-model"></a>
 </h2>
 <p>We have explored both the validity of MI in principle, using our
 mDAG, and the specification of our imputation model, based on our
@@ -656,9 +704,13 @@ specifying a quadratic relationship between BMI at age 7 years and
 maternal age) as a <code>mimod</code> object (note we have suppressed
 the <code>checkModSpec</code> output in this case using the
 <code>message = FALSE</code> option). We will then use this, along with
-our dataset, to construct our call of the “mice” function. Note we will
-also save our proposed “mice” call as a <code>miprop</code> object, to
-be used later.</p>
+our dataset, to construct our call of the “mice” function. Note the
+<code>plotprompt = FALSE</code> option of <code>proposeMI</code> is used
+to suppress user prompts to the R Console before displaying the second
+plot - this is useful in this vignette, but we recommend using the
+default value of <code>TRUE</code> in regular use of
+<code>proposeMI</code>. Note we will also save our proposed “mice” call
+as a <code>miprop</code> object, to be used later.</p>
 <p>The results are shown below. In particular, note that in the proposed
 “mice” call, the default values for the number of imputations, method,
 formulas, and number of iterations have been changed. Plots of the
@@ -668,11 +720,12 @@ using the proposed imputation method. Trace plots, showing the mean and
 standard deviation of the imputed values across iterations, are also
 displayed. Note that there is no need to adjust the number of iterations
 when, as in our dataset, only one variable is partially observed.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
-<span>                      family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span>,</span>
+<div class="sourceCode" id="section-cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mimod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
+<span>                      family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
+<span>                      data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                      message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span><span class="va">mimod</span>, data<span class="op">=</span><span class="va">bmi</span>, plotprompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on your proposed imputation model and dataset, your mice() call should be as follows: 
 mice(data =  bmi , # You may need to specify a subset of the columns in your dataset 
  
@@ -709,7 +762,15 @@ as imputation is performed
  
 seed = NA) # It is good practice to choose a seed so your results are 
 reproducible </code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" width="700"><img src="midoc_files/figure-html/unnamed-chunk-22-2.png" width="700"></p>
+<p><img src="midocdemoShiny_files/figure-html/unnamed-chunk-40-1.png" width="700"><img src="midocdemoShiny_files/figure-html/unnamed-chunk-40-2.png" width="700"></p>
+<p><strong>You can explore the optimal “mice” options for your own
+dataset, based on your specified imputation model, using a Shiny app, by
+uploading your dataset (in CSV format) and editing the text in the box
+below. Note that the diagnostic plots are not displayed (<em>i.e.</em>
+<code>plot</code> is set to <code>FALSE</code>). Further note that if
+you do not upload a file, the default <code>bmi</code> dataset will be
+analysed.</strong></p>
+<iframe data-deferred-src="app1314abd19b833874720a4246502e4dd7/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models (one for each partially observed
 variable) in <code>proposeMI</code> (although note that the Shiny app
@@ -718,7 +779,7 @@ example, suppose pregnancy size was also partially observed (assuming,
 for simplicity, that pregnancy size was missing completely at random).
 Then we could construct our proposed “mice” call using
 <code>proposeMI</code>, as follows:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="section-cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
 <span>                      family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                      message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -739,8 +800,9 @@ imputed dataset and the pooled results will be displayed (equivalent to
 using the “mice” functions <code>with</code> and <code>pool</code>). If
 the substantive model is not specified, only the imputation step will be
 performed.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/doMImice.html">doMImice</a></span><span class="op">(</span><span class="va">miprop</span>, <span class="fl">123</span>, substmod<span class="op">=</span><span class="st">"lm(bmi7 ~ matage + I(matage^2) + mated)"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="section-cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/doMImice.html">doMImice</a></span><span class="op">(</span><span class="va">miprop</span>, <span class="fl">123</span>, </span>
+<span>         substmod<span class="op">=</span><span class="st">"lm(bmi7 ~ matage + I(matage^2) + mated)"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) 
  
 multiple imputation estimates are as follows: 
@@ -755,9 +817,15 @@ multiple imputation estimates are as follows:
 2  1.0472648  1.2536442
 3  0.7778567  0.9051382
 4 -1.2156760 -0.7895629</code></pre>
+<p><strong>You can perform multiple imputation using “mice” for your own
+dataset, based on your specified imputation and analysis models, using a
+Shiny app, by uploading your dataset (in CSV format) and editing the
+text in the box below. Note that if you do not upload a file, the
+default <code>bmi</code> dataset will be analysed.</strong></p>
+<iframe data-deferred-src="app6bf8292835846134c30dc22c4d746acd/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
-<h2 id="illustration-using-our-worked-example">Illustration using our worked example<a class="anchor" aria-label="anchor" href="#illustration-using-our-worked-example"></a>
+<h2 id="section-illustration-using-our-worked-example">Illustration using our worked example<a class="anchor" aria-label="anchor" href="#section-illustration-using-our-worked-example"></a>
 </h2>
 <p>Finally, we illustrate how our choice of analysis approach affects
 the estimated association between maternal age and BMI at age 7 years,
