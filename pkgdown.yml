@@ -17,5 +17,23 @@ navbar:
     text: Articles
     menu:
     - text: Multiple Imputation Doctor (midoc)
-    - text: Multiple Imputation Doctor (midoc)
       href: articles/midoc.html
+    reference:
+    - title: Explore
+      desc: >
+        Explore missing data patterns and mechanisms
+      contents:
+      - descMissData
+      - exploreDAG
+    - title: Check
+      desc: >
+        Check whether complete records analysis and multiple imputation are valid 
+      contents:
+      - checkCRA
+      - checkMI
+    - title: Implement
+        desc: >
+          Implement a suitable multiple imputation strategy 
+        contents:
+        - proposeMI
+        - doMImice
