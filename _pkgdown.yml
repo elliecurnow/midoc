@@ -1,7 +1,6 @@
 url: https://elliecurnow.github.io/midoc/
 template:
   bootstrap: 5
-
 pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
@@ -21,26 +20,22 @@ navbar:
       href: articles/midoc.html
   reference:
     - title: Explore
-      desc: >
-        Explore missing data patterns and mechanisms
+      desc: Explore missing data patterns and mechanisms
       contents:
       - descMissData
       - exploreDAG
     - title: Check
-      desc: >
-        Check whether complete records analysis and multiple imputation are valid 
+      desc: Check whether complete records analysis and multiple imputation are valid 
       contents:
       - checkCRA
       - checkMI
     - title: Implement
-        desc: >
-          Implement a suitable multiple imputation strategy 
+        desc: Implement a suitable multiple imputation strategy 
         contents:
         - proposeMI
         - doMImice
     -  title: Examples and Vignettes
-        desc: >
-          Example dataset and interactive vignette
+        desc: Example dataset and interactive vignette
         contents:
         - bmi
         - midocVignette
