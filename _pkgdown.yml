@@ -2,3 +2,21 @@ url: https://elliecurnow.github.io/midoc/
 template:
   bootstrap: 5
 
+pandoc: 3.1.11
+pkgdown: 2.1.0
+pkgdown_sha: ~
+last_built: 2024-07-29T12:12Z
+urls:
+  reference: https://elliecurnow.github.io/midoc/reference
+  article: https://elliecurnow.github.io/midoc/articles
+navbar:
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [search, github, lightswitch]
+  components:
+   articles:
+    text: Articles
+    menu:
+    - text: Multiple Imputation Doctor (midoc)
+    - text: Multiple Imputation Doctor (midoc)
+      href: articles/midoc.html
