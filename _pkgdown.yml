@@ -28,11 +28,11 @@ navbar:
       - checkCRA
       - checkMI
     - title: Implement
-        contents:
-        - proposeMI
-        - doMImice
-    -  title: Examples and Vignettes
-        contents:
-        - bmi
-        - midocVignette
+      contents:
+      - proposeMI
+      - doMImice
+    - title: Examples and Vignettes
+      contents:
+      - bmi
+      - midocVignette
 
