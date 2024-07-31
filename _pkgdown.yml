@@ -1,43 +1,43 @@
 url: https://elliecurnow.github.io/midoc/
-template:
+  template:
   bootstrap: 5
 pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
-last_built: 2024-07-29T12:12Z
+  last_built: 2024-07-29T12:12Z
 urls:
   reference: https://elliecurnow.github.io/midoc/reference
-  article: https://elliecurnow.github.io/midoc/articles
+article: https://elliecurnow.github.io/midoc/articles
 navbar:
- components:
-   articles:
-    text: Articles
-    menu:
-    - text: Multiple Imputation DOCtor (midoc)
-      href: articles/midoc.html
+  components:
+  articles:
+  text: Articles
+menu:
+  - text: Multiple Imputation DOCtor (midoc)
+href: articles/midoc.html
 reference:
-      - title: Explore Data
-        desc: Explore missing data patterns and mechanisms
-      - contents:
-        - descMissData
-        - exploreDAG
-      - title: Check Validity
-        desc: Check whether complete records analysis and multiple imputation are valid
-      - contents:
-        - checkCRA
-        - checkMI
-      - title: Implement MI
-        desc: Implement a suitable multiple imputation strategy
-      - contents:
-        - checkModSpec
-        - proposeMI
-        - doMImice
-      - title: Examples and Vignettes
-        desc: Example dataset and interactive vignette
-      - contents:
-        - bmi
-        - midocVignette
-      - title: internal
+  - title: Explore Data
+desc: Explore missing data patterns and mechanisms
+- contents:
+  - descMissData
+- exploreDAG
+- title: Check Validity
+desc: Check whether complete records analysis and multiple imputation are valid
+- contents:
+  - checkCRA
+- checkMI
+- title: Implement MI
+desc: Implement a suitable multiple imputation strategy
+- contents:
+  - checkModSpec
+- proposeMI
+- doMImice
+- title: Examples and Vignettes
+desc: Example dataset and interactive vignette
+- contents:
+  - bmi
+- midocVignette
+- title: internal
 
 
 
