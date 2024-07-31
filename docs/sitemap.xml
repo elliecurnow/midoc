@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/404.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/midoc.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/articles/midoc.html</loc>
   </url>
   <url>
-    <loc>/articles/midocdemoShiny.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/articles/midocdemoShiny.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/reference/bmi.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/bmi.html</loc>
   </url>
   <url>
-    <loc>/reference/checkCRA.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/checkCRA.html</loc>
   </url>
   <url>
-    <loc>/reference/checkMI.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/checkMI.html</loc>
   </url>
   <url>
-    <loc>/reference/checkModSpec.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/checkModSpec.html</loc>
   </url>
   <url>
-    <loc>/reference/descMissData.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/descMissData.html</loc>
   </url>
   <url>
-    <loc>/reference/doMImice.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/doMImice.html</loc>
   </url>
   <url>
-    <loc>/reference/exploreDAG.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/exploreDAG.html</loc>
   </url>
   <url>
-    <loc>/reference/fp.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/fp.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/midoc-package.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/midoc-package.html</loc>
   </url>
   <url>
-    <loc>/reference/midocVignette.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/midocVignette.html</loc>
   </url>
   <url>
-    <loc>/reference/proposeMI.html</loc>
+    <loc>https://elliecurnow.github.io/midoc/reference/proposeMI.html</loc>
   </url>
 </urlset>

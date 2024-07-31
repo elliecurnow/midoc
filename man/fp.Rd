@@ -20,3 +20,4 @@ fp(x, df = 4, select = NA, alpha = NA, scale = TRUE)
 \description{
 Fractional Polynomial Transformation as per {mfp} package: Ambler G, Benner A (2022). mfp: Multivariable Fractional Polynomials. R package version 1.5.2.2, \url{https://CRAN.R-project.org/package=mfp}.
 }
+\keyword{internal}

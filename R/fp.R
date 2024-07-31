@@ -6,7 +6,7 @@
 #' @param alpha sets the FP selection level
 #' @param scale use pre-transformation scaling
 #'
-#' @export
+#' @keywords internal
 #'
 fp <- function (x, df = 4, select = NA, alpha = NA, scale = TRUE)
 {
