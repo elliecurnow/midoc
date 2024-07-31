@@ -1,15 +1,13 @@
 url: https://elliecurnow.github.io/midoc/
 template:
   bootstrap: 5
-<<<<<<< HEAD
-=======
 pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
   last_built: 2024-07-29T12:12Z
 urls:
   reference: https://elliecurnow.github.io/midoc/reference
-article: https://elliecurnow.github.io/midoc/articles
+  article: https://elliecurnow.github.io/midoc/articles
 navbar:
   components:
   articles:
@@ -17,8 +15,4 @@ navbar:
   menu:
   - text: Multiple Imputation DOCtor (midoc)
   href: articles/midoc.html
-
-
-
->>>>>>> 658e8349a74709bca0471d33a3d08259275eaf55
 
