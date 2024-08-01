@@ -4,7 +4,7 @@
 \alias{descMissData}
 \title{Lists missing data patterns in the specified dataset}
 \usage{
-descMissData(y, covs, data)
+descMissData(y, covs, data, plot = FALSE)
 }
 \arguments{
 \item{y}{The analysis model outcome, specified as a string}
@@ -14,6 +14,10 @@ delimited)}
 
 \item{data}{A data frame containing the specified analysis model outcome and
 covariate(s)}
+
+\item{plot}{If TRUE, displays a plot using \link[mice]{md.pattern} to
+visualise the missing data patterns; use plot = FALSE (the default) to
+disable the plot}
 }
 \value{
 A summary of the missing data patterns
@@ -31,5 +35,5 @@ e.g. 'y' could refer to the exposure, with all other variables listed in
 }
 \examples{
 descMissData(y="bmi7", covs="matage mated", data=bmi)
-descMissData(y="bmi7", covs="matage mated pregsize bwt", data=bmi)
+descMissData(y="bmi7", covs="matage mated pregsize bwt", data=bmi, plot=TRUE)
 }

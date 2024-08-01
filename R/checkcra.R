@@ -1,9 +1,13 @@
 #' Inspect complete records analysis model
 #'
 #' Check complete records analysis is valid under the proposed analysis model
-#' and directed acyclic graph (DAG). The DAG should include all observed and
-#' unobserved variables related to the analysis model variables and their
-#' missingness, as well as all required missingness indicators.
+#' and directed acyclic graph (DAG). Validity means that complete records
+#' analysis will allow unbiased estimation of regression parameters,
+#' associations, and causal effects.
+#'
+#' The DAG should include all observed and unobserved variables related to the
+#' analysis model variables and their missingness, as well as all required
+#' missingness indicators.
 #'
 #' In general, complete records analysis is valid if the analysis model outcome
 #' and complete record indicator are unrelated, conditional on the specified
@@ -32,6 +36,10 @@
 #' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 #'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
 #'   mated sep_unmeas -> r bmi7 -> r")
+#'   checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r matage -> bmi3 mated -> bmi3 bmi3 -> bmi7
+#'   bmi3 -> r")
 checkCRA <- function(y, covs, r_cra, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   covsvec <- unlist(strsplit(covs," "))
@@ -53,8 +61,18 @@ records analysis may still be valid. See, for example, Bartlett et al. (2015)
     adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r_cra),outcome=y,type = "all")
     if(length(adjsets)==0){
       cat(strwrap("There are no other variables which could be added to the model to make
-the analysis model outcome and complete record indicator conditionally independent.
-\nConsider using a different strategy e.g. multiple imputation."),fill=TRUE)
+the analysis model outcome and complete record indicator conditionally independent, without
+changing the estimand of interest."),"\n",
+          strwrap("Consider using a different strategy e.g. multiple imputation."),"\n",
+          fill=TRUE)
+      adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=y,type = "all")
+      if(length(adjsetsfull)>0){
+          cat(strwrap("Consider whether an estimand based on a different set of
+              variables could be of interest. For example, the analysis model
+              outcome and complete record indicator are independent given each of
+              the following sets of variables:"),"\n", fill=TRUE)
+          print(adjsetsfull)
+      }
     } else {
       cat(strwrap("Consider using a different analysis model and/or strategy, e.g. multiple imputation.
 \nFor example, the analysis model outcome and complete record indicator are independent
@@ -62,7 +80,7 @@ if, in addition to the specified covariates, the following sets of variables are
 as covariates in the analysis model (note that this list is not necessarily exhaustive,
 particularly if your DAG is complex):"),"\n", fill=TRUE)
       print(adjsets)
-      }
+    }
   }
 }
 

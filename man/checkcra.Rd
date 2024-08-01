@@ -23,11 +23,15 @@ the proposed DAG and analysis model outcome and covariate(s)
 }
 \description{
 Check complete records analysis is valid under the proposed analysis model
-and directed acyclic graph (DAG). The DAG should include all observed and
-unobserved variables related to the analysis model variables and their
-missingness, as well as all required missingness indicators.
+and directed acyclic graph (DAG). Validity means that complete records
+analysis will allow unbiased estimation of regression parameters,
+associations, and causal effects.
 }
 \details{
+The DAG should include all observed and unobserved variables related to the
+analysis model variables and their missingness, as well as all required
+missingness indicators.
+
 In general, complete records analysis is valid if the analysis model outcome
 and complete record indicator are unrelated, conditional on the specified
 covariates. This is determined using the proposed DAG by checking whether the
@@ -44,4 +48,8 @@ checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r bmi7 -> r")
+  checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+  mated sep_unmeas -> r matage -> bmi3 mated -> bmi3 bmi3 -> bmi7
+  bmi3 -> r")
 }

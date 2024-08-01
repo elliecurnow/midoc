@@ -41,26 +41,29 @@ conditional independencies
 'X is independent of Y conditional on Z'). Note that variable names are abbreviated:"),"\n",fill=TRUE)
     print(tests)
     cat("\n")
-    cat(strwrap("None of the fully observed variables are conditionally independent. \nConsider whether
+    cat(strwrap("None of the fully observed variables are conditionally independent.
+    \nHence, no consistency checks will be performed. \nConsider whether
 it is valid and possible to explore relationships between partially observed variables
 using the observed data, e.g. avoiding perfect prediction."),"\n",fill=TRUE)
   }else{
-    cat(strwrap("The proposed directed acyclic graph (DAG) implies the following
-conditional independencies
-(where, for example, 'X _||_ Y | Z' should be read as
-'X is independent of Y conditional on Z'). Note that variable names are abbreviated:"),"\n",fill=TRUE)
+    cat(strwrap("The proposed directed acyclic graph (DAG) implies that the
+    following pairs of variables are independent, or conditionally independent.
+    'X _||_ Y | Z' should be read as 'X is independent of Y conditional on Z'.
+    Note that variable names are abbreviated:"),"\n",fill=TRUE)
     print(tests)
     cat("\n")
-    cat(strwrap("Of these, the following relationships involve fully observed variables and are
-explored using the specified dataset:"),"\n",fill=TRUE)
+    cat(strwrap("These (conditional) independence statements are explored below
+    using the canonical correlations approach for mixed data. See
+                ??dagitty::localTests for further details."),"\n",
+        strwrap("Results are shown for variables that are fully observed in the
+        specified dataset."),
+        strwrap("The null hypothesis is that the stated variables are (conditionally) independent."),"\n",fill=TRUE)
     print(dagitty::localTests(x=mod,data=compdata,tests=comptests,type="cis.pillai",abbreviate.names=FALSE))
-    cat("\n")
-    cat(strwrap("Method for exploring the consistency of the specified dataset with
-the proposed DAG: canonical correlations approach for mixed data. See ??dagitty::localTests for further details."),"\n",
-    strwrap("Interpretation: A large p-value for a conditional model means there is little evidence of
-inconsistency between your data and the proposed DAG. \nA small p-value for a conditional model
-means your data may not be consistent with the proposed DAG."),"\n",
-strwrap("Note that these results assume that relationships between variables are linear.
+    cat("\n", strwrap("Interpretation: A small p-value means the stated variables may not be (conditionally) independent
+        in the specified dataset: your data may not be consistent with the proposed DAG.
+        A large p-value means there is little evidence of inconsistency between your data
+                 and the proposed DAG."),"\n",fill=TRUE)
+    cat(strwrap("Note that these results assume that relationships between variables are linear.
 Consider exploring the specification of each relationship in your model. \nAlso consider whether
 it is valid and possible to explore relationships between partially observed variables
 using the observed data, e.g. avoiding perfect prediction."),"\n",fill=TRUE)

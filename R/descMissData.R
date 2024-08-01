@@ -15,16 +15,19 @@
 #'   delimited)
 #' @param data A data frame containing the specified analysis model outcome and
 #'   covariate(s)
+#' @param plot If TRUE, displays a plot using \link[mice]{md.pattern} to
+#' visualise the missing data patterns; use plot = FALSE (the default) to
+#' disable the plot
 #'
 #' @return A summary of the missing data patterns
 #' @export
 #'
 #' @examples
 #' descMissData(y="bmi7", covs="matage mated", data=bmi)
-#' descMissData(y="bmi7", covs="matage mated pregsize bwt", data=bmi)
-descMissData <- function(y, covs, data) {
+#' descMissData(y="bmi7", covs="matage mated pregsize bwt", data=bmi, plot=TRUE)
+descMissData <- function(y, covs, data, plot=FALSE) {
   covslist <- unlist(strsplit(covs," "))
-  mdtab <- mice::md.pattern(data[,c(y,covslist)],plot=FALSE)
+  mdtab <- mice::md.pattern(data[,c(y,covslist)],plot=plot)
 
   #Only print if dataset is not completely observed - if it is, print output as per md.pattern
   if (mdtab[nrow(mdtab),ncol(mdtab)] != 0){
