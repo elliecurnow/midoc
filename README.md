@@ -4,6 +4,8 @@
 # midoc
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The Multiple Imputation DOCtor (`midoc`) R package is a decision-making
