@@ -192,10 +192,10 @@ dataset are consistent with the proposed mDAG, specifying both our mDAG
 (<code>mdag</code>) and dataset (<code>data</code>), as follows.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following 
-conditional independencies (where, for example, 'X _||_ Y | Z' should 
-be read as 'X is independent of Y conditional on Z'). Note that 
-variable names are abbreviated: 
+<pre><code>The proposed directed acyclic graph (DAG) implies that the following 
+pairs of variables are independent, or conditionally independent.  'X 
+_||_ Y | Z' should be read as 'X is independent of Y conditional on Z'. 
+Note that variable names are abbreviated: 
 
 bmi7 _||_ r | sp_n
 bmi7 _||_ r | matd
@@ -205,21 +205,23 @@ matg _||_ r | matd
 matg _||_ sp_n | matd
 matd _||_ r | sp_n
 
-Of these, the following relationships involve fully observed variables 
-and are explored using the specified dataset: 
+These (conditional) independence statements are explored below using 
+the canonical correlations approach for mixed data. See 
+??dagitty::localTests for further details. 
+ 
+Results are shown for variables that are fully observed in the 
+specified dataset. 
+The null hypothesis is that the stated variables are (conditionally) 
+independent. 
 
                         estimate  p.value        2.5%      97.5%
 matage _||_ r | mated 0.02998323 0.343547 -0.03206946 0.09180567
 
-Method for exploring the consistency of the specified dataset with the 
-proposed DAG: canonical correlations approach for mixed data. See 
-??dagitty::localTests for further details. 
- 
-Interpretation: A large p-value for a conditional model means there is 
-little evidence of inconsistency between your data and the proposed 
-DAG.  A small p-value for a conditional model means your data may not 
-be consistent with the proposed DAG. 
- 
+ Interpretation: A small p-value means the stated variables may not be 
+(conditionally) independent in the specified dataset: your data may not 
+be consistent with the proposed DAG.  A large p-value means there is 
+little evidence of inconsistency between your data and the proposed DAG. 
+
 Note that these results assume that relationships between variables are 
 linear. Consider exploring the specification of each relationship in 
 your model.  Also consider whether it is valid and possible to explore 
@@ -345,7 +347,9 @@ for further details.
 
 There are no other variables which could be added to the model to make 
 the analysis model outcome and complete record indicator conditionally 
-independent.  Consider using a different strategy e.g. multiple imputation.</code></pre>
+independent, without changing the estimand of interest. 
+ 
+Consider using a different strategy e.g. multiple imputation. </code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
@@ -408,10 +412,10 @@ follows.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt; mated sep_unmeas -&gt; r </span></span>
 <span><span class="st">           pregsize -&gt; bmi7 pregsize -&gt; bwt  sep_unmeas -&gt; bwt"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following 
-conditional independencies (where, for example, 'X _||_ Y | Z' should 
-be read as 'X is independent of Y conditional on Z'). Note that 
-variable names are abbreviated: 
+<pre><code>The proposed directed acyclic graph (DAG) implies that the following 
+pairs of variables are independent, or conditionally independent.  'X 
+_||_ Y | Z' should be read as 'X is independent of Y conditional on Z'. 
+Note that variable names are abbreviated: 
 
 bmi7 _||_ bwt | prgs, sp_n
 bmi7 _||_ bwt | matd, prgs
@@ -431,8 +435,14 @@ matd _||_ r | sp_n
 prgs _||_ r
 prgs _||_ sp_n
 
-Of these, the following relationships involve fully observed variables 
-and are explored using the specified dataset: 
+These (conditional) independence statements are explored below using 
+the canonical correlations approach for mixed data. See 
+??dagitty::localTests for further details. 
+ 
+Results are shown for variables that are fully observed in the 
+specified dataset. 
+The null hypothesis is that the stated variables are (conditionally) 
+independent. 
 
                           estimate   p.value        2.5%      97.5%
 bwt _||_ matage | mated 0.05018898 0.1127099 -0.01184095 0.11183410
@@ -441,15 +451,11 @@ matage _||_ r | mated   0.02998323 0.3435470 -0.03206946 0.09180567
 mated _||_ pregsize     0.01594976 0.6144181 -0.04608889 0.07786585
 pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273
 
-Method for exploring the consistency of the specified dataset with the 
-proposed DAG: canonical correlations approach for mixed data. See 
-??dagitty::localTests for further details. 
- 
-Interpretation: A large p-value for a conditional model means there is 
-little evidence of inconsistency between your data and the proposed 
-DAG.  A small p-value for a conditional model means your data may not 
-be consistent with the proposed DAG. 
- 
+ Interpretation: A small p-value means the stated variables may not be 
+(conditionally) independent in the specified dataset: your data may not 
+be consistent with the proposed DAG.  A large p-value means there is 
+little evidence of inconsistency between your data and the proposed DAG. 
+
 Note that these results assume that relationships between variables are 
 linear. Consider exploring the specification of each relationship in 
 your model.  Also consider whether it is valid and possible to explore 

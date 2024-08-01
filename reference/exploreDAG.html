@@ -76,10 +76,10 @@ variables in the specified dataset are consistent with the proposed DAG</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">exploreDAG</span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt;</span></span></span>
 <span class="r-in"><span><span class="st">  mated sep_unmeas -&gt; r"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The proposed directed acyclic graph (DAG) implies the following </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> conditional independencies (where, for example, 'X _||_ Y | Z' should </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> be read as 'X is independent of Y conditional on Z'). Note that </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> variable names are abbreviated: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The proposed directed acyclic graph (DAG) implies that the following </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs of variables are independent, or conditionally independent.  'X </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> _||_ Y | Z' should be read as 'X is independent of Y conditional on Z'. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note that variable names are abbreviated: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bmi7 _||_ r | sp_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bmi7 _||_ r | matd</span>
@@ -89,21 +89,23 @@ variables in the specified dataset are consistent with the proposed DAG</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> matg _||_ sp_n | matd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> matd _||_ r | sp_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Of these, the following relationships involve fully observed variables </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> and are explored using the specified dataset: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> These (conditional) independence statements are explored below using </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the canonical correlations approach for mixed data. See </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ??dagitty::localTests for further details. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results are shown for variables that are fully observed in the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> specified dataset. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The null hypothesis is that the stated variables are (conditionally) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> independent. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         estimate  p.value        2.5%      97.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> matage _||_ r | mated 0.02998323 0.343547 -0.03206946 0.09180567</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method for exploring the consistency of the specified dataset with the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> proposed DAG: canonical correlations approach for mixed data. See </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ??dagitty::localTests for further details. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Interpretation: A large p-value for a conditional model means there is </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> little evidence of inconsistency between your data and the proposed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> DAG.  A small p-value for a conditional model means your data may not </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> be consistent with the proposed DAG. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Interpretation: A small p-value means the stated variables may not be </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (conditionally) independent in the specified dataset: your data may not </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> be consistent with the proposed DAG.  A large p-value means there is </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> little evidence of inconsistency between your data and the proposed DAG. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note that these results assume that relationships between variables are </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> linear. Consider exploring the specification of each relationship in </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> your model.  Also consider whether it is valid and possible to explore </span>
@@ -113,10 +115,10 @@ variables in the specified dataset are consistent with the proposed DAG</p>
 <span class="r-in"><span><span class="fu">exploreDAG</span><span class="op">(</span>mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt;</span></span></span>
 <span class="r-in"><span><span class="st">  mated sep_unmeas -&gt; r pregsize -&gt; bmi7 pregsize -&gt; bwt sep_unmeas -&gt; bwt"</span>,</span></span>
 <span class="r-in"><span>  data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The proposed directed acyclic graph (DAG) implies the following </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> conditional independencies (where, for example, 'X _||_ Y | Z' should </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> be read as 'X is independent of Y conditional on Z'). Note that </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> variable names are abbreviated: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The proposed directed acyclic graph (DAG) implies that the following </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairs of variables are independent, or conditionally independent.  'X </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> _||_ Y | Z' should be read as 'X is independent of Y conditional on Z'. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note that variable names are abbreviated: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bmi7 _||_ bwt | prgs, sp_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bmi7 _||_ bwt | matd, prgs</span>
@@ -136,8 +138,14 @@ variables in the specified dataset are consistent with the proposed DAG</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> prgs _||_ r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> prgs _||_ sp_n</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Of these, the following relationships involve fully observed variables </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> and are explored using the specified dataset: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> These (conditional) independence statements are explored below using </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the canonical correlations approach for mixed data. See </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ??dagitty::localTests for further details. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results are shown for variables that are fully observed in the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> specified dataset. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The null hypothesis is that the stated variables are (conditionally) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> independent. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           estimate   p.value        2.5%      97.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bwt _||_ matage | mated 0.05018898 0.1127099 -0.01184095 0.11183410</span>
@@ -146,15 +154,11 @@ variables in the specified dataset are consistent with the proposed DAG</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mated _||_ pregsize     0.01594976 0.6144181 -0.04608889 0.07786585</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method for exploring the consistency of the specified dataset with the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> proposed DAG: canonical correlations approach for mixed data. See </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ??dagitty::localTests for further details. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Interpretation: A large p-value for a conditional model means there is </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> little evidence of inconsistency between your data and the proposed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> DAG.  A small p-value for a conditional model means your data may not </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> be consistent with the proposed DAG. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Interpretation: A small p-value means the stated variables may not be </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (conditionally) independent in the specified dataset: your data may not </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> be consistent with the proposed DAG.  A large p-value means there is </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> little evidence of inconsistency between your data and the proposed DAG. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note that these results assume that relationships between variables are </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> linear. Consider exploring the specification of each relationship in </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> your model.  Also consider whether it is valid and possible to explore </span>
