@@ -685,12 +685,17 @@ when, as in our dataset, only one variable is partially observed.</p>
 <span>                      family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                      message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Based on your proposed imputation model and dataset, your mice() call should be as follows: 
-mice(data =  bmi , # You may need to specify a subset of the columns in your dataset 
+<pre><code>Based on your proposed imputation model and dataset, your mice() call 
+should be as follows: 
+mice(data =  bmi , 
+# You may need to specify a subset of the columns in your dataset 
  
-m =  41 , # You should use at least this number of imputations based on the proportion of complete records in your dataset 
+m =  41 , 
+# You should use at least this number of imputations based on the 
+proportion of complete records in your dataset 
  
 method = c( 'norm' ) 
+
 # Specify a method for each incomplete variable.  If displayed, the 
 box-and-whisker plots can be used to inform your choice of method(s): 
 for example, if the imputation model does not predict extreme values 

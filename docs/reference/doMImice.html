@@ -94,12 +94,17 @@ to each imputed dataset and the results pooled</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># Save the proposed 'mice' options as a 'miprop' object</span></span></span>
 <span class="r-in"><span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Based on your proposed imputation model and dataset, your mice() call should be as follows: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mice(data =  bmi , # You may need to specify a subset of the columns in your dataset </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Based on your proposed imputation model and dataset, your mice() call </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> should be as follows: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mice(data =  bmi , </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # You may need to specify a subset of the columns in your dataset </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m =  41 , # You should use at least this number of imputations based on the proportion of complete records in your dataset </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m =  41 , </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # You should use at least this number of imputations based on the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> proportion of complete records in your dataset </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> method = c( 'norm' ) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Specify a method for each incomplete variable.  If displayed, the </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> box-and-whisker plots can be used to inform your choice of method(s): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> for example, if the imputation model does not predict extreme values </span>

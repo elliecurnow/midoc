@@ -177,7 +177,7 @@ observed.</p>
 using a Shiny app, by uploading your dataset (in CSV format) and editing
 the text in the box below. Note that if you do not upload a file, the
 default <code>bmi</code> dataset will be analysed.</strong></p>
-<iframe data-deferred-src="app9848823e43e599ef0f095daca8459f5b/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="appf7eeeb0b672dbf234af5ca0b174322d3/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p>Returning to our worked example, we will use indicator variable “R”
 to denote the missingness of BMI at age 7 years (for example, R=1 if BMI
 at age 7 years is observed, and 0 otherwise). In this specific example,
@@ -205,7 +205,7 @@ out more about using “dagitty” to draw mDAGs.</p>
 <p><img src="midocdemoShiny_files/figure-html/unnamed-chunk-10-1.png" width="500px" height="400px"></p>
 <p><strong>You can draw your own DAG using a Shiny app, by editing the
 text in the box below.</strong></p>
-<iframe data-deferred-src="app578a18b2809ac74fa97bc276e800c984/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="app75c7b7027fdc2d1982b071dd1035b2aa/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p>As a final check of our mDAG, we will use the <code>midoc</code>
 function <code>exploreDAG</code> to explore whether relationships in the
 dataset are consistent with the proposed mDAG, specifying both our mDAG
@@ -263,7 +263,7 @@ consistent with your proposed mDAG using a Shiny app, by uploading your
 dataset (in CSV format) and editing the text in the box below. Note that
 if you do not upload a file, the default <code>bmi</code> dataset will
 be analysed.</strong></p>
-<iframe data-deferred-src="app2640a902c795df82a8614691fc25a056/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="app118451985ea49657d57bc3439d007256/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Tips for specifying a “missingness” DAG</strong></p>
 <ul>
 <li><p>First specify the DAG for the analysis model, as it would be if
@@ -381,7 +381,7 @@ independent. Consider using a different strategy e.g. multiple imputation. </cod
 <p><strong>You can check whether CRA is valid for your own DAG and
 analysis model using a Shiny app, by editing the text in the box
 below.</strong></p>
-<iframe data-deferred-src="app91581fc853c674684701bd3ada9df416/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="appc4f3faa8642b516eb7844b673cfd908d/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
 <h2 id="section-step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
@@ -569,7 +569,7 @@ missingness as auxiliary variables <a href="https://doi.org/10.3389/fepid.2023.1
 imputation models (checking the imputation model for each partially
 observed variable in turn) using a Shiny app, by editing the text in the
 box below.</strong></p>
-<iframe data-deferred-src="appda16879c7fec95c6d75b1105e63a7393/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="app61ded696076ab135bd908b668f983d14/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
 <h2 id="section-step-4-check-that-all-relationships-are-correctly-specified">Step 4 Check that all relationships are correctly specified<a class="anchor" aria-label="anchor" href="#section-step-4-check-that-all-relationships-are-correctly-specified"></a>
@@ -668,7 +668,7 @@ the diagnostic plot is not displayed (<em>i.e.</em> <code>plot</code> is
 set to <code>FALSE</code>). Further note that if you do not upload a
 file, the default <code>bmi</code> dataset will be
 analysed.</strong></p>
-<iframe data-deferred-src="app765996766b45e26cde27d78c87604046/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="app667db311d29f38111a0f1578dde4aa3d/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Tips for imputation model variable selection</strong></p>
 <ul>
 <li>
@@ -738,12 +738,17 @@ when, as in our dataset, only one variable is partially observed.</p>
 <span>                      data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                      message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span><span class="va">mimod</span>, data<span class="op">=</span><span class="va">bmi</span>, plotprompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Based on your proposed imputation model and dataset, your mice() call should be as follows: 
-mice(data =  bmi , # You may need to specify a subset of the columns in your dataset 
+<pre><code>Based on your proposed imputation model and dataset, your mice() call 
+should be as follows: 
+mice(data =  bmi , 
+# You may need to specify a subset of the columns in your dataset 
  
-m =  41 , # You should use at least this number of imputations based on the proportion of complete records in your dataset 
+m =  41 , 
+# You should use at least this number of imputations based on the 
+proportion of complete records in your dataset 
  
 method = c( 'norm' ) 
+
 # Specify a method for each incomplete variable.  If displayed, the 
 box-and-whisker plots can be used to inform your choice of method(s): 
 for example, if the imputation model does not predict extreme values 
@@ -782,7 +787,7 @@ below. Note that the diagnostic plots are not displayed (<em>i.e.</em>
 <code>plot</code> is set to <code>FALSE</code>). Further note that if
 you do not upload a file, the default <code>bmi</code> dataset will be
 analysed.</strong></p>
-<iframe data-deferred-src="app4d019b17b96dfb99f0dc0ccb4f9bbcad/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="appc99561ec05689778304dda16bcc7f233/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models (one for each partially observed
 variable) in <code>proposeMI</code> (although note that the Shiny app
@@ -834,7 +839,7 @@ dataset, based on your specified imputation and analysis models, using a
 Shiny app, by uploading your dataset (in CSV format) and editing the
 text in the box below. Note that if you do not upload a file, the
 default <code>bmi</code> dataset will be analysed.</strong></p>
-<iframe data-deferred-src="appfcdbd04740b543d23db9b908013c4d99/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="app5f053643f59f8fcd3f82f5f7e25e5b67/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div class="section level2">
 <h2 id="section-illustration-using-our-worked-example">Illustration using our worked example<a class="anchor" aria-label="anchor" href="#section-illustration-using-our-worked-example"></a>
