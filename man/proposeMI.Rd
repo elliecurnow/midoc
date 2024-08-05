@@ -45,6 +45,6 @@ formula="pregsize~bmi7+matage+I(matage^2)+mated",
 # Display the proposed 'mice' options
   ## When specifying a single imputation model
 proposeMI(mimodobj=mimod_bmi7, data=bmi)
-  ## When specifying more than one imputation model
-proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize), data=bmi)
+  ## When specifying more than one imputation model (suppressing the plot)
+proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize), data=bmi, plot = FALSE)
 }
