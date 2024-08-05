@@ -95,7 +95,8 @@ covariates.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example DAG for which complete records analysis is not valid</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example DAG for which complete records analysis is not valid, but could be</span></span></span>
+<span class="r-in"><span>  <span class="co">## valid for a different set of covariates</span></span></span>
 <span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
 <span class="r-in"><span>  mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt;</span></span></span>
 <span class="r-in"><span><span class="st">  mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></span>
@@ -129,25 +130,6 @@ covariates.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model covariates. Hence, complete records analysis is valid. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example DAG for which complete records analysis is not valid</span></span></span>
-<span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
-<span class="r-in"><span>  mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt;</span></span></span>
-<span class="r-in"><span><span class="st">  mated sep_unmeas -&gt; r bmi7 -&gt; r"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Based on the proposed directed acyclic graph (DAG), the analysis model </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> outcome and complete record indicator are not independent given </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> analysis model covariates. Hence, in general, complete records analysis </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is not valid. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> In special cases, depending on the type of analysis model and estimand </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of interest, complete records analysis may still be valid. See, for </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> for further details. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> There are no other variables which could be added to the model to make </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the analysis model outcome and complete record indicator conditionally </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> independent. Consider using a different strategy e.g. multiple imputation. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example DAG for which complete records is not valid, but could be valid</span></span></span>
 <span class="r-in"><span>  <span class="co">## for a different estimand</span></span></span>
 <span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
@@ -179,6 +161,25 @@ covariates.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> { bmi3, matage, sep_unmeas }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> { bmi3, mated, sep_unmeas }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> { bmi3, matage, mated, sep_unmeas }</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example DAG for which complete records analysis is not valid</span></span></span>
+<span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
+<span class="r-in"><span>  mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7 sep_unmeas -&gt;</span></span></span>
+<span class="r-in"><span><span class="st">  mated sep_unmeas -&gt; r bmi7 -&gt; r"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Based on the proposed directed acyclic graph (DAG), the analysis model </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> outcome and complete record indicator are not independent given </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> analysis model covariates. Hence, in general, complete records analysis </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is not valid. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> In special cases, depending on the type of analysis model and estimand </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> of interest, complete records analysis may still be valid. See, for </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for further details. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> There are no other variables which could be added to the model to make </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the analysis model outcome and complete record indicator conditionally </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> independent. Consider using a different strategy e.g. multiple imputation. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
