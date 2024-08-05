@@ -24,7 +24,7 @@
 #' imp <- doMImice(miprop,123)
 #'
 #' # Additionally, fit the substantive model to each imputed dataset and display
-#' # the pooled results
+#'   ## the pooled results
 #' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 doMImice <- function(mipropobj, seed, substmod = " ") {
 

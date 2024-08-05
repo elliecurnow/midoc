@@ -24,8 +24,8 @@ the proposed DAG and analysis model outcome and covariate(s)
 \description{
 Check complete records analysis is valid under the proposed analysis model
 and directed acyclic graph (DAG). Validity means that complete records
-analysis will allow unbiased estimation of regression parameters,
-associations, and causal effects.
+analysis will allow unbiased estimation of the estimand(s) of interest,
+including regression parameters, associations, and causal effects.
 }
 \details{
 The DAG should include all observed and unobserved variables related to the
@@ -39,16 +39,24 @@ analysis model and complete record indicator are 'd-separated', given the
 covariates.
 }
 \examples{
+# Example DAG for which complete records analysis is not valid
 checkCRA(y="bmi7", covs="matage", r_cra="r",
   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r")
+  ## For the DAG in the example above, complete records analysis is valid
+  ## if a different set of covariates is used
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r")
+
+# Example DAG for which complete records analysis is not valid
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r bmi7 -> r")
-  checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+
+# Example DAG for which complete records is not valid, but could be valid
+  ## for a different estimand
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r matage -> bmi3 mated -> bmi3 bmi3 -> bmi7
   bmi3 -> r")

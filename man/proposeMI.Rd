@@ -43,8 +43,8 @@ formula="pregsize~bmi7+matage+I(matage^2)+mated",
   family="binomial(logit)", data=bmi)
 
 # Display the proposed 'mice' options
-# Specifying a single imputation model
+  ## When specifying a single imputation model
 proposeMI(mimodobj=mimod_bmi7, data=bmi)
-# Specifying more than one imputation model
+  ## When specifying more than one imputation model
 proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize), data=bmi)
 }

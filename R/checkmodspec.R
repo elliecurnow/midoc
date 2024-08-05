@@ -26,15 +26,12 @@
 #' @export
 #'
 #' @examples
+#' # Example (incorrectly) assuming a linear relationship
 #' checkModSpec(formula="bmi7~matage+mated+pregsize",
 #'   family="gaussian(identity)", data=bmi)
+#'   ## For the example above, (correctly) assuming a quadratic relationship
 #' checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 #'   family="gaussian(identity)", data=bmi)
-#'
-#' checkModSpec(formula="pregsize~bmi7+matage+mated",
-#'   family="binomial(logit)", data=bmi)
-#' checkModSpec(formula="pregsize~bmi7+matage+I(matage^2)+mated",
-#'   family="binomial(logit)", data=bmi)
 checkModSpec <- function(formula, family, data, message=TRUE, plot=TRUE) {
 
   if(family == "gaussian(identity)"){

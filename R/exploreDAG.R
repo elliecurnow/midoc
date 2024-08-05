@@ -18,9 +18,6 @@
 #' @examples
 #' exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
 #'   mated sep_unmeas -> r", data=bmi)
-#' exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt",
-#'   data=bmi)
 exploreDAG <- function(mdag, data) {
   mod <- dagitty::dagitty(paste('dag {',mdag,'}'), layout=T)
 

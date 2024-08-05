@@ -26,7 +26,4 @@ specified dataset are consistent with the proposed directed acyclic graph
 \examples{
 exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
   mated sep_unmeas -> r", data=bmi)
-exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt",
-  data=bmi)
 }
