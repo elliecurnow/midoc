@@ -1,9 +1,9 @@
 #' Inspect complete records analysis model
 #'
 #' Check complete records analysis is valid under the proposed analysis model
-#' and directed acyclic graph (DAG). Validity means that complete records
-#' analysis will allow unbiased estimation of the estimand(s) of interest,
-#' including regression parameters, associations, and causal effects.
+#' and directed acyclic graph (DAG). Validity means that the proposed approach
+#' will allow unbiased estimation of the estimand(s) of interest, including
+#' regression parameters, associations, and causal effects.
 #'
 #' The DAG should include all observed and unobserved variables related to the
 #' analysis model variables and their missingness, as well as all required

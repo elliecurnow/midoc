@@ -23,9 +23,9 @@ the proposed DAG and analysis model outcome and covariate(s)
 }
 \description{
 Check complete records analysis is valid under the proposed analysis model
-and directed acyclic graph (DAG). Validity means that complete records
-analysis will allow unbiased estimation of the estimand(s) of interest,
-including regression parameters, associations, and causal effects.
+and directed acyclic graph (DAG). Validity means that the proposed approach
+will allow unbiased estimation of the estimand(s) of interest, including
+regression parameters, associations, and causal effects.
 }
 \details{
 The DAG should include all observed and unobserved variables related to the

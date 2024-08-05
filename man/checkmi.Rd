@@ -25,11 +25,13 @@ proposed DAG and imputation model
 }
 \description{
 Check multiple imputation is valid under the proposed imputation model and
-directed acyclic graph (DAG). The imputation model should include all other
-analysis model variables as predictors, as well as any auxiliary variables.
-The DAG should include all observed and unobserved variables related to the
-analysis model variables and their missingness, as well as all required
-missingness indicators.
+directed acyclic graph (DAG). Validity means that the proposed approach will
+allow unbiased estimation of the estimand(s) of interest, including
+regression parameters, associations, and causal effects. The imputation model
+should include all other analysis model variables as predictors, as well as
+any auxiliary variables. The DAG should include all observed and unobserved
+variables related to the analysis model variables and their missingness, as
+well as all required missingness indicators.
 }
 \details{
 In principle, multiple imputation is valid if each partially observed
