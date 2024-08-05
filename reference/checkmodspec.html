@@ -93,7 +93,8 @@ variable and covariates are likely to be correctly specified or not</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example (incorrectly) assuming a linear relationship</span></span></span>
+<span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values </span>
@@ -103,28 +104,12 @@ variable and covariates are likely to be correctly specified or not</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> specification of each relationship in your model. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="checkmodspec-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  <span class="co">## For the example above, (correctly) assuming a quadratic relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model mis-specification. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~bmi7+matage+mated"</span>,</span></span>
-<span class="r-in"><span>  family<span class="op">=</span><span class="st">"binomial(logit)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: Pregibon's link test </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 0.03831304 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A small p-value means the model may be mis-specified. Check the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> specification of each relationship in your model. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="checkmodspec-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~bmi7+matage+I(matage^2)+mated"</span>,</span></span>
-<span class="r-in"><span>  family<span class="op">=</span><span class="st">"binomial(logit)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: Pregibon's link test </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 0.5553561 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model mis-specification. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
