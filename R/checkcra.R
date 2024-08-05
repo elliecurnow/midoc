@@ -27,7 +27,8 @@
 #' @export
 #'
 #' @examples
-#' # Example DAG for which complete records analysis is not valid
+#' # Example DAG for which complete records analysis is not valid, but could be
+#'   ## valid for a different set of covariates
 #' checkCRA(y="bmi7", covs="matage", r_cra="r",
 #'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
 #'   mated sep_unmeas -> r")
@@ -37,17 +38,17 @@
 #'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
 #'   mated sep_unmeas -> r")
 #'
-#' # Example DAG for which complete records analysis is not valid
-#' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-#'   mated sep_unmeas -> r bmi7 -> r")
-#'
 #' # Example DAG for which complete records is not valid, but could be valid
 #'   ## for a different estimand
 #' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 #'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
 #'   mated sep_unmeas -> r matage -> bmi3 mated -> bmi3 bmi3 -> bmi7
 #'   bmi3 -> r")
+#'
+#' # Example DAG for which complete records analysis is not valid
+#' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
+#'   mated sep_unmeas -> r bmi7 -> r")
 checkCRA <- function(y, covs, r_cra, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   covsvec <- unlist(strsplit(covs," "))
