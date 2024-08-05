@@ -83,7 +83,7 @@ Check that the specification of each imputation model was explored using the sam
     strwrap("# You may need to specify a subset of the columns in your dataset"),"\n",
     "\nm = ", m_min, ",", strwrap("# You should use at least this number of imputations
     based on the proportion of complete records in your dataset"),"\n",
-    "\nmethod = c(",paste(sQuote(method), collapse=", "),")","\n")
+    "\nmethod = c(",paste(sQuote(method), collapse=", "),")","\n",fill=TRUE)
     cat(strwrap("# Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform
     your choice of method(s): for example, if the imputation model does not predict extreme values appropriately,
     consider a different imputation model/method e.g. PMM. Note the distribution of
