@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   midoc: midoc.html
   midocdemoShiny: midocdemoShiny.html
-last_built: 2024-08-05T08:50Z
+last_built: 2024-08-09T08:07Z
 urls:
   reference: https://elliecurnow.github.io/midoc/reference
   article: https://elliecurnow.github.io/midoc/articles
