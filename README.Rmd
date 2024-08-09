@@ -19,7 +19,25 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The Multiple Imputation DOCtor (`midoc`) R package is a decision-making system which incorporates expert, up-to-date guidance to help you choose the most appropriate analysis method when there are missing data. `midoc` will guide you through your analysis, examining the structure of the dataset to advise on whether multiple imputation (MI) is needed, and if so how to perform it. 
+## Overview
+
+The Multiple Imputation DOCtor (`midoc`) R package is a guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help you choose the most appropriate analysis method when there are missing data. By examining the available data and the assumed causal structure, `midoc` will advise whether multiple imputation is needed, and if so, how best to perform it. 
+
+* `descMissData` lists missing data patterns in the specified dataset
+
+* `exploreDAG` compares the relationships in the available data with the proposed DAG
+
+* `checkCRA` checks complete records analysis is valid under the proposed analysis model 
+
+* `checkMI` checks multiple imputation is valid under the proposed imputation model 
+
+* `checkModSpec` explores the parametric specification of the imputation model 
+
+* `proposeMI` suggests multiple imputation options based on the available data and specified imputation model
+
+* `doMImice` performs multiple imputation based on the `proposeMI` options 
+
+You can learn more about these commands in `vignette("midoc","midoc")`.
 
 ## Installation
 
@@ -29,16 +47,52 @@ You can install the development version of midoc from [GitHub](https://github.co
 # install.packages("devtools")
 devtools::install_github("elliecurnow/midoc")
 ```
-```{r, include=FALSE}
-## Example
+## Usage
 
-#This is a basic example which shows you how to solve a common problem
-  
-```
-
-```{r, include=FALSE}
+```{r}
 library(midoc)
-## basic example code
+
+head(bmi)
+
+descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
+
+exploreDAG(mdag=" matage -> bmi7 
+                  mated -> matage 
+                  mated -> bmi7 
+                  sep_unmeas -> mated 
+                  sep_unmeas -> r
+                  pregsize -> bmi7 
+                  pregsize -> bwt  
+                  sep_unmeas -> bwt", 
+           data=bmi)
+
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+         mdag="   matage -> bmi7 
+                  mated -> matage 
+                  mated -> bmi7 
+                  sep_unmeas -> mated 
+                  sep_unmeas -> r
+                  pregsize -> bmi7 
+                  pregsize -> bwt  
+                  sep_unmeas -> bwt")
+
+checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+        mdag="    matage -> bmi7 
+                  mated -> matage 
+                  mated -> bmi7 
+                  sep_unmeas -> mated 
+                  sep_unmeas -> r
+                  pregsize -> bmi7 
+                  pregsize -> bwt  
+                  sep_unmeas -> bwt")
+
+mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+                           family="gaussian(identity)", data=bmi)
+
+miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
+
+doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
+
 ```
 
 ```{r, include=FALSE}

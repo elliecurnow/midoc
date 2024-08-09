@@ -6,7 +6,7 @@
 \alias{midoc-package}
 \title{midoc: A Decision-Making System For Multiple Imputation}
 \description{
-midoc will guide researchers through their analyses, examining the structure of the dataset to advise on whether multiple imputation is needed, and if so how to perform it. Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. However, using MI in practice can be complex. Application of MI involves multiple decisions which are rarely justified or even documented, and for which little guidance is available. midoc is a decision-making system which incorporates expert, up-to-date guidance to help researchers choose the most appropriate analysis method when there are missing data.
+A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. 'midoc' will advise whether multiple imputation is needed, and if so, how best to perform it.
 }
 \seealso{
 Useful links:

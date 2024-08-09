@@ -93,3 +93,15 @@ mimod <- list(formula = formula,family = family,
               datalab=deparse(substitute(data)))
 invisible(mimod)
 }
+
+## Fractional Polynomial Transformation as per {mfp} package: Ambler G, Benner A (2022). mfp: Multivariable Fractional Polynomials. R package version 1.5.2.2, <https://CRAN.R-project.org/package=mfp>.
+fp <- function (x, df = 4, select = NA, alpha = NA, scale = TRUE)
+{
+  name <- deparse(substitute(x))
+  attr(x, "df") <- df
+  attr(x, "alpha") <- alpha
+  attr(x, "select") <- select
+  attr(x, "scale") <- scale
+  attr(x, "name") <- name
+  x
+}

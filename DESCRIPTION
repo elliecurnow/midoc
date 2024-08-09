@@ -4,10 +4,12 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Elinor", "Curnow", , "elinor.curnow@bristol.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3109-3647"))
-Description: midoc will guide researchers through their analyses, examining the structure of the dataset to advise on whether multiple imputation is needed, and if so how to perform it. 
-  Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. 
-  However, using MI in practice can be complex. Application of MI involves multiple decisions which are rarely justified or even documented, and for which little guidance is available. midoc is a 
-  decision-making system which incorporates expert, up-to-date guidance to help researchers choose the most appropriate analysis method when there are missing data.
+Description: A guidance system for analysis with missing data. It incorporates 
+  expert, up-to-date methodology to help researchers choose the most 
+  appropriate analysis approach when some data are missing. You provide the 
+  available data and the assumed causal structure, including the likely causes 
+  of missing data. 'midoc' will advise whether multiple imputation is needed, and 
+  if so, how best to perform it.   
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -25,12 +27,12 @@ Imports:
     grDevices,
     lifecycle,
     mfp,
-    mice,
+    mice (>= 3.16.0),
     rlang,
     rmarkdown,
     stats
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.6)
 LazyData: true
 URL: https://elliecurnow.github.io/midoc/
