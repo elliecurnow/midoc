@@ -37,7 +37,8 @@ checkModSpec <- function(formula, family, data, message=TRUE, plot=TRUE) {
   if(family == "gaussian(identity)"){
     mod <- stats::glm(stats::as.formula(formula), data=data)
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
-    modfittest <- mfp::mfp(r ~ fp(fitvals, df = 4, select=0.05), data=modfit)
+    modfittest <- mfp2::mfp2(r ~ fp(fitvals, df = 4, select=0.05),
+                             data=modfit, verbose = FALSE)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
 
     if (message){
@@ -94,14 +95,4 @@ mimod <- list(formula = formula,family = family,
 invisible(mimod)
 }
 
-## Fractional Polynomial Transformation as per {mfp} package: Ambler G, Benner A (2022). mfp: Multivariable Fractional Polynomials. R package version 1.5.2.2, <https://CRAN.R-project.org/package=mfp>.
-fp <- function (x, df = 4, select = NA, alpha = NA, scale = TRUE)
-{
-  name <- deparse(substitute(x))
-  attr(x, "df") <- df
-  attr(x, "alpha") <- alpha
-  attr(x, "select") <- select
-  attr(x, "scale") <- scale
-  attr(x, "name") <- name
-  x
-}
+

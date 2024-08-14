@@ -4,8 +4,12 @@
 #' (midoc). In the interactive version, you can apply midoc functions in
 #' \link[shiny]{shiny-package} apps using your own DAG and data.
 #'
+#' @return A browser-based, interactive version of the midoc vignette
 #' @export
 #'
+#' @examplesIf interactive()
+#' # Run the interactive vignette
+#' midocVignette()
 midocVignette <- function() {
   appDir <- system.file("doc/midocdemoShiny.rmd", package = "midoc", mustWork=TRUE)
   if (appDir == "") {
