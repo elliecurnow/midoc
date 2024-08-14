@@ -32,6 +32,9 @@ options and dataset specified by a call to  proposeMI."><!-- mathjax --><script 
     <a class="dropdown-item" href="../articles/midoc.html">Multiple Imputation DOCtor (midoc)</a>
   </div>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -82,62 +85,15 @@ to each imputed dataset and the results pooled</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># First specify the imputation model as a 'mimod' object</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># First specify the imputation model as a 'mimod' object (suppressing the</span></span></span>
+<span class="r-in"><span><span class="co">## output)</span></span></span>
 <span class="r-in"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkModSpec.html">checkModSpec</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
-<span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model mis-specification. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># Save the proposed 'mice' options as a 'miprop' object</span></span></span>
-<span class="r-in"><span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Based on your proposed imputation model and dataset, your mice() call </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> should be as follows: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mice(data =  bmi , </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # You may need to specify a subset of the columns in your dataset </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m =  41 , </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # You should use at least this number of imputations based on the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> proportion of complete records in your dataset </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> method = c( 'norm' ) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Specify a method for each incomplete variable.  If displayed, the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> box-and-whisker plots can be used to inform your choice of method(s): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> for example, if the imputation model does not predict extreme values </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> appropriately, consider a different imputation model/method e.g. PMM. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note the distribution of imputed and observed values is displayed for </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> numeric variables only. The distribution may differ if data are missing </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> at random. If you suspect data are missing not at random, the plots can </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> also inform your choice of sensitivity parameter. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> formulas = formulas_list , # Note that you do not additionally need to </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> specify a 'predmatrix' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # The formulas_list specifies the conditional imputation models, as follows: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 'bmi7 ~ matage + I(matage^2) + mated + pregsize' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> maxit = 10 , # If you have more than one incomplete variable, you </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> should check this number of iterations is sufficient by inspecting the </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> trace plots, if displayed.  Consider increasing the number of </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iterations if there is a trend that does not stabilise by the 10th </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iteration. Note that iteration is not required when only one variable </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is partially observed. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> printFlag = FALSE , # Change to printFlag=TRUE to display the history </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> as imputation is performed </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> seed = NA) # It is good practice to choose a seed so your results are </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> reproducible </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="doMImice-1.png" alt="" width="700" height="433"></span>
-<span class="r-plt img"><img src="doMImice-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Save the proposed 'mice' options as a 'miprop' object (suppressing the</span></span></span>
+<span class="r-in"><span><span class="co">## output)</span></span></span>
+<span class="r-in"><span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span>, message <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Create the set of imputed datasets using the proposed 'mice' options</span></span></span>
 <span class="r-in"><span><span class="va">imp</span> <span class="op">&lt;-</span> <span class="fu">doMImice</span><span class="op">(</span><span class="va">miprop</span>,<span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Now you have created your multiply imputed datasets, you can perform </span>
@@ -169,7 +125,7 @@ to each imputed dataset and the results pooled</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Elinor Curnow.</p>
+  <p>Developed by Elinor Curnow, Jon Heron, Rosie Cornish, Kate Tilling, James Carpenter.</p>
 </div>
 
 <div class="pkgdown-footer-right">

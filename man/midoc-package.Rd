@@ -16,7 +16,15 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Elinor Curnow \email{elinor.curnow@bristol.ac.uk} (\href{https://orcid.org/0000-0002-3109-3647}{ORCID})
+\strong{Maintainer}: Elinor Curnow \email{elinor.curnow@bristol.ac.uk} (\href{https://orcid.org/0000-0002-3109-3647}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item Jon Heron
+  \item Rosie Cornish
+  \item Kate Tilling
+  \item James Carpenter
+}
 
 }
 \keyword{internal}

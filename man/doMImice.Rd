@@ -23,12 +23,15 @@ Performs multiple imputation using \link[mice]{mice}, based on the 'mice'
 options and dataset specified by a call to  \link[midoc]{proposeMI}.
 }
 \examples{
-# First specify the imputation model as a 'mimod' object
+# First specify the imputation model as a 'mimod' object (suppressing the
+## output)
 mimod_bmi7 <- checkModSpec(
   formula="bmi7~matage+I(matage^2)+mated+pregsize",
-  family="gaussian(identity)", data=bmi)
-# Save the proposed 'mice' options as a 'miprop' object
-miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
+  family="gaussian(identity)", data=bmi, message = FALSE)
+# Save the proposed 'mice' options as a 'miprop' object (suppressing the
+## output)
+miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi, message = FALSE,
+  plot = FALSE)
 # Create the set of imputed datasets using the proposed 'mice' options
 imp <- doMImice(miprop,123)
 

@@ -37,8 +37,7 @@ checkModSpec <- function(formula, family, data, message=TRUE, plot=TRUE) {
   if(family == "gaussian(identity)"){
     mod <- stats::glm(stats::as.formula(formula), data=data)
     modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
-    modfittest <- mfp2::mfp2(r ~ fp(fitvals, df = 4, select=0.05),
-                             data=modfit, verbose = FALSE)
+    modfittest <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
     pval <- 1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual)
 
     if (message){

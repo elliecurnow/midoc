@@ -1,9 +1,14 @@
 Package: midoc
 Title: A Decision-Making System For Multiple Imputation
 Version: 0.0.0.9000
-Authors@R: 
-    person("Elinor", "Curnow", , "elinor.curnow@bristol.ac.uk", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-3109-3647"))
+Authors@R: c(
+    person("Elinor", "Curnow", , "elinor.curnow@bristol.ac.uk", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-3109-3647")),
+    person("Jon", "Heron", role = "aut"),
+    person("Rosie", "Cornish", role = "aut"),
+    person("Kate", "Tilling", role = "aut"),
+    person("James", "Carpenter", role = "aut")
+           )
 Description: A guidance system for analysis with missing data. It incorporates 
   expert, up-to-date methodology to help researchers choose the most 
   appropriate analysis approach when some data are missing. You provide the 
@@ -26,7 +31,7 @@ Imports:
     glue,
     grDevices,
     lifecycle,
-    mfp,
+    mfp2,
     mice (>= 3.16.0),
     rlang,
     rmarkdown,

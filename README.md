@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/elliecurnow/midoc/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/midoc)](https://CRAN.R-project.org/package=midoc)
 <!-- badges: end -->
 
 ## Overview

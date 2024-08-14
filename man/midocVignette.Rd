@@ -6,8 +6,17 @@
 \usage{
 midocVignette()
 }
+\value{
+A browser-based, interactive version of the midoc vignette
+}
 \description{
 Runs an interactive version of the midoc vignette: Multiple Imputation DOCtor
 (midoc). In the interactive version, you can apply midoc functions in
 \link[shiny]{shiny-package} apps using your own DAG and data.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Run the interactive vignette
+midocVignette()
+\dontshow{\}) # examplesIf}
 }
