@@ -25,6 +25,7 @@ partially observed variable) and specified dataset."></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/midoc.html">Multiple Imputation DOCtor (midoc)</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -90,28 +91,18 @@ the proposed 'mice' options</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># First specify each imputation model as a 'mimod' object</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># First specify each imputation model as a 'mimod' object (suppressing the</span></span></span>
+<span class="r-in"><span><span class="co">## output)</span></span></span>
 <span class="r-in"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkmodspec.html">checkModSpec</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
-<span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model mis-specification. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>  family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mimod_pregsize</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkmodspec.html">checkModSpec</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>formula<span class="op">=</span><span class="st">"pregsize~bmi7+matage+I(matage^2)+mated"</span>,</span></span>
-<span class="r-in"><span>  family<span class="op">=</span><span class="st">"binomial(logit)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model mis-specification method: Pregibon's link test </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  P-value: 0.5553561 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model mis-specification. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>  family<span class="op">=</span><span class="st">"binomial(logit)"</span>, data<span class="op">=</span><span class="va">bmi</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Display the proposed 'mice' options</span></span></span>
+<span class="r-in"><span><span class="co"># Display the proposed 'mice' options (suppressing the plot prompt)</span></span></span>
 <span class="r-in"><span>  <span class="co">## When specifying a single imputation model</span></span></span>
-<span class="r-in"><span><span class="fu">proposeMI</span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">proposeMI</span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span>, plotprompt <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Based on your proposed imputation model and dataset, your mice() call </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> should be as follows: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> mice(data =  bmi , </span>
@@ -209,7 +200,7 @@ the proposed 'mice' options</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Elinor Curnow.</p>
+  <p>Developed by Elinor Curnow, Jon Heron, Rosie Cornish, Kate Tilling, James Carpenter.</p>
 </div>
 
 <div class="pkgdown-footer-right">
