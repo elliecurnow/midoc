@@ -1,6 +1,6 @@
 Package: midoc
 Title: A Decision-Making System for Multiple Imputation
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
     person("Elinor", "Curnow", , "elinor.curnow@bristol.ac.uk", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-3109-3647")),
