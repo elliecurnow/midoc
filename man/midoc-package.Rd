@@ -4,7 +4,7 @@
 \name{midoc-package}
 \alias{midoc}
 \alias{midoc-package}
-\title{midoc: A Decision-Making System For Multiple Imputation}
+\title{midoc: A Decision-Making System for Multiple Imputation}
 \description{
 A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. 'midoc' will advise whether multiple imputation is needed, and if so, how best to perform it.
 }
