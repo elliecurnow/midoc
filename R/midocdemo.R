@@ -11,7 +11,7 @@
 #' # Run the interactive vignette
 #' midocVignette()
 midocVignette <- function() {
-  appDir <- system.file("doc/midocdemoShiny.rmd", package = "midoc", mustWork=TRUE)
+  appDir <- system.file("shinyexamples/midocdemoShiny.rmd", package = "midoc", mustWork=TRUE)
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `midoc`.", call. = FALSE)
   }

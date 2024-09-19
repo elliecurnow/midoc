@@ -8,10 +8,10 @@ output:
     #code_folding: hide
     #theme: readable
 runtime: shiny
-vignette: >
-  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc) Shiny version}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+#vignette: >
+#  %\VignetteIndexEntry{Multiple Imputation DOCtor (midoc) Shiny version}
+#  %\VignetteEngine{knitr::rmarkdown}
+#  %\VignetteEncoding{UTF-8}
 ---
 
 <style>
