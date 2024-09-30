@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="A Decision-Making System for Multiple Imputation">
-<meta name="description" content="A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. midoc will advise whether multiple imputation is needed, and if so, how best to perform it.">
-<meta property="og:description" content="A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. midoc will advise whether multiple imputation is needed, and if so, how best to perform it.">
+<meta name="description" content="A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. `midoc` will advise which analysis approaches can be used, and how best to perform them. `midoc` follows the framework for the treatment and reporting of missing data in observational studies (TARMOS). Lee et al (2021). &lt;doi:10.1016/j.jclinepi.2021.01.008&gt;.">
+<meta property="og:description" content="A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. `midoc` will advise which analysis approaches can be used, and how best to perform them. `midoc` follows the framework for the treatment and reporting of missing data in observational studies (TARMOS). Lee et al (2021). &lt;doi:10.1016/j.jclinepi.2021.01.008&gt;.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -93,173 +93,195 @@
 <span><span class="co">#&gt; 3       NA -0.22673432     0        1 3.022161 0</span></span>
 <span><span class="co">#&gt; 4       NA  0.81459107     1        0 3.103251 0</span></span>
 <span><span class="co">#&gt; 5 17.97791 -0.55260086     0        0 3.830381 1</span></span>
-<span><span class="co">#&gt; 6       NA -0.03829346     1        0 2.775282 0</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 6       NA -0.03829346     1        0 2.775282 0</span></span>
+<span></span>
 <span><span class="fu"><a href="reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, data<span class="op">=</span><span class="va">bmi</span>, plot<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt;  pattern bmi7 matage mated   n pct</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;        1    1      1     1 592  59</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;        2    0      1     1 408  41</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="reference/exploreDAG.html">exploreDAG</a></span><span class="op">(</span>mdag<span class="op">=</span><span class="st">" matage -&gt; bmi7 </span></span>
-<span><span class="st">                  mated -&gt; matage </span></span>
-<span><span class="st">                  mated -&gt; bmi7 </span></span>
-<span><span class="st">                  sep_unmeas -&gt; mated </span></span>
-<span><span class="st">                  sep_unmeas -&gt; r</span></span>
-<span><span class="st">                  pregsize -&gt; bmi7 </span></span>
-<span><span class="st">                  pregsize -&gt; bwt  </span></span>
-<span><span class="st">                  sep_unmeas -&gt; bwt"</span>, </span>
-<span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The proposed directed acyclic graph (DAG) implies that the following </span></span>
-<span><span class="co">#&gt; pairs of variables are independent, or conditionally independent.  'X </span></span>
-<span><span class="co">#&gt; _||_ Y | Z' should be read as 'X is independent of Y conditional on Z'. </span></span>
-<span><span class="co">#&gt; Note that variable names are abbreviated: </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; bmi7 _||_ bwt | prgs, sp_n</span></span>
-<span><span class="co">#&gt; bmi7 _||_ bwt | matd, prgs</span></span>
-<span><span class="co">#&gt; bmi7 _||_ r | sp_n</span></span>
-<span><span class="co">#&gt; bmi7 _||_ r | matd</span></span>
-<span><span class="co">#&gt; bmi7 _||_ sp_n | matd</span></span>
-<span><span class="co">#&gt; bwt _||_ matg | matd</span></span>
-<span><span class="co">#&gt; bwt _||_ matg | sp_n</span></span>
-<span><span class="co">#&gt; bwt _||_ matd | sp_n</span></span>
-<span><span class="co">#&gt; bwt _||_ r | sp_n</span></span>
-<span><span class="co">#&gt; matg _||_ prgs</span></span>
-<span><span class="co">#&gt; matg _||_ r | sp_n</span></span>
-<span><span class="co">#&gt; matg _||_ r | matd</span></span>
-<span><span class="co">#&gt; matg _||_ sp_n | matd</span></span>
-<span><span class="co">#&gt; matd _||_ prgs</span></span>
-<span><span class="co">#&gt; matd _||_ r | sp_n</span></span>
-<span><span class="co">#&gt; prgs _||_ r</span></span>
-<span><span class="co">#&gt; prgs _||_ sp_n</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; These (conditional) independence statements are explored below using </span></span>
-<span><span class="co">#&gt; the canonical correlations approach for mixed data. See </span></span>
-<span><span class="co">#&gt; ??dagitty::localTests for further details. </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; Results are shown for variables that are fully observed in the </span></span>
-<span><span class="co">#&gt; specified dataset. </span></span>
-<span><span class="co">#&gt; The null hypothesis is that the stated variables are (conditionally) </span></span>
-<span><span class="co">#&gt; independent. </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                           estimate   p.value        2.5%      97.5%</span></span>
-<span><span class="co">#&gt; bwt _||_ matage | mated 0.05018898 0.1127099 -0.01184095 0.11183410</span></span>
-<span><span class="co">#&gt; matage _||_ pregsize    0.03029139 0.3386080 -0.03176134 0.09211150</span></span>
-<span><span class="co">#&gt; matage _||_ r | mated   0.02998323 0.3435470 -0.03206946 0.09180567</span></span>
-<span><span class="co">#&gt; mated _||_ pregsize     0.01594976 0.6144181 -0.04608889 0.07786585</span></span>
-<span><span class="co">#&gt; pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Interpretation: A small p-value means the stated variables may not be </span></span>
-<span><span class="co">#&gt; (conditionally) independent in the specified dataset: your data may not </span></span>
-<span><span class="co">#&gt; be consistent with the proposed DAG.  A large p-value means there is </span></span>
-<span><span class="co">#&gt; little evidence of inconsistency between your data and the proposed DAG. </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note that these results assume that relationships between variables are </span></span>
-<span><span class="co">#&gt; linear. Consider exploring the specification of each relationship in </span></span>
-<span><span class="co">#&gt; your model.  Also consider whether it is valid and possible to explore </span></span>
-<span><span class="co">#&gt; relationships between partially observed variables using the observed </span></span>
-<span><span class="co">#&gt; data, e.g. avoiding perfect prediction.</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="reference/checkcra.html">checkCRA</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>         mdag<span class="op">=</span><span class="st">"   matage -&gt; bmi7 </span></span>
-<span><span class="st">                  mated -&gt; matage </span></span>
-<span><span class="st">                  mated -&gt; bmi7 </span></span>
-<span><span class="st">                  sep_unmeas -&gt; mated </span></span>
-<span><span class="st">                  sep_unmeas -&gt; r</span></span>
-<span><span class="st">                  pregsize -&gt; bmi7 </span></span>
-<span><span class="st">                  pregsize -&gt; bwt  </span></span>
-<span><span class="st">                  sep_unmeas -&gt; bwt"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Based on the proposed directed acyclic graph (DAG), the analysis model </span></span>
-<span><span class="co">#&gt; outcome and complete record indicator are independent given analysis </span></span>
-<span><span class="co">#&gt; model covariates. Hence, complete records analysis is valid.</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="reference/checkmi.html">checkMI</a></span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage mated pregsize"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span>
-<span>        mdag<span class="op">=</span><span class="st">"    matage -&gt; bmi7 </span></span>
-<span><span class="st">                  mated -&gt; matage </span></span>
-<span><span class="st">                  mated -&gt; bmi7 </span></span>
-<span><span class="st">                  sep_unmeas -&gt; mated </span></span>
-<span><span class="st">                  sep_unmeas -&gt; r</span></span>
-<span><span class="st">                  pregsize -&gt; bmi7 </span></span>
-<span><span class="st">                  pregsize -&gt; bwt  </span></span>
-<span><span class="st">                  sep_unmeas -&gt; bwt"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Based on the proposed directed acyclic graph (DAG), the incomplete </span></span>
-<span><span class="co">#&gt; variable and its missingness indicator are independent given imputation </span></span>
-<span><span class="co">#&gt; model predictors. Hence, multiple imputation methods which assume data </span></span>
-<span><span class="co">#&gt; are missing at random are valid in principle.</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span>
-<span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Model mis-specification method: regression of model residuals on a </span></span>
-<span><span class="co">#&gt; fractional polynomial of the fitted values </span></span>
-<span><span class="co">#&gt;  P-value: 1 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; A large p-value means there is little evidence of model mis-specification.</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Based on your proposed imputation model and dataset, your mice() call </span></span>
-<span><span class="co">#&gt; should be as follows: </span></span>
-<span><span class="co">#&gt; mice(data =  bmi , </span></span>
-<span><span class="co">#&gt; # You may need to specify a subset of the columns in your dataset </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; m =  41 , </span></span>
-<span><span class="co">#&gt; # You should use at least this number of imputations based on the </span></span>
-<span><span class="co">#&gt; proportion of complete records in your dataset </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; method = c( 'norm' ) </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; # Specify a method for each incomplete variable.  If displayed, the </span></span>
-<span><span class="co">#&gt; box-and-whisker plots can be used to inform your choice of method(s): </span></span>
-<span><span class="co">#&gt; for example, if the imputation model does not predict extreme values </span></span>
-<span><span class="co">#&gt; appropriately, consider a different imputation model/method e.g. PMM. </span></span>
-<span><span class="co">#&gt; Note the distribution of imputed and observed values is displayed for </span></span>
-<span><span class="co">#&gt; numeric variables only. The distribution may differ if data are missing </span></span>
-<span><span class="co">#&gt; at random. If you suspect data are missing not at random, the plots can </span></span>
-<span><span class="co">#&gt; also inform your choice of sensitivity parameter. </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; formulas = formulas_list , # Note that you do not additionally need to </span></span>
-<span><span class="co">#&gt; specify a 'predmatrix' </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; # The formulas_list specifies the conditional imputation models, as follows: </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; 'bmi7 ~ matage + I(matage^2) + mated + pregsize' </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; maxit = 10 , # If you have more than one incomplete variable, you </span></span>
-<span><span class="co">#&gt; should check this number of iterations is sufficient by inspecting the </span></span>
-<span><span class="co">#&gt; trace plots, if displayed.  Consider increasing the number of </span></span>
-<span><span class="co">#&gt; iterations if there is a trend that does not stabilise by the 10th </span></span>
-<span><span class="co">#&gt; iteration. Note that iteration is not required when only one variable </span></span>
-<span><span class="co">#&gt; is partially observed. </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; printFlag = FALSE , # Change to printFlag=TRUE to display the history </span></span>
-<span><span class="co">#&gt; as imputation is performed </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; seed = NA) # It is good practice to choose a seed so your results are </span></span>
-<span><span class="co">#&gt; reproducible</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&gt;   pattern bmi7 matage mated   n pct</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; 1       1    1      1     1 592  59</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; 2       2    0      1     1 408  41</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">exploreDAG</span>(<span class="at">mdag=</span><span class="st">" matage -&gt; bmi7 </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="st">                  mated -&gt; matage </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="st">                  mated -&gt; bmi7 </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; mated </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; r</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="st">                  pregsize -&gt; bmi7 </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="st">                  pregsize -&gt; bwt  </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; bwt"</span>, </span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>           <span class="at">data=</span>bmi)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; The proposed directed acyclic graph (DAG) implies the following</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; conditional independencies (where, for example, 'X _||_ Y | Z' should</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; be read as 'X is independent of Y conditional on Z'). Note that</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; variable names are abbreviated:</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; bmi7 _||_ bwt | prgs, sp_n</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; bmi7 _||_ bwt | matd, prgs</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; bmi7 _||_ r | sp_n</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; bmi7 _||_ r | matd</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; bmi7 _||_ sp_n | matd</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; bwt _||_ matg | matd</span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; bwt _||_ matg | sp_n</span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; bwt _||_ matd | sp_n</span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt; bwt _||_ r | sp_n</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; matg _||_ prgs</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; matg _||_ r | sp_n</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; matg _||_ r | matd</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; matg _||_ sp_n | matd</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; matd _||_ prgs</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt; matd _||_ r | sp_n</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; prgs _||_ r</span></span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt; prgs _||_ sp_n</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; These (conditional) independence statements are explored below using</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; the canonical correlations approach for mixed data. See</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; ??dagitty::localTests for further details.  Results are shown for</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt; variables that are fully observed in the specified dataset. The null</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt; hypothesis is that the stated variables are (conditionally)</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt; independent.</span></span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt;                           estimate   p.value        2.5%      97.5%</span></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a><span class="co">#&gt; bwt _||_ matage | mated 0.05018898 0.1127099 -0.01184095 0.11183410</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="co">#&gt; matage _||_ pregsize    0.03029139 0.3386080 -0.03176134 0.09211150</span></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="co">#&gt; matage _||_ r | mated   0.02998323 0.3435470 -0.03206946 0.09180567</span></span>
+<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a><span class="co">#&gt; mated _||_ pregsize     0.01594976 0.6144181 -0.04608889 0.07786585</span></span>
+<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a><span class="co">#&gt; pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273</span></span>
+<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a><span class="co">#&gt; Interpretation: A small p-value means the stated variables may not be</span></span>
+<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a><span class="co">#&gt; (conditionally) independent in the specified dataset: your data may not</span></span>
+<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a><span class="co">#&gt; be consistent with the proposed DAG. A large p-value means there is</span></span>
+<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a><span class="co">#&gt; little evidence of inconsistency between your data and the proposed</span></span>
+<span id="cb3-76"><a href="#cb3-76" tabindex="-1"></a><span class="co">#&gt; DAG.</span></span>
+<span id="cb3-77"><a href="#cb3-77" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-78"><a href="#cb3-78" tabindex="-1"></a><span class="co">#&gt; Note that these results assume that relationships between variables are</span></span>
+<span id="cb3-79"><a href="#cb3-79" tabindex="-1"></a><span class="co">#&gt; linear. Consider exploring the specification of each relationship in</span></span>
+<span id="cb3-80"><a href="#cb3-80" tabindex="-1"></a><span class="co">#&gt; your model.  Also consider whether it is valid and possible to explore</span></span>
+<span id="cb3-81"><a href="#cb3-81" tabindex="-1"></a><span class="co">#&gt; relationships between partially observed variables using the observed</span></span>
+<span id="cb3-82"><a href="#cb3-82" tabindex="-1"></a><span class="co">#&gt; data, e.g. avoiding perfect prediction.</span></span>
+<span id="cb3-83"><a href="#cb3-83" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" tabindex="-1"></a><span class="fu">checkCRA</span>(<span class="at">y=</span><span class="st">"bmi7"</span>, <span class="at">covs=</span><span class="st">"matage mated"</span>, <span class="at">r_cra=</span><span class="st">"r"</span>,</span>
+<span id="cb3-85"><a href="#cb3-85" tabindex="-1"></a>         <span class="at">mdag=</span><span class="st">"   matage -&gt; bmi7 </span></span>
+<span id="cb3-86"><a href="#cb3-86" tabindex="-1"></a><span class="st">                  mated -&gt; matage </span></span>
+<span id="cb3-87"><a href="#cb3-87" tabindex="-1"></a><span class="st">                  mated -&gt; bmi7 </span></span>
+<span id="cb3-88"><a href="#cb3-88" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; mated </span></span>
+<span id="cb3-89"><a href="#cb3-89" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; r</span></span>
+<span id="cb3-90"><a href="#cb3-90" tabindex="-1"></a><span class="st">                  pregsize -&gt; bmi7 </span></span>
+<span id="cb3-91"><a href="#cb3-91" tabindex="-1"></a><span class="st">                  pregsize -&gt; bwt  </span></span>
+<span id="cb3-92"><a href="#cb3-92" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; bwt"</span>)</span>
+<span id="cb3-93"><a href="#cb3-93" tabindex="-1"></a><span class="co">#&gt; Based on the proposed directed acyclic graph (DAG), the analysis model</span></span>
+<span id="cb3-94"><a href="#cb3-94" tabindex="-1"></a><span class="co">#&gt; outcome and complete record indicator are independent given analysis</span></span>
+<span id="cb3-95"><a href="#cb3-95" tabindex="-1"></a><span class="co">#&gt; model covariates. Hence, complete records analysis is valid.</span></span>
+<span id="cb3-96"><a href="#cb3-96" tabindex="-1"></a></span>
+<span id="cb3-97"><a href="#cb3-97" tabindex="-1"></a><span class="fu">checkMI</span>(<span class="at">dep=</span><span class="st">"bmi7"</span>, <span class="at">preds=</span><span class="st">"matage mated pregsize"</span>, <span class="at">r_dep=</span><span class="st">"r"</span>,</span>
+<span id="cb3-98"><a href="#cb3-98" tabindex="-1"></a>        <span class="at">mdag=</span><span class="st">"    matage -&gt; bmi7 </span></span>
+<span id="cb3-99"><a href="#cb3-99" tabindex="-1"></a><span class="st">                  mated -&gt; matage </span></span>
+<span id="cb3-100"><a href="#cb3-100" tabindex="-1"></a><span class="st">                  mated -&gt; bmi7 </span></span>
+<span id="cb3-101"><a href="#cb3-101" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; mated </span></span>
+<span id="cb3-102"><a href="#cb3-102" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; r</span></span>
+<span id="cb3-103"><a href="#cb3-103" tabindex="-1"></a><span class="st">                  pregsize -&gt; bmi7 </span></span>
+<span id="cb3-104"><a href="#cb3-104" tabindex="-1"></a><span class="st">                  pregsize -&gt; bwt  </span></span>
+<span id="cb3-105"><a href="#cb3-105" tabindex="-1"></a><span class="st">                  sep_unmeas -&gt; bwt"</span>)</span>
+<span id="cb3-106"><a href="#cb3-106" tabindex="-1"></a><span class="co">#&gt; Based on the proposed directed acyclic graph (DAG), the incomplete</span></span>
+<span id="cb3-107"><a href="#cb3-107" tabindex="-1"></a><span class="co">#&gt; variable and its missingness indicator are independent given imputation</span></span>
+<span id="cb3-108"><a href="#cb3-108" tabindex="-1"></a><span class="co">#&gt; model predictors. Hence, multiple imputation methods which assume data</span></span>
+<span id="cb3-109"><a href="#cb3-109" tabindex="-1"></a><span class="co">#&gt; are missing at random are valid in principle.</span></span>
+<span id="cb3-110"><a href="#cb3-110" tabindex="-1"></a></span>
+<span id="cb3-111"><a href="#cb3-111" tabindex="-1"></a>mimod_bmi7 <span class="ot">&lt;-</span> <span class="fu">checkModSpec</span>(<span class="at">formula=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span>
+<span id="cb3-112"><a href="#cb3-112" tabindex="-1"></a>                           <span class="at">family=</span><span class="st">"gaussian(identity)"</span>, <span class="at">data=</span>bmi)</span>
+<span id="cb3-113"><a href="#cb3-113" tabindex="-1"></a><span class="co">#&gt; Model mis-specification method: regression of model residuals on a</span></span>
+<span id="cb3-114"><a href="#cb3-114" tabindex="-1"></a><span class="co">#&gt; fractional polynomial of the fitted values</span></span>
+<span id="cb3-115"><a href="#cb3-115" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-116"><a href="#cb3-116" tabindex="-1"></a><span class="co">#&gt; P-value: 1</span></span>
+<span id="cb3-117"><a href="#cb3-117" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-118"><a href="#cb3-118" tabindex="-1"></a><span class="co">#&gt; A large p-value means there is little evidence of model</span></span>
+<span id="cb3-119"><a href="#cb3-119" tabindex="-1"></a><span class="co">#&gt; mis-specification.</span></span>
+<span id="cb3-120"><a href="#cb3-120" tabindex="-1"></a></span>
+<span id="cb3-121"><a href="#cb3-121" tabindex="-1"></a>miprop <span class="ot">&lt;-</span> <span class="fu">proposeMI</span>(<span class="at">mimodobj=</span>mimod_bmi7, <span class="at">data=</span>bmi)</span>
+<span id="cb3-122"><a href="#cb3-122" tabindex="-1"></a><span class="co">#&gt; Based on your proposed imputation model and dataset, your mice() call</span></span>
+<span id="cb3-123"><a href="#cb3-123" tabindex="-1"></a><span class="co">#&gt; should be as follows:</span></span>
+<span id="cb3-124"><a href="#cb3-124" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-125"><a href="#cb3-125" tabindex="-1"></a><span class="co">#&gt; mice(data = bmi , # You may need to specify a subset of the columns in</span></span>
+<span id="cb3-126"><a href="#cb3-126" tabindex="-1"></a><span class="co">#&gt; your dataset</span></span>
+<span id="cb3-127"><a href="#cb3-127" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-128"><a href="#cb3-128" tabindex="-1"></a><span class="co">#&gt; m = 41 , # You should use at least this number of imputations based on</span></span>
+<span id="cb3-129"><a href="#cb3-129" tabindex="-1"></a><span class="co">#&gt; the proportion of complete records in your dataset</span></span>
+<span id="cb3-130"><a href="#cb3-130" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-131"><a href="#cb3-131" tabindex="-1"></a><span class="co">#&gt; method = c( 'norm' ) # Specify a method for each incomplete variable.</span></span>
+<span id="cb3-132"><a href="#cb3-132" tabindex="-1"></a><span class="co">#&gt; If displayed, the box-and-whisker plots can be used to inform your</span></span>
+<span id="cb3-133"><a href="#cb3-133" tabindex="-1"></a><span class="co">#&gt; choice of method(s): for example, if the imputation model does not</span></span>
+<span id="cb3-134"><a href="#cb3-134" tabindex="-1"></a><span class="co">#&gt; predict extreme values appropriately, consider a different imputation</span></span>
+<span id="cb3-135"><a href="#cb3-135" tabindex="-1"></a><span class="co">#&gt; model/method e.g. PMM. Note the distribution of imputed and observed</span></span>
+<span id="cb3-136"><a href="#cb3-136" tabindex="-1"></a><span class="co">#&gt; values is displayed for numeric variables only. The distribution may</span></span>
+<span id="cb3-137"><a href="#cb3-137" tabindex="-1"></a><span class="co">#&gt; differ if data are missing at random or missing not at random. If you</span></span>
+<span id="cb3-138"><a href="#cb3-138" tabindex="-1"></a><span class="co">#&gt; suspect data are missing not at random, the plots can also inform your</span></span>
+<span id="cb3-139"><a href="#cb3-139" tabindex="-1"></a><span class="co">#&gt; choice of sensitivity parameter.</span></span>
+<span id="cb3-140"><a href="#cb3-140" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-141"><a href="#cb3-141" tabindex="-1"></a><span class="co">#&gt; formulas = formulas_list , # Note that you do not additionally need to</span></span>
+<span id="cb3-142"><a href="#cb3-142" tabindex="-1"></a><span class="co">#&gt; specify a 'predmatrix'</span></span>
+<span id="cb3-143"><a href="#cb3-143" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-144"><a href="#cb3-144" tabindex="-1"></a><span class="co">#&gt; # The formulas_list specifies the conditional imputation models, which</span></span>
+<span id="cb3-145"><a href="#cb3-145" tabindex="-1"></a><span class="co">#&gt; are as follows:</span></span>
+<span id="cb3-146"><a href="#cb3-146" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-147"><a href="#cb3-147" tabindex="-1"></a><span class="co">#&gt; 'bmi7 ~ matage + I(matage^2) + mated + pregsize'</span></span>
+<span id="cb3-148"><a href="#cb3-148" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-149"><a href="#cb3-149" tabindex="-1"></a><span class="co">#&gt; maxit = 10 , # If you have more than one incomplete variable, you</span></span>
+<span id="cb3-150"><a href="#cb3-150" tabindex="-1"></a><span class="co">#&gt; should check this number of iterations is sufficient by inspecting the</span></span>
+<span id="cb3-151"><a href="#cb3-151" tabindex="-1"></a><span class="co">#&gt; trace plots, if displayed. Consider increasing the number of iterations</span></span>
+<span id="cb3-152"><a href="#cb3-152" tabindex="-1"></a><span class="co">#&gt; if there is a trend that does not stabilise by the 10th iteration. Note</span></span>
+<span id="cb3-153"><a href="#cb3-153" tabindex="-1"></a><span class="co">#&gt; that iteration is not performed when only one variable is partially</span></span>
+<span id="cb3-154"><a href="#cb3-154" tabindex="-1"></a><span class="co">#&gt; observed.</span></span>
+<span id="cb3-155"><a href="#cb3-155" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-156"><a href="#cb3-156" tabindex="-1"></a><span class="co">#&gt; printFlag = FALSE , # Change to printFlag=TRUE to display the history</span></span>
+<span id="cb3-157"><a href="#cb3-157" tabindex="-1"></a><span class="co">#&gt; as imputation is performed</span></span>
+<span id="cb3-158"><a href="#cb3-158" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-159"><a href="#cb3-159" tabindex="-1"></a><span class="co">#&gt; seed = NA) # It is good practice to choose a seed so your results are</span></span>
+<span id="cb3-160"><a href="#cb3-160" tabindex="-1"></a><span class="co">#&gt; reproducible</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-2.png" width="100%"><img src="reference/figures/README-unnamed-chunk-2-3.png" width="100%"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="reference/doMImice.html">doMImice</a></span><span class="op">(</span><span class="va">miprop</span>, <span class="fl">123</span>, substmod<span class="op">=</span><span class="st">"lm(bmi7 ~ matage + I(matage^2) + mated)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) </span></span>
-<span><span class="co">#&gt;  </span></span>
-<span><span class="co">#&gt; multiple imputation estimates are as follows: </span></span>
+<span><span class="co">#&gt; Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,</span></span>
+<span><span class="co">#&gt; multiple imputation estimates are as follows:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;          term   estimate  std.error  statistic       df       p.value</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 1 (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 2      matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 3 I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 4      mated1 -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;        2.5 %     97.5 %</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 1 17.5203258 17.8011389</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 2  1.0472648  1.2536442</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 3  0.7778567  0.9051382</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; 4 -1.2156760 -0.7895629</span></span></code></pre></div>
 </div>
 </div>
