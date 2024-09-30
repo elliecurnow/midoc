@@ -4,7 +4,7 @@
 \alias{checkModSpec}
 \title{Inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data, message = TRUE, plot = TRUE)
+checkModSpec(formula, family, data, plot = TRUE, message = TRUE)
 }
 \arguments{
 \item{formula}{A symbolic description of the model to be fitted, with the
@@ -17,19 +17,24 @@ supported are "gaussian(identity)" and "binomial(logit)"}
 
 \item{data}{A data frame containing all the variables stated in the formula}
 
-\item{message}{If TRUE (the default), displays a message indicating whether the
-relationships between the dependent variable and covariates are likely to
-be correctly specified or not; use message = FALSE to suppress the message}
+\item{plot}{If TRUE (the default) and there is evidence of model
+mis-specification, displays a plot which can be used to explore the
+functional form of each covariate in the specified model; use plot = FALSE
+to disable the plot}
 
-\item{plot}{If TRUE (the default) and there is evidence of model mis-specification,
-displays a plot which can be used to explore the functional form of each
-covariate in the specified model; use plot = FALSE to disable the plot}
+\item{message}{If TRUE (the default), displays a message indicating whether
+the relationships between the dependent variable and covariates are likely
+to be correctly specified or not; use message = FALSE to suppress the
+message}
 }
 \value{
-An object of type 'miprop' (a list containing the
-specified formula, family, and dataset name), plus, optionally, messages
-and plots indicating whether the relationships between the dependent
-variable and covariates are likely to be correctly specified or not
+An object of type 'mimod' (a list containing the specified formula,
+family, and dataset name). Optionally, a message indicating whether the
+relationships between the dependent variable and covariates are likely to
+be correctly specified or not. If there is evidence of model
+mis-specification, optionally returns a plot of the model residuals versus
+the fitted values which can be used to explore the appropriate functional
+form for the specified model.
 }
 \description{
 Explore whether the observed relationships in the specified dataset are
@@ -39,8 +44,14 @@ analysis or imputation model).
 \examples{
 # Example (incorrectly) assuming a linear relationship
 checkModSpec(formula="bmi7~matage+mated+pregsize",
-  family="gaussian(identity)", data=bmi)
+             family="gaussian(identity)", data=bmi)
   ## For the example above, (correctly) assuming a quadratic relationship
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
-  family="gaussian(identity)", data=bmi)
+             family="gaussian(identity)", data=bmi)
+}
+\references{
+Curnow E, Carpenter JR, Heron JE, et al. 2023. Multiple
+imputation of missing data under missing at random: compatible imputation
+models are not sufficient to avoid bias if they are mis-specified. J Clin
+Epidemiol. \url{doi:10.1016/j.jclinepi.2023.06.011}
 }

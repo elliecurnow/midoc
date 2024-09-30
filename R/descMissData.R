@@ -36,7 +36,9 @@ descMissData <- function(y, covs, data, plot=FALSE) {
     n <- as.numeric(row.names(mdtab[1:nrow(mdtab)-1,]))
     pct <-  round(n*100/sum(n))
     pattern <- 1:(nrow(mdtab)-1)
-    print(data.frame(pattern,mdtab2,n,pct),row.names=FALSE)
+    result<-data.frame(pattern,mdtab2,n,pct)
+    row.names(result) <- NULL
+    return(result)
   }
 }
 

@@ -26,44 +26,44 @@
 #'   proposed DAG and imputation model
 #' @export
 #'
+#' @references Curnow E, Tilling K, Heron JE, Cornish RP, Carpenter JR. 2023.
+#'   Multiple imputation of missing data under missing at random: including a
+#'   collider as an auxiliary variable in the imputation model can induce bias.
+#'   Frontiers in Epidemiology. <doi:10.3389/fepid.2023.1237447>
+#'
 #' @examples
 #' # Example DAG for which multiple imputation is valid
 #' checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
-#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+#'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+#'               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
+#'               pregsize -> bwt sep_unmeas -> bwt")
 #'
 #' # Example DAG for which multiple imputation is not valid, due to a collider
 #' checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
-#'   mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-#'   mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+#'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+#'               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
+#'               pregsize -> bwt sep_unmeas -> bwt")
 checkMI <- function(dep, preds, r_dep, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   predsvec <- unlist(strsplit(preds," "))
   #If r_dep does not depend on dep conditional on predictors, then MI is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), dep, r_dep, predsvec)){
-    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
-the incomplete variable and its missingness indicator are independent
-given imputation model predictors. Hence, multiple imputation methods which
-assume data are missing at random are valid in principle."), fill=TRUE)
+    result <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are valid in principle.", collapse="\n")
   } else {
-    cat(strwrap("Based on the proposed directed acyclic graph (DAG),
-the incomplete variable and its missingness indicator are not independent
-given imputation model predictors. Hence, multiple imputation methods which
-assume data are missing at random are not valid."),"\n",
-      strwrap("Consider using a different imputation model and/or strategy (e.g. not-at-random
-fully conditional specification)."),"\n",fill=TRUE)
+      result1 <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are not independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are not valid. \n \nConsider using a different imputation model and/or strategy (e.g. not-at-random fully conditional specification).",
+        collapse="\n")
       adjsets_r <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,r_dep),outcome=dep,type = "all")
       adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")
       if(length(adjsets_r)>0) (adjsets <- adjsets_r)
         else (adjsets <- adjsets_dep)
       if(length(adjsets)>0){
-        cat(strwrap("For example, the incomplete variable and its missingness indicator are
-independent if, in addition to the specified predictors, the following sets of
-variables are included as predictors in the imputation model
-(note that this list is not necessarily exhaustive, particularly if your DAG is complex):"),"\n",fill=TRUE)
-        print(adjsets)
-            }
-         }
+        result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n",
+                          paste0(adjsets, prefix="\n", collapse = "\n"),collapse = "\n")
+        #print(adjsets)
+        }
+    result <- paste(result1, "\n", result2, collapse = "\n")
+  }
+  message(paste(strwrap(result),collapse="\n"))
 }
 
 

@@ -40,25 +40,34 @@ covariates.
 }
 \examples{
 # Example DAG for which complete records analysis is not valid, but could be
-  ## valid for a different set of covariates
+## valid for a different set of covariates
 checkCRA(y="bmi7", covs="matage", r_cra="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r")
-  ## For the DAG in the example above, complete records analysis is valid
-  ## if a different set of covariates is used
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r")
+# For the DAG in the example above, complete records analysis is valid
+## if a different set of covariates is used
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r")
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r")
 
 # Example DAG for which complete records is not valid, but could be valid
-  ## for a different estimand
+## for a different estimand
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r matage -> bmi3 mated -> bmi3 bmi3 -> bmi7
-  bmi3 -> r")
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r matage -> bmi3
+               mated -> bmi3 bmi3 -> bmi7 bmi3 -> r")
 
-# Example DAG for which complete records analysis is not valid
+# Example DAG for which complete records analysis is never valid
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r bmi7 -> r")
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
+}
+\references{
+Hughes R, Heron J, Sterne J, Tilling K. 2019. Accounting for
+missing data in statistical analyses: multiple imputation is not always the
+answer. Int J Epidemiol. \url{doi:10.1093/ije/dyz032}
+
+Bartlett JW, Harel O, Carpenter JR. 2015. Asymptotically Unbiased
+Estimation of Exposure Odds Ratios in Complete Records Logistic Regression.
+Am J Epidemiol. \url{doi:10.1093/aje/kwv114}
 }

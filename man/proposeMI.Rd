@@ -4,7 +4,7 @@
 \alias{proposeMI}
 \title{Suggests multiple imputation options}
 \usage{
-proposeMI(mimodobj, data, message = TRUE, plot = TRUE, plotprompt = TRUE)
+proposeMI(mimodobj, data, plot = TRUE, plotprompt = TRUE, message = TRUE)
 }
 \arguments{
 \item{mimodobj}{An object, or list of objects, of type 'mimod', which stands
@@ -14,38 +14,45 @@ for 'multiple imputation model', created by a call to
 \item{data}{A data frame containing all the variables required for imputation
 and the substantive analysis}
 
-\item{message}{If TRUE (the default), displays a message describing the
-proposed 'mice' options; use message=FALSE to suppress the message}
-
-\item{plot}{If TRUE (the default), displays diagnostic plots for the
-proposed 'mice' call; use plot=FALSE to disable the plots}
+\item{plot}{If TRUE (the default), displays diagnostic plots for the proposed
+'mice' call; use plot=FALSE to disable the plots}
 
 \item{plotprompt}{If TRUE (the default), the user is prompted before the
 second plot is displayed; use plotprompt=FALSE to remove the prompt}
+
+\item{message}{If TRUE (the default), displays a message describing the
+proposed 'mice' options; use message=FALSE to suppress the message}
 }
 \value{
 An object of type 'miprop', which can be used to run 'mice' using the
-proposed options, plus, optionally, a message and diagnostic plots describing
-the proposed 'mice' options
+proposed options, plus, optionally, a message and diagnostic plots
+describing the proposed 'mice' options
 }
 \description{
-Suggests the \link[mice]{mice} options to perform multiple
-imputation, based on the proposed set of imputation models (one for each
-partially observed variable) and specified dataset.
+Suggests the \link[mice]{mice} options to perform multiple imputation, based
+on the proposed set of imputation models (one for each partially observed
+variable) and specified dataset.
 }
 \examples{
-# First specify each imputation model as a 'mimod' object (suppressing the
-## output)
-mimod_bmi7 <- checkModSpec(
-formula="bmi7~matage+I(matage^2)+mated+pregsize",
-  family="gaussian(identity)", data=bmi, message = FALSE)
+# First specify each imputation model as a 'mimod' object
+## (suppressing the message)
+mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+                           family="gaussian(identity)",
+                           data=bmi,
+                           message=FALSE)
 mimod_pregsize <- checkModSpec(
-formula="pregsize~bmi7+matage+I(matage^2)+mated",
-  family="binomial(logit)", data=bmi, message = FALSE)
+                           formula="pregsize~bmi7+matage+I(matage^2)+mated",
+                           family="binomial(logit)",
+                           data=bmi,
+                           message=FALSE)
 
 # Display the proposed 'mice' options (suppressing the plot prompt)
-  ## When specifying a single imputation model
-proposeMI(mimodobj=mimod_bmi7, data=bmi, plotprompt = FALSE)
-  ## When specifying more than one imputation model (suppressing the plot)
-proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize), data=bmi, plot = FALSE)
+## When specifying a single imputation model
+proposeMI(mimodobj=mimod_bmi7,
+          data=bmi,
+          plotprompt = FALSE)
+## When specifying more than one imputation model (suppressing the plots)
+proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
+          data=bmi,
+          plot = FALSE)
 }

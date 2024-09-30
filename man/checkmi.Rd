@@ -41,11 +41,19 @@ predictors.
 \examples{
 # Example DAG for which multiple imputation is valid
 checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+        mdag="matage -> bmi7 mated -> matage mated -> bmi7
+              sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
+              pregsize -> bwt sep_unmeas -> bwt")
 
 # Example DAG for which multiple imputation is not valid, due to a collider
 checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
-  mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas ->
-  mated sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt")
+        mdag="matage -> bmi7 mated -> matage mated -> bmi7
+              sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
+              pregsize -> bwt sep_unmeas -> bwt")
+}
+\references{
+Curnow E, Tilling K, Heron JE, Cornish RP, Carpenter JR. 2023.
+Multiple imputation of missing data under missing at random: including a
+collider as an auxiliary variable in the imputation model can induce bias.
+Frontiers in Epidemiology. \url{doi:10.3389/fepid.2023.1237447}
 }

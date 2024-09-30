@@ -4,7 +4,7 @@
 \alias{doMImice}
 \title{Performs multiple imputation}
 \usage{
-doMImice(mipropobj, seed, substmod = " ")
+doMImice(mipropobj, seed, substmod = " ", message = TRUE)
 }
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}
@@ -14,28 +14,38 @@ doMImice(mipropobj, seed, substmod = " ")
 \item{substmod}{Optionally, a symbolic description of the substantive model
 to be fitted, specified as a string; if supplied, the model will be fitted
 to each imputed dataset and the results pooled}
+
+\item{message}{If TRUE (the default), displays a message summarising the
+analysis that has been performed; use message = FALSE to suppress the
+message}
 }
 \value{
-A 'mice' object of type 'mids'
+A 'mice' object of class 'mids' (the multiply imputed datasets).
+Optionally, a message summarising the analysis that has been performed.
 }
 \description{
-Performs multiple imputation using \link[mice]{mice}, based on the 'mice'
-options and dataset specified by a call to  \link[midoc]{proposeMI}.
+Creates multiple imputations using \link[mice]{mice}, based on the options
+and dataset specified by a call to \link[midoc]{proposeMI}. If a substantive
+model is specified, also calculates the pooled estimates using
+\link[mice]{pool}.
 }
 \examples{
-# First specify the imputation model as a 'mimod' object (suppressing the
-## output)
-mimod_bmi7 <- checkModSpec(
-  formula="bmi7~matage+I(matage^2)+mated+pregsize",
-  family="gaussian(identity)", data=bmi, message = FALSE)
-# Save the proposed 'mice' options as a 'miprop' object (suppressing the
-## output)
-miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi, message = FALSE,
-  plot = FALSE)
+# First specify the imputation model as a 'mimod' object
+## (suppressing the message)
+mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
+                           family="gaussian(identity)",
+                           data=bmi,
+                           message=FALSE)
+# Save the proposed 'mice' options as a 'miprop' object
+## (suppressing the message)
+miprop <- proposeMI(mimodobj=mimod_bmi7,
+                    data=bmi,
+                    message=FALSE,
+                    plot = FALSE)
 # Create the set of imputed datasets using the proposed 'mice' options
 imp <- doMImice(miprop,123)
 
 # Additionally, fit the substantive model to each imputed dataset and display
-  ## the pooled results
+## the pooled results
 doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 }
