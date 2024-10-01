@@ -6,7 +6,7 @@
 \alias{midoc-package}
 \title{midoc: A Decision-Making System for Multiple Imputation}
 \description{
-A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. `midoc` will advise which analysis approaches can be used, and how best to perform them. `midoc` follows the framework for the treatment and reporting of missing data in observational studies (TARMOS). Lee et al (2021). \doi{10.1016/j.jclinepi.2021.01.008}.
+A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. 'midoc' will advise which analysis approaches can be used, and how best to perform them. 'midoc' follows the framework for the treatment and reporting of missing data in observational studies (TARMOS). Lee et al (2021). \doi{10.1016/j.jclinepi.2021.01.008}.
 }
 \seealso{
 Useful links:
