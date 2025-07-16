@@ -1,0 +1,861 @@
+---
+title: "Multiple Imputation DOCtor (<a href='https://elliecurnow.github.io/midoc/'>midoc</a>)"
+author:   
+  - name: "[Elinor Curnow](https://github.com/elliecurnow), Jon Heron, Rosie Cornish, Kate Tilling, James Carpenter, and [Holly Taylor](https://github.com/H0LLYJT)"
+# date: "2025-06-26"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+runtime: shiny
+editor_options:
+  markdown:
+    wrap: sentence
+
+---
+<style>
+  body{
+  font-size: 12pt;
+  }
+  code{
+  background-color: white;
+  font-color: black;
+  font-size: 12pt;
+  font-weight: bold;
+  font-family: verdana; 
+  }
+  code.r{
+  font-color: black;
+  font-size: 12pt;
+  font-weight: bold;
+  font-family: verdana;
+  }
+  pre{
+  background-color: white;
+  font-color: black;
+  font-size: 12pt;
+  font-weight: bold;
+  font-family: verdana;
+  }
+  caption{
+  color: black;
+  font-weight: bold;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) # echo = TRUE means code will be shown
+
+library(midoc)
+library(dagitty) # draws dags
+library(shiny) # makes embeded apps
+```
+
+
+## What is midoc?
+Missing data is a common issue in health and social research, often addressed by multiple imputation (MI). MI is a flexible and general approach, with a suite of software packages. 
+However, using MI in practice can be complex. Application of MI involves multiple decisions which are rarely justified or even documented, and for which little guidance is available. 
+
+The Multiple Imputation DOCtor (`midoc`) R package is a decision-making system which incorporates expert, up-to-date guidance to help you choose the most appropriate analysis method 
+when there are missing data. `midoc` will guide you through your analysis, examining both the hypothesised causal relationships and the observed data to advise on whether MI is needed, and if so how to perform it. `midoc` follows the framework for the treatment 
+and reporting of missing data in observational studies (TARMOS) [1](https://doi.org/10.1016/j.jclinepi.2021.01.008). We assume you are interested in obtaining unbiased estimates of regression coefficients - note that bias is not necessarily a concern if your interest is in prediction (*i.e.* diagnostic/prognostic modelling).
+
+**Note** *Multiple Imputation DOCtor (midoc) Shiny version* is also available to run locally. Run the `midoc` command `midocVignette()` in R.
+
+## How to use these apps
+
+All datasets must be in .csv format
+
+You will have to figure out the casual relationship between variables yourself.
+
+Variables entered must be by the same name as in the spreadsheet.
+
+Use the apps in order.
+
+## Upload data set
+
+```{r data, echo = FALSE}
+# USER INTERFACE data ----------------------------------------------------
+data_ui <- fluidPage(
+  
+  sidebarLayout(
+    
+    sidebarPanel(
+      selectInput("data_source", "Choose Data Source:",
+                  choices = c("Upload CSV" = "upload",
+                              "BMI data set"= "bmi" )),
+      
+      conditionalPanel(
+        condition = "input.data_source == 'upload'",
+        fileInput("file", "Upload .csv file", accept = ".csv")
+      )
+    ),
+    
+    mainPanel(
+      tableOutput("preview")
+    )
+  )
+)
+
+# SERVER data  -----------------------------------------
+data_server <- function(input, output) {
+  
+  # Make uploaded dataframe reactive
+  uploaded_df <- reactiveVal()
+  
+  # If a CSV is uploaded
+  observeEvent(input$file, {
+    req(input$file)
+    
+    # Clear any existing data
+  uploaded_df(NULL)
+    
+    df <- read.csv(input$file$datapath)
+    uploaded_df(df)
+    
+    if (!dir.exists("shared_data")) dir.create("shared_data")
+    saveRDS(df, file = "shared_data/uploaded_data.rds")
+  })
+  
+  # If the BMI dataset is selected
+  observeEvent(input$data_source, {
+    if (input$data_source == "bmi") {
+    # Clear any existing data
+    uploaded_df(NULL)
+      
+      df <- midoc::bmi  
+      uploaded_df(df)
+      
+      
+      if (!dir.exists("shared_data")) dir.create("shared_data")
+      saveRDS(df, file = "shared_data/uploaded_data.rds")
+    }
+  })
+  
+  # Show preview of the selected or uploaded dataset
+  output$preview <- renderTable({
+    req(uploaded_df())
+    head(uploaded_df(), 10)
+  })
+}
+
+# APP FUNCTION data----------------------------------------
+shinyApp(ui = data_ui, server = data_server)
+```
+
+## Interactive midoc apps{.tabset .tabset-fade .tabset-pills}
+
+### descMissData()
+
+```{r table, echo=FALSE} 
+
+# USER INTERFACE tab 1 ----------------------------------------------------
+missing_data_input_ui <- fluidPage(
+  
+  # App title 
+  titlePanel("List missing data patterns"), 
+
+  # add text above the UI
+  div(
+    style = "margin-bottom: 20px; font-size: 14px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+  hr(), # line to divide text from output
+
+  # Sidebar layout with input and output definitions 
+  sidebarLayout(
+    
+    # Sidebar panel for inputs 
+    sidebarPanel(
+      textInput(inputId = "y",
+                label = "Analysis model outcome/variable of primary interest",
+                value = ""),
+      
+      textInput(inputId = "covs",
+                label = "Analysis model covariates/other variables, separated by a space",
+                value = ""),
+      
+      # fileInput(inputId = "datafile", 
+      #           label = "Upload CSV file",
+      #           accept = c("text/csv",
+      #                      "text/comma-separated-values",
+      #                      ".csv")),
+      
+      actionButton(inputId = "go",
+                   label = "List missing data patterns")
+      
+    ),
+    
+    # Main panel for displaying outputs
+    mainPanel(
+      plotOutput(outputId = "descmissdata"),
+      uiOutput("post_output_text")  # dynamic text below the output
+    )  # close mainPanel
+    
+  )  # close sidebarLayout
+)
+
+
+# SERVER tab 1 ----------------------------------------------------------------
+
+missing_data_input_server <- function(input, output) {
+  
+  data <- reactive({
+    if (file.exists("shared_data/uploaded_data.rds")) {
+      readRDS("shared_data/uploaded_data.rds")
+    } else {
+      validate("Please upload a data set.")
+    }
+  })
+  
+  output$descmissdata <- bindEvent(
+    renderPlot({
+      req(data())  
+      midoc::descMissData(
+        y = input$y,
+        covs = input$covs,
+        data = data(),
+        plot = TRUE
+      )
+    }),
+    input$go
+  )
+  
+  output$post_output_text <- renderUI({
+    req(input$go)  # only show after button clicked
+    
+    tagList(
+      hr(),
+      div(
+        style = "margin-top: 15px; font-size: 12px; color: #333;",
+        p("Text below output will be a conditional explanation of the worked example."),
+        p("For uploaded data it will explain how to interpret the output. For example:"),
+        tags$ul(
+          tags$li("0 indicates missing data. 1 indicates complete data.")
+        ),
+        p("When a package dataset is selected, it will explain the output like a tutorial."),
+        tags$ul(
+          tags$li("This is a bullet point")
+        )
+      )
+    )
+  })
+}
+
+# APP FUNCTION tab 1 --------------------------------------------------------------
+shinyApp(ui = missing_data_input_ui, server = missing_data_input_server)
+
+
+```
+
+
+
+###  Draw DAG 
+
+
+```{r dag, echo=FALSE, out.width="500px", out.height="400px", dpi=200}
+
+# USER INTERFACE tab 2 ---------------------------------------------------
+dag_ui <- fluidPage( # creates UI
+  
+  # App title 
+  titlePanel("Draw the specified directed acyclic graph (DAG)"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app or of how to interpret the output")
+  ),  
+    hr(), # line to divide text from output
+  
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+          textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = ""),
+          
+          actionButton(inputId = "go",
+                              label = "Create DAG")
+          ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+
+      #Debug print value of string being passed
+      #textOutput("testvar"),
+      
+      # Output: Plot result
+      plotOutput("mdagplot", width="300px", height="300px")
+      
+    )
+  )
+)
+
+# SERVER tab 2 ---------------------------------------------------
+dag_server <- function(input, output) {
+  
+    mdagspec <- reactive(paste('dag {',input$mdag,'}'))
+    
+    output$mdagplot <- shiny::bindEvent(shiny::renderPlot({
+      plot(dagitty::dagitty(mdagspec()))
+  }),
+  input$go
+)
+}
+
+# APP FUNCTION tab 2 ---------------------------------------------------
+shinyApp(ui = dag_ui, server = dag_server)
+
+# need to decide own causal relationships. 
+
+```
+
+### exploreDAG()
+
+```{r comparison, echo=FALSE}
+
+# USER INTERFACE tab 3 -------------------------------------------------------
+comparison_ui <- fluidPage(
+  
+  # App title
+titlePanel("Compare data with proposed DAG"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+    hr(), # line to divide text from output
+
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+          
+          textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = ""),
+          
+          # fileInput(inputId = "datafile", 
+          #                  label = "Upload CSV file",
+          #                  accept = c("text/csv",
+          #                   "text/comma-separated-values,
+          #                   .csv")),
+          
+          actionButton(inputId = "go",
+                              label = "compare data")
+          
+          ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+
+      # Output: Print result
+      verbatimTextOutput(outputId = "exploredag")
+      
+    )
+  )
+)
+
+# SERVER tab 3 ----------------------------------------------------------
+comparison_server <- function(input, output) {
+  
+  data <- reactive({
+    # Wait for the button to be clicked
+    input$go
+    
+    # Invalidate/reactive isolate to trigger on button click
+    isolate({
+      # Check if the file exists
+      if (file.exists("shared_data/uploaded_data.rds")) {
+        readRDS("shared_data/uploaded_data.rds")
+      } else {
+        NULL
+      }
+    })
+  })
+  
+  exploredag <- reactive({
+    req(data())
+    testthat::evaluate_promise(midoc::exploreDAG(input$mdag, data()))$messages
+  })
+  
+  output$exploredag <- shiny::renderPrint({
+    req(input$go)
+    cat(strwrap(paste(cat(exploredag(), "\n", fill = TRUE), collapse = "\n")))
+  })
+}
+
+# APP FUNCTION tab 3 -------------------------------------------------
+shinyApp(ui = comparison_ui, server = comparison_server)
+```
+
+### checkCRA()
+```{r validity, echo=FALSE}
+
+# USER INTERFACE tab 4 -----------------------------------------
+CRA_validity_ui <- fluidPage(
+
+  # App title
+  titlePanel("Inspect complete records analysis model"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app or of how to interpret the output")
+  ),  
+    hr(), # line to divide text from output
+  
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+      textInput(inputId = "y",
+                  label = "Analysis model outcome",
+                  value = ""),
+
+      textInput(inputId = "covs",
+                  label = "Analysis model covariates, separated by a space",
+                  value = ""),
+      
+      textInput(inputId = "r_cra",
+                  label = "Complete record indicator",
+                  value = ""),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = ""),
+          
+          actionButton(inputId = "go",
+                              label = "Check CRA")
+    ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+      
+      # Output: Print result
+      verbatimTextOutput(outputId = "checkcra")
+
+    )
+  )
+)
+
+# SERVER tab 4 ---------------------------------------------------------
+CRA_validity_server <- function(input, output) {
+
+  checkcra <- reactive({
+        testthat::evaluate_promise(
+          midoc::checkCRA(input$y,input$covs,input$r_cra,input$mdag))$messages
+  })
+    
+  output$checkcra <- bindEvent(renderPrint({
+
+    cat(strwrap(paste(cat(checkcra(),"\n",fill=TRUE), collapse="\n")))
+  
+  }), input$go)
+
+}
+
+# APP FUNCTION tab 4 ---------------------------------------------------
+shinyApp(ui = CRA_validity_ui, server = CRA_validity_server)
+
+```
+
+### checkMI()
+
+```{r MI validity, echo=FALSE}
+
+#  USER INTERFACE tab 5 ----------------------------------------------------
+MI_validity_ui <- fluidPage(
+
+  # App title
+  titlePanel("Inspect multiple imputation model"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+    hr(), # line to divide text from output
+
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+      textInput(inputId = "dep",
+                  label = "Partially observed variable",
+                  value = ""),
+
+      textInput(inputId = "preds",
+                  label = "Imputation model predictors, separated by a space",
+                  value = ""),
+      
+      textInput(inputId = "r_dep",
+                  label = "Partially observed variable's missingness indicator",
+                  value = ""),
+
+      textAreaInput(inputId = "mdag",
+                  label = "Directed acyclic graph",
+                  value = ""),
+          
+      actionButton(inputId = "go",
+                          label = "check Validity")
+    ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+      
+      # Output: Print result
+      verbatimTextOutput(outputId = "checkmi"),
+
+    )
+  )
+)
+
+#  SERVER tab 5 ----------------------------------------------------------
+MI_validity_server <- function(input, output) {
+
+  checkmi <- reactive({
+        testthat::evaluate_promise(
+          midoc::checkMI(input$dep,input$preds,input$r_dep,input$mdag))$messages
+  })
+    
+  output$checkmi <- bindEvent(renderPrint({
+
+    cat(strwrap(paste(cat(checkmi(),"\n",fill=TRUE), collapse="\n")))
+  
+  }), input$go)
+
+}
+
+# APP FUNCTION tab 5 -------------------------------------------------------
+shinyApp(ui = MI_validity_ui, server = MI_validity_server)
+
+```
+
+### checkModSpec()
+
+```{r inspect model specification, echo=FALSE}
+
+#  USER INTERFACE tab 6 ------------------------------------------------------
+specification_ui <- fluidPage(
+  
+  # App title
+  titlePanel("Inspect parametric model specification"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+    hr(), # line to divide text from output
+
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+          
+          textAreaInput(inputId = "formula",
+                  label = "Formula",
+                  value = ""),
+          
+          selectInput(inputId = "family",
+                  label = "Family",
+                  choices = c("gaussian(identity)","binomial(logit)"),
+                  selected = ""),
+
+          # fileInput(inputId = "datafile", 
+          #                  label = "Upload CSV file",
+          #                  accept = c("text/csv",
+          #                   "text/comma-separated-values,
+          #                   .csv")),
+          
+          shiny::actionButton(inputId = "go",
+                              label = "inspect model")
+          
+          ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+
+      # Output: Print result
+      verbatimTextOutput(outputId = "checkmodspec")
+      
+    )
+  )
+)
+
+#  SERVER tab 6 -------------------------------------------------------------
+specification_server <- function(input, output) {
+  
+  data <- reactive({
+        if (file.exists("shared_data/uploaded_data.rds")) {
+      readRDS("shared_data/uploaded_data.rds")
+    } else {
+      validate("Please upload a data set.")
+    }
+  })
+  
+    checkmodspec <- reactive({
+        testthat::evaluate_promise(
+          midoc::checkModSpec(input$formula,input$family,data(),plot=FALSE))$messages
+    })
+    
+    output$checkmodspec <- shiny::bindEvent(shiny::renderPrint({
+
+      cat(strwrap(paste(cat(checkmodspec(),"\n",fill=TRUE), collapse="\n")))
+  
+    }), input$go)
+     
+}
+
+#  APP FUNCTION tab 6 -------------------------------------------------------
+shinyApp(ui = specification_ui, server = specification_server)
+
+```
+
+
+### proposeMI()
+
+```{r opitmal mice, echo=FALSE}
+
+# USER INTERFACE tab 7 -------------------------------------------------------
+mice_ui <- fluidPage(
+  
+  # App title
+  titlePanel("Suggest multiple imputation options"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+    hr(), # line to divide text from output
+
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+          
+          textAreaInput(inputId = "formula",
+                  label = "Imputation Model formula",
+                  value = ""),
+          
+          selectInput(inputId = "family",
+                  label = "Imputation Model family",
+                  choices = c("gaussian(identity)","binomial(logit)"),
+                  selected = "gaussian(identity)"),
+
+          # fileInput(inputId = "datafile", 
+          #                  label = "Upload CSV file",
+          #                  accept = c("text/csv",
+          #                   "text/comma-separated-values,
+          #                   .csv")),
+          
+          actionButton(inputId = "go",
+                              label = "Create output")
+          
+          ),
+
+    # Main panel for displaying outputs
+    mainPanel(
+
+      # Output: Print result
+      verbatimTextOutput(outputId = "proposemi")
+      
+    )
+  )
+)
+
+#  SERVER  tab 7 ----------------------------------------------------------
+mice_server <- function(input, output) {
+  
+  data <- reactive({
+        if (file.exists("shared_data/uploaded_data.rds")) {
+      readRDS("shared_data/uploaded_data.rds")
+    } else {
+      validate("Please upload a data set.")
+    }
+  })  
+    
+    mimod <- shiny::reactive(
+                midoc::checkModSpec(input$formula,input$family,data(),
+                                    plot=FALSE, message=FALSE))
+    
+    proposemi <- shiny::reactive({
+        testthat::evaluate_promise(
+          midoc::proposeMI(mimod(),data(),plot=FALSE))$messages
+    })
+    
+    output$proposemi <- shiny::bindEvent(shiny::renderPrint({
+
+      cat(strwrap(paste(cat(proposemi(),"\n",fill=TRUE), collapse="\n")))
+  
+    }), input$go)
+    
+}
+
+# APP FUNCTION tab 7 ----------------------------------------------------
+shinyApp(ui = mice_ui, server = mice_server)
+
+```
+
+### doMImice()
+```{r, echo=FALSE}
+
+# USER INTERFACE tab 8 ----------------------------------------------------
+MI_ui <- fluidPage(
+  
+  # App title
+  titlePanel("Perform multiple imputation using 'mice'"),
+
+  # add text above the UI
+    div(
+    style = "margin-bottom: 20px; font-size: 12px; color: #333;",
+    p("This is writing above the app "),
+    p("explanation of how to use the app")
+  ),  
+    hr(), # line to divide text from output
+  
+  # Sidebar layout with input and output definitions
+  sidebarLayout(
+
+    # Sidebar panel for inputs
+    sidebarPanel(
+          
+      textAreaInput(inputId = "impformula", 
+                    label = "Imputation Model formula",
+                    value = ""),
+          
+      selectInput(inputId = "impfamily",
+                  label = "Imputation Model family",
+                  choices = c("gaussian(identity)","binomial(logit)"),
+                  selected = "gaussian(identity)"),
+          
+      textAreaInput(inputId = "substmod",
+                  label = "Substantive Model",
+                  value = "lm()"),
+          
+      numericInput(inputId = "seed",
+                  label = "Set the seed of the 'mice' call",
+                  value = 123),
+
+      # fileInput(inputId = "datafile",
+      #         label = "Upload CSV file",
+      #         accept = c("text/csv", "text/comma-separated-values,.csv")),
+      # 
+      #button to run app    
+      actionButton(inputId = "go",
+                 label = "Do MI")
+          
+   ),
+
+    # Main panel for displaying outputs
+    mainPanel(verbatimTextOutput(outputId = "domimice"))
+  )
+)
+
+# SEVER tab 8 ---------------------------------------------------------------
+MI_server <- function(input, output) {
+
+    data <- reactive({
+        if (file.exists("shared_data/uploaded_data.rds")) {
+      readRDS("shared_data/uploaded_data.rds")
+    } else {
+      validate("Please upload a data set.")
+    }
+  }) 
+    
+mimod <- reactive(midoc::checkModSpec(
+  input$impformula,input$impfamily,data(), plot=FALSE, message=FALSE)
+  )
+    
+miprop <- reactive(midoc::proposeMI(
+  mimod(),data(),plot=FALSE, message=FALSE)
+  )
+    
+domimice <- reactive({
+  testthat::evaluate_promise(midoc::doMImice(
+    miprop(),input$seed,input$substmod))$messages})
+    
+output$domimice <- bindEvent(
+  renderPrint({
+    cat(strwrap(paste(cat(domimice(),"\n",fill=TRUE), collapse="\n")))}), 
+  input$go)}
+
+# APP FUNCTION tab 8 ---------------------------------------------------------
+shinyApp(ui = MI_ui, server = MI_server) 
+
+```
+
+
+
+``` {r, include = FALSE}
+# To do next --------------------------------------------
+
+# PROBLEM: when you wan tot switch to another dataset, you have to lcose and reknit 
+# test apps with new data set
+#
+# figure out how to get rid of scrolling for embedded tab apps.
+# 
+# Add text that shows up when you run a data set. if a new data set, make it an explanation of how to interpret the output. If one of the example data sets, make it an in depth explanation of how the function generated that output from the data
+# 
+# Improve apps by removing now unnecessary data input  and allowing for multiple outputs (plots and text)
+#
+# edit all existing text
+#
+#add explanation/worked example for other dataset in package, similar to bmi
+#
+# consider whether one multitab app is best, or if splitting app into 3 pages of multitab apps is better. e.g. Explore Data, Check Validity, Implement MI each get there own section. 
+# SPlitting them up would fit elinors pattern on the vignette and website better but may be more confusing to navigate
+#
+# Ask Elinor if she wants me to number the tabs to make sure they're used in order
+#
+# make html output a link anyone can open
+#
+#make a dag fucntion in setup with upload data
+#
+#make midoc run from github verison so new dataset can be used
+#devtools
+# install_github("elliecurnow/midoc", dependencies = TRUE, build_vignettes = TRUE, force=TRUE)
+# install_github("elliecurnow/midoc", dependencies = TRUE, build_vignettes = TRUE, force=TRUE, version='1.0.0.9000')
+
+# Done -----------------------------------------------------------------
+#
+#compile all apps into one html
+#
+# put apps in multitab format
+#
+# change tabe name, app title, button text etc.
+#
+#change theme of toc to be more streamlined
+#
+# add some linnks to titles and names
+#
+#make data upload app a dropdown menu for upload, bmi or other package dataset
+#
+#figure out how to call package dataset (e.g. bmi) instead of having to upload it.
+# and add this as an option alongside uploading data
+#
+# Add an app that allows the data set to be uploaded/selected once and input into the following apps.
+# 
+# change font to sans serif for accessibility
+
+ 
+```
