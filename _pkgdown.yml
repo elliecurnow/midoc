@@ -36,6 +36,8 @@ reference:
         desc: Example dataset and interactive vignette
       - contents:
         - bmi
+        - qol
+        - adr
         - midocVignette
       - title: internal
 
