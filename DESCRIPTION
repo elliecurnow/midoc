@@ -13,7 +13,7 @@ Description: A guidance system for analysis with missing data. It incorporates e
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     shiny,
