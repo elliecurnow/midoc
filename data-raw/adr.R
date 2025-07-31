@@ -45,13 +45,13 @@ summary(ks2_score)
 gcse_score <- rnorm(1000, 0.5*ks2_score + 3*mated + 7*log_income - 38, 6)
 summary(gcse_score)
 
-# Missing mechanism for log_income: MAR | mated
-# Generate missing values of log_income - depending on mated
+# Missing mechanism for log_income: MAR | mated and ks2_score
+# Generate missing values of log_income - depending on mated and ks2_score
 
 log_income_m1 <- log_income
 for (i in 1:1000){
-  log_income_m1[i] <- ifelse(rbinom(1,1,exp(3*mated[i]-0.5)/
-                                (1+exp(3*mated[i]-0.5)))==0,
+  log_income_m1[i] <- ifelse(rbinom(1,1,exp(3*mated[i] + 0.5*ks2_score[i]-30)/
+                                (1+exp(3*mated[i]+ 0.5*ks2_score[i]-30)))==0,
                               NA, log_income[i])
 }
 summary(log_income_m1)
@@ -60,15 +60,15 @@ summary(log_income_m1)
 adr<-data.frame(gcse_score=gcse_score, log_income=log_income_m1,mated=mated,
                 ks2_score=ks2_score)
 
-#Create complete_record indicator/missing qol12 indicator
+#Create complete_record indicator
 adr$r_cra <- ifelse(apply(adr,1,anyNA)==F,1,0)
 
 # Check if there is an interaction between gcse_score and log_income in the
 # log-additive model for selection under the chosen missingness mechanism
 r_cra <- adr$r_cra
 summary(glm(r_cra~gcse_score*log_income, family=poisson(log)))
-# There is an interaction so expecting bias in CRA (not adj for mated) of
-# -0.005 (Gkatzionis  et al, 2025,https://doi.org/10.1177/09622802241306860)
+# There is an interaction so expecting bias in CRA of -0.04
+# (Gkatzionis  et al, 2025, https://doi.org/10.1177/09622802241306860)
 
 #Define binary variables as factors
 adr$mated <- as.factor(adr$mated)
@@ -121,14 +121,14 @@ plot(x=exp(x), y=c(9.72*(x-8.99)),type='o',pch=18,xlab="Income (£ pa)",
      ylab="Mean difference in GCSE score relative to a child with family income of ~£8000")
 #title(ylab="", mgp=c(2,1,0),cex.lab=0.9)
 
-# CRA - should be unbiased but less precise
+# CRA - attenuated and less precise
 cra <- lm(gcse_score~log_income+mated, data=adr)
 summary(cra)
 c(cra$coefficients[2], confint(cra)[2,])
 # log_income      2.5 %     97.5 %
-#  9.452045   8.379837  10.524252
+#  8.029733   6.786605   9.272861
 
-# Slightly attenuated CRA estimate of marginal association however
+# CRA estimate of marginal association is even more attenuated
 fullm <- lm(gcse_score~log_income)
 c(fullm$coefficients[2], confint(full)[2,])
 #log_income      2.5 %     97.5 %
@@ -136,7 +136,7 @@ c(fullm$coefficients[2], confint(full)[2,])
 cram <- lm(gcse_score~log_income, data=adr)
 c(cram$coefficients[2], confint(cra)[2,])
 #log_income      2.5 %     97.5 %
-#12.330883   8.379837  10.524252
+#8.855280   6.786605   9.272861
 
 # Define mDAG
 adr_mdag <- " log_income -> gcse_score
@@ -145,15 +145,17 @@ adr_mdag <- " log_income -> gcse_score
               mated -> gcse_score
               mated -> ks2_score
               ks2_score -> gcse_score
-              mated -> r_cra"
+              mated -> r_cra
+              ks2_score -> r_cra"
 exploreDAG(adr_mdag,adr)
 
 checkCRA("gcse_score","log_income","r_cra",adr_mdag)
-checkCRA("gcse_score","log_income mated","r_cra",adr_mdag)
+checkCRA("gcse_score","log_income mated ks2_score","r_cra",adr_mdag)
 
 checkMI("log_income","gcse_score mated ks2_score","r_cra", adr_mdag)
 
 logincome_mod_aux <- checkModSpec("log_income~gcse_score+mated+ks2_score","gaussian(identity)",adr)
+
 # Useful to illustrate this with a plot
 modfit <- lm(log_income~gcse_score+mated+ks2_score, data=adr)
 plot(y=modfit[["residuals"]],x=modfit[["fitted.values"]],xlab="",ylab="",
@@ -162,14 +164,22 @@ plot(y=modfit[["residuals"]],x=modfit[["fitted.values"]],xlab="",ylab="",
 modfit_mated0 <- lm(log_income~gcse_score+ks2_score, data=adr, subset=(mated=="0"))
 plot(y=modfit_mated0[["residuals"]],x=modfit_mated0[["fitted.values"]],xlab="",ylab="",
      main="Residuals versus fitted values")
-modfit_mated1 <- lm(log_income~gcse_score+ks2_score, data=adr, subset=(mated=="0"))
+modfit_mated1 <- lm(log_income~gcse_score+ks2_score, data=adr, subset=(mated=="1"))
 plot(y=modfit_mated1[["residuals"]],x=modfit_mated1[["fitted.values"]],xlab="",ylab="",
      main="Residuals versus fitted values")
-#Could be an argument for stratified MI
+#Could be an argument for stratified MI although no of observations with mated==0
+# is quite small which could be an argument for a combined model
 
+#Note that if we had imputed income instead, our model would be mis-specified
+income_mod_aux <- checkModSpec("I(exp(log_income))~gcse_score+mated+ks2_score","gaussian(identity)",adr)
+
+# Formulate best mice options
 propMI_aux <- proposeMI(logincome_mod_aux, adr)
+# Note the difference in the distribution between observed and imputed values
+# does not imply data are MNAR - may be a consequence of data MAR
 
 doMImice(propMI_aux,123,"lm(gcse_score~log_income+mated)")
+# log_income   9.341205 8.201510  10.48090
 
 # And without aux variable
 logincome_mod <- checkModSpec("log_income~gcse_score+mated","gaussian(identity)",adr)
@@ -178,3 +188,5 @@ propMI <- proposeMI(logincome_mod, adr)
 
 doMImice(propMI,123,"lm(gcse_score~log_income+mated)")
 #Unbiased but larger SE
+# log_income   9.285316 8.066820  10.50381
+
