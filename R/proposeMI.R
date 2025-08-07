@@ -35,11 +35,10 @@
 #'                            data=bmi,
 #'                            message=FALSE)
 #'
-#' # Display the proposed 'mice' options (suppressing the plot prompt)
+#' # Display the proposed 'mice' options
 #' ## When specifying a single imputation model
 #' proposeMI(mimodobj=mimod_bmi7,
-#'           data=bmi,
-#'           plotprompt = FALSE)
+#'           data=bmi)
 #' ## When specifying more than one imputation model (suppressing the plots)
 #' proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
 #'           data=bmi,
@@ -103,18 +102,21 @@ Check that the specification of each imputation model was explored using the sam
     if (plot){
       imp <- mice::mice(data = data, method = method,
                         formulas = formulas_list, maxit = 20, printFlag = FALSE)
-      #changed from bwplot to densityplot
-      print(mice::bwplot(imp,
-                         main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
 
       #Optionally prompt for second plot after first plot is displayed
       if (plotprompt){
+        print(mice::bwplot(imp,
+                       main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
         oask <- grDevices::devAskNewPage(TRUE)
         print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
         #Reset original settings
         grDevices::devAskNewPage(oask)
       } else {
-        print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+        gridExtra::grid.arrange(
+          mice::bwplot(imp,
+                       main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)),
+          plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+
       }
     }
 
