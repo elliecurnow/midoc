@@ -63,6 +63,9 @@ adr<-data.frame(gcse_score=gcse_score, log_income=log_income_m1,mated=mated,
 #Create complete_record indicator
 adr$r_cra <- ifelse(apply(adr,1,anyNA)==F,1,0)
 
+#Create indiv variable missingness indicator for log_income
+adr$r_log_income <- ifelse(is.na(adr$log_income)==F,1,0)
+
 # Check if there is an interaction between gcse_score and log_income in the
 # log-additive model for selection under the chosen missingness mechanism
 r_cra <- adr$r_cra
@@ -73,6 +76,7 @@ summary(glm(r_cra~gcse_score*log_income, family=poisson(log)))
 #Define binary variables as factors
 adr$mated <- as.factor(adr$mated)
 adr$r_cra <- as.factor(adr$r_cra)
+adr$r_log_income <- as.factor(adr$r_log_income)
 
 summary(adr)
 
