@@ -60,8 +60,8 @@ summary(log_income_m1)
 adr<-data.frame(gcse_score=gcse_score, log_income=log_income_m1,mated=mated,
                 ks2_score=ks2_score)
 
-#Create complete_record indicator
-adr$r_cra <- ifelse(apply(adr,1,anyNA)==F,1,0)
+#Create missing indicator - note this is also the complete_record indicator
+adr$r_log_income <- ifelse(apply(adr,1,anyNA)==F,1,0)
 
 #Removed indiv variable missingness indicator for log_income
 #Multiple missingness indicators currently no supported by midoc
@@ -69,20 +69,20 @@ adr$r_cra <- ifelse(apply(adr,1,anyNA)==F,1,0)
 
 # Check if there is an interaction between gcse_score and log_income in the
 # log-additive model for selection under the chosen missingness mechanism
-r_cra <- adr$r_cra
+r_cra <- adr$r_log_income
 summary(glm(r_cra~gcse_score*log_income, family=poisson(log)))
 # There is an interaction so expecting bias in CRA of -0.04
 # (Gkatzionis  et al, 2025, https://doi.org/10.1177/09622802241306860)
 
 #Define binary variables as factors
 adr$mated <- as.factor(adr$mated)
-adr$r_cra <- as.factor(adr$r_cra)
-#adr$r_log_income <- as.factor(adr$r_log_income)
+#adr$r_cra <- as.factor(adr$r_cra)
+adr$r_log_income <- as.factor(adr$r_log_income)
 
 summary(adr)
 
 # Check predictors of missingness are as expected
-summary(glm(r_cra~mated+ks2_score+gcse_score, family=binomial(logit),
+summary(glm(r_log_income~mated+ks2_score+gcse_score, family=binomial(logit),
             data=adr))
 # As expected
 
