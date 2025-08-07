@@ -60,7 +60,8 @@ checkMI <- function(dep, preds, r_dep, mdag) {
         result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n",
                           paste0(adjsets, prefix="\n", collapse = "\n"),collapse = "\n")
         #print(adjsets)
-        }
+      }
+        else (result2 <- "")
     result <- paste(result1, "\n", result2, collapse = "\n")
   }
   message(paste(strwrap(result),collapse="\n"))
