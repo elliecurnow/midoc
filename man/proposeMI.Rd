@@ -46,11 +46,10 @@ mimod_pregsize <- checkModSpec(
                            data=bmi,
                            message=FALSE)
 
-# Display the proposed 'mice' options (suppressing the plot prompt)
+# Display the proposed 'mice' options
 ## When specifying a single imputation model
 proposeMI(mimodobj=mimod_bmi7,
-          data=bmi,
-          plotprompt = FALSE)
+          data=bmi)
 ## When specifying more than one imputation model (suppressing the plots)
 proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
           data=bmi,
