@@ -95,7 +95,7 @@ Check that the specification of each imputation model was explored using the sam
 "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not    stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
 
 
-  #Return message with model check results
+  #Return message with proposed settings
   if(message) {message(paste(strwrap(result),collapse="\n"))}
 
     #Optionally create a plot of observed versus imputed values and a trace plot for five imputed datasets

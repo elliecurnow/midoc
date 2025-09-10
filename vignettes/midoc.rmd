@@ -62,7 +62,9 @@ Here, we will demonstrate the key features of `midoc` using a worked example.
 
 In this example, we wish to estimate the association between maternal age at first pregnancy (our exposure) and child's body mass index (BMI) at age 7 years (our outcome). For simplicity, we only consider one confounder of the relationship between maternal age and BMI at age 7 years, maternal education level. Note that simulated data for this study are included in the `midoc` package in the `bmi` dataset. The dataset contains 1000 observations, with realistic values for each variable, and exaggerated relationships between variables (to highlight the consequences of our choice of analysis approach). 
 
-**Note** An interactive version of this vignette: *Multiple Imputation DOCtor (midoc) Shiny version* is also available to run locally (you can run this using the `midoc` command `midocVignette()`). In the interactive version, you can apply features of `midoc` described here using your own DAG and data.  
+**Note** An interactive version of this vignette: *Multiple Imputation DOCtor (midoc) Shiny version* is also available to run locally (you can run this using the `midoc` command `midocVignette()`). In the interactive version, you can apply features of `midoc` described here using your own DAG and data. 
+
+You can also explore `midoc` functions interactively using the (browser-based) [midoc Shiny app](https://elliecurnow.shinyapps.io/midocshinyapp/).
 
 
 ## Step 1 Specify the analysis and missingness models using a directed acyclic graph
