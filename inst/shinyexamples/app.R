@@ -100,13 +100,13 @@ drawDAG_ui <- fluidPage(
   # app title
   #titlePanel("Specify mDAG"),
 
-  #div(
+  div(
     #style = "margin-bottom: 20px; font-size: 14px; color: black;",
-    #p(HTML("Use arrows to specify causal relationships.")),
-    #p(HTML("Example input: the code for 'A causes B' is  <code>A -> B</code>")),
+    p(HTML("Use arrows to specify causal relationships")),
+    p(HTML("Example input: the code for 'A causes B' is  <code>A -> B</code>"))
     #p(HTML("<code>variable -> variable</code>"), style = "text-indent: 95px;"),
     #p(HTML("<code>variable -> variable</code>"), style = "text-indent: 95px;")
-  #),
+  ),
   #hr(),
 
   sidebarLayout(
@@ -216,7 +216,12 @@ drawDAG_server <- function(input, output, session) {
       return(NULL)
     }
     req(dag_spec())  # only run after button click
-    plot(dagitty::dagitty(dag_spec(), layout = TRUE))
+
+    #Plot and postscript only if no error
+    tryCatch({
+        plot(dagitty::dagitty(dag_spec(), layout = TRUE))
+      }, error = function(e) {""}
+    )
   })
 
   #conditional text under output for draw DAG app
@@ -229,31 +234,37 @@ drawDAG_server <- function(input, output, session) {
     req(input$go_drawDAG)
     req(uploaded_data$data_source)  # Make sure data_source exists
 
+    tryCatch({
+      plot(dagitty::dagitty(dag_spec(), layout = TRUE))
+
     #if (uploaded_data$data_source == "bmi") {
-    #  tagList(
+      tagList(
     #    hr(),
-    #    div(
+        div(
           # bmi specific post output text  for Draw DAG
     #      style = "margin-top: 15px; font-size: 12px; color: black;",
-    #      p('Visually check that the relationships are specified as you intended',
+         p(HTML('Visually check that the relationships are specified as you intended.',
+           'Note that a different, random layout is shown each time the mDAG is drawn.',
             #"This mDAG will carry over to the function apps."),
-    #      'The mDAG has been drawn using “dagitty”. Go to the',
-    #      '<a href="https://dagitty.net" target="_blank">dagitty website</a>',
-    #             'to find out more about using "dagitty" to draw mDAGs.' )
+    #     'The mDAG has been drawn using “dagitty”.',
+         'Go to the <a href="https://dagitty.net" target="_blank">dagitty website</a>',
+         'to find out more about using "dagitty" to draw an mDAG with a specific layout.'))
     #    )
     #  )
     #} else {
-      tagList(
+      #tagList(
         #hr(),
-        div(
+        #div(
           # generic post output text for Draw DAG
           #style = "margin-top: 15px; font-size: 14px; color: #333;",
-          p(HTML("Visually check that the relationships are specified as you intended "))
+          #p(HTML("Visually check that the relationships are specified as you intended "))
           #'The mDAG has been drawn using “dagitty”. Go to the',
           #'<a href="https://dagitty.net" target="_blank">dagitty website</a>',
           #       'to find out more about using "dagitty" to draw mDAGs.' ))
         )
       )
+    }, error = function(e) {""}
+    )
     #}
   })
 }
@@ -357,12 +368,15 @@ descMissData_server <- function(input, output, session) {
       return(invisible())
     }
     req(data())
-    midoc::descMissData(
-      y = input$y_descMissData,
-      covs = input$covs_descMissData,
-      data = data(),
-      plot = FALSE
-    )
+    tryCatch({
+      midoc::descMissData(
+        y = input$y_descMissData,
+        covs = input$covs_descMissData,
+        data = data(),
+        plot = FALSE)
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # descMissData() function for plot output
@@ -398,7 +412,7 @@ descMissData_server <- function(input, output, session) {
       y = input$y_descMissData,
       covs = input$covs_descMissData,
       data = data(),
-      plot = TRUE
+      plot = FALSE
     )
 
     if (uploaded_data$data_source == "bmi") {
@@ -483,6 +497,9 @@ exploreDAG_ui <- fluidPage(tagList(
 # SERVER explorDAG() function app
 exploreDAG_server <- function(input, output, session) {
 
+  # Reactive flag to track data changes and reset output
+  data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
+
   # Reactive dataset
   data <- reactive({
     validate(
@@ -500,8 +517,6 @@ exploreDAG_server <- function(input, output, session) {
     uploaded_data$dag_text
   })
 
-  # Reactive flag to track data changes and reset output
-  data_changed <- reactiveVal(TRUE)  # tracks whether new data/DAG was uploaded
 
   # autofill dag from draw dag app
   observe({
@@ -532,7 +547,11 @@ exploreDAG_server <- function(input, output, session) {
   exploredag_result <- eventReactive(input$go_exploreDAG, {
     req(data())
     req(dag_text())
-    testthat::evaluate_promise(midoc::exploreDAG(dag_text(), data()))$messages
+    tryCatch({
+      testthat::evaluate_promise(midoc::exploreDAG(input$mdag_exploreDAG, data()))$messages
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # exploreDAG function ouput
@@ -681,14 +700,18 @@ checkCRA_server <- function(input, output, session) {
     validate(
       need(!is.null(uploaded_data$df), "Please upload a dataset")
     )
-    testthat::evaluate_promise(
-      midoc::checkCRA(
-        input$y_checkCRA,
-        input$covs_checkCRA,
-        input$r_checkCRA,
-        input$mdag_checkCRA
-      )
-    )$messages
+    tryCatch({
+      testthat::evaluate_promise(
+        midoc::checkCRA(
+          input$y_checkCRA,
+          input$covs_checkCRA,
+          input$r_checkCRA,
+          input$mdag_checkCRA
+        )
+      )$messages
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # checkCRA function output
@@ -791,7 +814,7 @@ checkMI_ui <- fluidPage(tagList(
   )
 ))
 
-# SERVER - checkMI() fucntion app
+# SERVER - checkMI() function app
 checkMI_server <- function(input, output, session) {
 
   data_changed <- reactiveVal(FALSE)  # Tracks if data has changed and output should reset
@@ -840,14 +863,18 @@ checkMI_server <- function(input, output, session) {
     validate(
       need(!is.null(uploaded_data$df), "Please upload a dataset")
     )
-    testthat::evaluate_promise(
-      midoc::checkMI(
-        input$dep_checkMI,
-        input$preds_checkMI,
-        input$r_dep_checkMI,
-        input$mdag_checkMI
-      )
-    )$messages
+    tryCatch({
+      testthat::evaluate_promise(
+        midoc::checkMI(
+          input$dep_checkMI,
+          input$preds_checkMI,
+          input$r_dep_checkMI,
+          input$mdag_checkMI
+        )
+      )$messages
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # checkMI function output
@@ -975,7 +1002,7 @@ checkModSpec_ui <- fluidPage(tagList(
   )
 ))
 
-# SERVER - checkModSpec fucntion app
+# SERVER - checkModSpec function app
 checkModSpec_server <- function(input, output, session) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output is hidden initially
@@ -1023,7 +1050,7 @@ checkModSpec_server <- function(input, output, session) {
 
       #res <- NULL
 
-      #tryCatch({
+      tryCatch({
         #eval_result <-
         testthat::evaluate_promise(
           midoc::checkModSpec(
@@ -1034,12 +1061,12 @@ checkModSpec_server <- function(input, output, session) {
           )
         )$messages
         #res <- eval_result$messages
-      #}, error = function(e) {
-        #res <<- paste("Error:", e$message)
+      }, error = function(e) {
+        e$message
       })
 
       #checkmodspec_result(res)  # Store result reactively
-    #})
+    })
   #})
 
   # Render model check output after clicking button, else show nothing
@@ -1070,6 +1097,7 @@ checkModSpec_server <- function(input, output, session) {
       input$formula_checkModSpec,
       input$family_checkModSpec,
       uploaded_data$df,
+      message = FALSE,
       plot = TRUE
     ),
     error = function(e) {""}
@@ -1271,17 +1299,25 @@ proposeMI_server <- function(input, output, session) {
     req(uploaded_data$df)
     req(stored_formula())
     req(stored_family())
+    tryCatch({
     midoc::checkModSpec(stored_formula(), stored_family(), data(),
                         plot = FALSE, message = FALSE)
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # ProposeMI reactive
   proposemi <- reactive({
     req(uploaded_data$df)
     req(mimod())
-    testthat::evaluate_promise(
-      midoc::proposeMI(mimod(), data(), plot = FALSE)
-    )$messages
+    tryCatch({
+      testthat::evaluate_promise(
+        midoc::proposeMI(mimod(), data(), plot = FALSE)
+      )$messages
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # Output the proposeMI output, only after go button clicked & if data not changed
@@ -1309,6 +1345,7 @@ proposeMI_server <- function(input, output, session) {
     #Only print plot if no error
     tryCatch(midoc::proposeMI(mimod(),
                               data(),
+                              message = FALSE,
                               plot = TRUE,
                               plotprompt = FALSE
     ),
@@ -1519,23 +1556,35 @@ doMImice_server <- function(input, output, session) {
     req(uploaded_data$df)
     req(stored_impformula())
     req(stored_impfamily())
+    tryCatch({
     midoc::checkModSpec(stored_impformula(), stored_impfamily(), data(),
                         plot = FALSE, message = FALSE)
+    }, error = function(e) {
+      e$message
+    })
   })
 
   # proposeMI() function
   miprop_domi <- reactive({
     req(uploaded_data$df)
     req(mimod_domi())
+    tryCatch({
     midoc::proposeMI(mimod_domi(), data(), plot = FALSE, message = FALSE)
+    }, error = function(e) {
+      e$message
+      })
   })
 
   # doMImice() function
   domimice <- reactive({
     req(miprop_domi())
-    testthat::evaluate_promise(
-      midoc::doMImice(miprop_domi(), input$seed, input$substmod)
-    )$messages
+    tryCatch({
+      testthat::evaluate_promise(
+        midoc::doMImice(miprop_domi(), input$seed, input$substmod)
+      )$messages
+    }, error = function(e) {
+      e$message
+    })
   })
 
   #output
@@ -1685,7 +1734,12 @@ doCRA_server <- function(input, output, session) {
       return(invisible())  # clear output if data changed but button not clicked
     }
     req(input$go_doCRA)
-    summary(eval(parse(text=input$substmod_cra, keep.source=FALSE), env=data()))
+
+    tryCatch({
+      summary(eval(parse(text=input$substmod_cra, keep.source=FALSE), env=data()))
+    }, error = function(e) {
+      e$message
+    })
   })
 
   output$docra_ci <- renderPrint({
@@ -1693,7 +1747,12 @@ doCRA_server <- function(input, output, session) {
       return(invisible())  # clear output if data changed but button not clicked
     }
     req(input$go_doCRA)
-    confint(eval(parse(text=input$substmod_cra, keep.source=FALSE), env=data()))
+    #Print if no error
+    tryCatch({
+      confint(eval(parse(text=input$substmod_cra, keep.source=FALSE), env=data()))
+    },
+    error = function(e) {return(invisible())}
+    )
   })
 
   # conditional text under the output
@@ -1802,6 +1861,8 @@ ui <- fluidPage(
     "))
   ),
 
+  title = 'midoc Shiny app',
+
   div(id = "main-content",
 
       tags$h1(
@@ -1824,7 +1885,8 @@ ui <- fluidPage(
       'are missing.',
       ' <strong>midoc</strong> follows the framework for the treatment and reporting of missing data',
           'in observational studies (<a href="https://doi.org/10.1016/j.jclinepi.2021.01.008"',
-          'target="_blank">TARMOS</a>).')
+          'target="_blank">TARMOS</a>).',
+      'Use this Shiny app to explore features of <strong>midoc</strong> in your browser.')
       ),
 
       tags$h2(id = "how-to-use", "How to use this app"),
@@ -1851,7 +1913,8 @@ ui <- fluidPage(
                   'For tips on specifying an mDAG, see the <strong>midoc</strong>',
       '<a href="https://elliecurnow.github.io/midoc/articles/midoc.html" target="_blank">vignette</a>.')),
 
-      tags$p(HTML('<strong>Note:</strong> This application is hosted on shiny.io, a third-party platform.',
+      tags$p(HTML('<strong>Note:</strong> This application is hosted on',
+             '<a href="https://www.shinyapps.io/" target="_blank">shinyapps.io</a>, a third-party platform.',
              'Do not upload confidential or sensitive data. To analyse data that are not publicly ',
              'available, run <strong>midoc</strong> functions locally in R.')),
       #by download <code>midoc</code> ',
