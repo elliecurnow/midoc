@@ -16,7 +16,6 @@ not}
 \item{pregsize}{Mother's pregnancy size: singleton or twins}
 \item{bwt}{Child's birth weight in kilograms}
 \item{r}{Missingness indicator: whether bmi7 is reported or not}
-...
 }
 }
 }

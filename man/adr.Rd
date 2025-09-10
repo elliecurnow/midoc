@@ -19,8 +19,8 @@ not}
 \item{ks2_score}{Child's Key Stage 2 score (at approximately age 11 years),
 as a percentage, calculated from the total of an individual's English,
 maths and science scores}
-\item{r_cra}{Missingness indicator: whether a complete case or not}
-...
+\item{r_log_income}{Missingness indicator: whether log_income is reported
+or not}
 }
 }
 }

@@ -12,7 +12,6 @@
 #'   \item{pregsize}{Mother's pregnancy size: singleton or twins}
 #'   \item{bwt}{Child's birth weight in kilograms}
 #'   \item{r}{Missingness indicator: whether bmi7 is reported or not}
-#'   ...
 #' }
 "bmi"
 
@@ -32,7 +31,6 @@
 #'   \item{qol12}{Participant's quality of life at 12 months post-randomisation,
 #'   measured using EQ-VAS}
 #'   \item{r_qol12}{Missingness indicator: whether qol12 is reported or not}
-#'   ...
 #' }
 "qol"
 
@@ -52,8 +50,8 @@
 #'   \item{ks2_score}{Child's Key Stage 2 score (at approximately age 11 years),
 #'   as a percentage, calculated from the total of an individual's English,
 #'   maths and science scores}
-#'   \item{r_cra}{Missingness indicator: whether a complete case or not}
-#'   ...
+#'   \item{r_log_income}{Missingness indicator: whether log_income is reported
+#'   or not}
 #' }
 "adr"
 
