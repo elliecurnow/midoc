@@ -24,11 +24,11 @@
 # These are generated as follows:
 
 # age0 and qol0 are independent of (treatment) group but qol0 depends on age0,
-# such that group ~ Bernoulli(0.5), age0 ~ N(44,7), qol0 ~ N(40,10)
+# such that group ~ Bernoulli(0.5), age0 ~ N(61,9), qol0 has a mean of approx 70
 
 # group was simulated so that pts were approx 50:50 split into Active and
 # Placebo arms
-# age0 was simulated so that pts were between the ages of approx 18 and 65
+# age0 was simulated so that pts were mainly between the ages of approx 55-65
 # qol0 was simulated to have a weakly quadratic relationship with age0, with
 # coeffs and res variance chosen so that mean & SD of qol0 were realistic values
 # (e.g. see Cheng et al. 2024, https://doi.org/10.1016/j.jclinepi.2024.111487)
@@ -38,11 +38,11 @@ set.seed(2329465)
 id=c(1:1000)
 #sex <- rbinom(1000,1,0.8)
 group <- rbinom(1000,1,0.5)
-age0 <- rnorm(1000,44,7)
+age0 <- rnorm(1000,61,9)
 summary(age0)
 aggregate(age0, by=list(Group=group), function(x) c(mean = mean(x), sd = sd(x)))
 
-qol0 <- round(rnorm(1000,75+0.3*age0-0.01*age0^2,3))
+qol0 <- round(rnorm(1000,90+0.3*age0-0.01*age0^2,3))
 summary(qol0)
 sd(qol0)
 plot(x=age0,y=qol0)

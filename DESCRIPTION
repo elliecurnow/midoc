@@ -29,6 +29,7 @@ Imports:
     lifecycle,
     mfp2,
     mice (>= 3.16.0),
+    RefBasedMI,
     rlang,
     rmarkdown,
     stats,

@@ -9,7 +9,7 @@
 
 A data frame with 1000 rows and 6 columns:
 \describe{
-\item{group}{Randomisation group: 0 = Control, 1 = Active treatment}
+\item{group}{Randomisation group: 0 = Placebo, 1 = Exenatide (investigational medicinal product)}
 \item{age0}{Participant's age at randomisation (baseline), in years}
 \item{qol0}{Participant's quality of life at randomisation (baseline),
 measured using the EuroQol Visual Analogue Scale (EQ-VAS)}
