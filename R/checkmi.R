@@ -52,17 +52,18 @@ checkMI <- function(dep, preds, r_dep, mdag) {
   } else {
       result1 <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are not independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are not valid. \n \nConsider using a different imputation model and/or strategy (e.g. not-at-random fully conditional specification).",
         collapse="\n")
-      adjsets_r <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,r_dep),outcome=dep,type = "all")
-      adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")
-      if(length(adjsets_r)>0) (adjsets <- adjsets_r)
-        else (adjsets <- adjsets_dep)
-      if(length(adjsets)>0){
-        result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n",
-                          paste0(adjsets, prefix="\n", collapse = "\n"),collapse = "\n")
+      #adjsets_r <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,r_dep),outcome=dep,type = "all")
+      #adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")
+      #if(length(adjsets_r)>0) (adjsets <- adjsets_r)
+      #  else (adjsets <- adjsets_dep)
+      #if(length(adjsets)>0){
+      # result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n",
+      #                    paste0(adjsets, prefix="\n", collapse = "\n"),collapse = "\n")
         #print(adjsets)
-      }
-        else (result2 <- "")
-    result <- paste(result1, "\n", result2, collapse = "\n")
+      #}
+        #else (result2 <- "")
+    #result <- paste(result1, "\n", result2, collapse = "\n")
+    result <- paste(result1, collapse = "\n")
   }
   message(paste(strwrap(result),collapse="\n"))
 }

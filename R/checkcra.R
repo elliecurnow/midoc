@@ -67,21 +67,22 @@ checkCRA <- function(y, covs, r_cra, mdag) {
   else {
     result1 <- paste("Based on the proposed directed acyclic graph (DAG), the analysis model outcome and complete record indicator are not independent given analysis model covariates. Hence, in general, complete records analysis is not valid. \n \nIn special cases, depending on the type of analysis model and estimand of interest, complete records analysis may still be valid. See, for example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) for further details.\n",collapse = "\n")
 
-    adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r_cra),outcome=y,type = "all")
-    adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=y,type = "all")
-    if(length(adjsets)==0 & length(adjsetsfull)==0){
-      result2 <- paste("There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent. Consider using a different strategy e.g. multiple imputation.",collapse = "\n")
-    }
-    if(length(adjsets)==0 & length(adjsetsfull)>0){
-      result2 <- paste("There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent, without changing the estimand of interest. Consider using a different strategy e.g. multiple imputation. \n \nAlternatively, consider whether a different estimand could be of interest. For example, the analysis model outcome and complete record indicator are independent given each of the following sets of variables:\n \n",
-          paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
+    #adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r_cra),outcome=y,type = "all")
+    #adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=y,type = "all")
+    #if(length(adjsets)==0 & length(adjsetsfull)==0){
+    #  result2 <- paste("There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent. Consider using a different strategy e.g. multiple imputation.",collapse = "\n")
+    #}
+    #if(length(adjsets)==0 & length(adjsetsfull)>0){
+    #  result2 <- paste("There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent, without changing the estimand of interest. Consider using a different strategy e.g. multiple imputation. \n \nAlternatively, consider whether a different estimand could be of interest. For example, the analysis model outcome and complete record indicator are independent given each of the following sets of variables:\n \n",
+    #      paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
       #print(adjsetsfull)
-    }
-    if(length(adjsets)>0){
-      result2 <- paste("Consider using a different analysis model and/or strategy, e.g. multiple imputation. \n \nFor example, the analysis model outcome and complete record indicator are independent if, in addition to the specified covariates, the following sets of variables are included as covariates in the analysis model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n", paste0(adjsets, prefix="\n", collapse = "\n"), collapse = "\n")
+    #}
+    #if(length(adjsets)>0){
+    #  result2 <- paste("Consider using a different analysis model and/or strategy, e.g. multiple imputation. \n \nFor example, the analysis model outcome and complete record indicator are independent if, in addition to the specified covariates, the following sets of variables are included as covariates in the analysis model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n", paste0(adjsets, prefix="\n", collapse = "\n"), collapse = "\n")
       #print(adjsets)
-    }
-  result <- paste(result1, "\n", result2, collapse="\n")
+    #}
+  #result <- paste(result1, "\n", result2, collapse="\n")
+  result <- paste(result1, collapse="\n")
   }
   message(paste(strwrap(result),collapse="\n"))
 }
