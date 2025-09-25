@@ -49,7 +49,7 @@ data_ui <- fluidPage(
 data_server <- function(input, output, session) {
 
     observeEvent(input$file, {
-    req(input$file)
+    #req(input$file)
     df <- read.csv(input$file$datapath)
     uploaded_data$df <- df             # Store uploaded data
     uploaded_data$data_source <- "upload"  # record source as upload
@@ -143,7 +143,16 @@ drawDAG_server <- function(input, output, session) {
 
   # RCT autofill dag input
   qol_dag_text <- paste(
-    "", # add qol dag here
+    "group -> qol12",
+    "group -> qol3",
+    "age0 -> qol0",
+    "age0 -> qol3",
+    "age0 -> qol12",
+    "qol0 -> qol3",
+    "qol0 -> qol12",
+    "qol3 -> qol12",
+    "qol0 -> r_qol12",
+    "qol3 -> r_qol12",
     sep = "\n"
   )
 
@@ -168,7 +177,7 @@ drawDAG_server <- function(input, output, session) {
   )
 
   # Reactive flag to track data changes and reset plot
-  data_changed <- reactiveVal(TRUE)  # tracks whether new data/DAG was uploaded
+  data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
 
   # if data source is package dataset, autofill dag to input
   observeEvent(uploaded_data$data_source, {
@@ -178,10 +187,10 @@ drawDAG_server <- function(input, output, session) {
     if (uploaded_data$data_source == "bmi") {
       updateTextAreaInput(session, "mdag_drawDAG", value = bmi_dag_text)
       uploaded_data$dag_text <- bmi_dag_text
-    #}
-    #else if (uploaded_data$data_source == "qol") {
-    #  updateTextAreaInput(session, "mdag_drawDAG", value = qol_dag_text)
-    #  uploaded_data$dag_text <- qol_dag_text
+    }
+    else if (uploaded_data$data_source == "qol") {
+      updateTextAreaInput(session, "mdag_drawDAG", value = qol_dag_text)
+      uploaded_data$dag_text <- qol_dag_text
     } else if (uploaded_data$data_source == "adr") {
       updateTextAreaInput(session, "mdag_drawDAG", value = adr_dag_text)
       uploaded_data$dag_text <- adr_dag_text
