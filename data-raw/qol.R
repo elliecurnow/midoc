@@ -157,8 +157,8 @@ aggregate(qol[,4:6], by=list(Group=qol$group),
                        function(x) c(mean = mean(x,na.rm=T), sd = sd(x,na.rm=T),
                                      missing=sum(is.na(x))))
 #Group qol0.mean   qol0.sd qol0.missing qol3.mean   qol3.sd qol3.missing qol12.mean   qol12.sd qol12.missing
-#1     0 68.399590  5.135351     0.000000 64.836066  5.046984     0.000000  71.189118   4.998694    199.000000
-#2     1 68.726562  4.925217     0.000000 69.978516  5.001910     0.000000  80.177668   4.764364     52.000000
+#1     0 70.418033  9.176204     0.000000 66.440574  7.901638     0.000000  74.129924   6.666518    172.000000
+#2     1 70.955078  8.568358     0.000000 71.757812  7.429245     0.000000  82.591424   6.532383     59.000000
 
 # Table of mean outcome by arm, by time, by dropout
 summtable <- aggregate(qol[,4:6], by=list(Group=qol$group, Response_12m=qol$r_qol12),
@@ -185,19 +185,19 @@ trellis.par.set(old.pars)
 full <- lm(qol12~group+qol0)
 c(full$coefficients[2], confint(full)[2,])
 #    group     2.5 %    97.5 %
-#  9.986821  9.542323 10.431319
+#  9.993481  9.548494 10.438468
 # This is in line with published clinically important difference for EQ-VAS
 
 # CRA - slightly attenuated
-cra <- lm(qol12~group+qol0, data=qol)
+cra <- lm(qol12~group+qol0+age0, data=qol)
 c(cra$coefficients[2], confint(cra)[2,])
 #  group1    2.5 %   97.5 %
-#  9.367841 8.859116 9.876567
+#  9.532509  9.024534 10.040483
 
-#MI using mice - assuming MAR given QOL at baseline (and 3 months)
+#MI using mice - assuming MAR given age at baseline, QOL at baseline (and 3 months)
 names(qol)
 #qol0
-mi_mar_qol0 <- mice(qol[,c(2,4,6)],method="norm",seed=123,printFlag=FALSE,m=200)
+mi_mar_qol0 <- mice(qol[,c(2:4,6)],method="norm",seed=123,printFlag=FALSE,m=200)
 summary(pool(with(mi_mar_qol0,lm(qol12~group+qol0))),conf.int=TRUE)[2,c(1:2,7:8)]
 #     term estimate    2.5 %   97.5 %
 #    group1  9.37072 8.851583 9.889857
