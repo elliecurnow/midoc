@@ -33,11 +33,12 @@ reference:
         - proposeMI
         - doMImice
       - title: Examples and Vignettes
-        desc: Example dataset and interactive vignette
+        desc: Example datasets and interactive versions
       - contents:
         - bmi
         - qol
         - adr
         - midocVignette
+        - midocShinyApp
       - title: internal
 
