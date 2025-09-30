@@ -5,9 +5,9 @@ account: elliecurnow
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 15219739
-bundleId: 10952068
+bundleId: 10971993
 url: https://elliecurnow.shinyapps.io/midocshinyapp/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: midocdemoShiny.rmd
+ignoredFiles: app_local.R|midocdemoShiny.rmd

@@ -146,8 +146,6 @@ drawDAG_server <- function(input, output, session) {
     "group -> qol12",
     "group -> qol3",
     "age0 -> qol0",
-    "age0 -> qol3",
-    "age0 -> qol12",
     "qol0 -> qol3",
     "qol0 -> qol12",
     "qol3 -> qol12",
