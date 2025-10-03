@@ -72,8 +72,9 @@ summary(lm(qol3~age0+I(age0^2)))
 # Coeffs and res variance chosen so that mean & SD of qol12 were realistic and
 # (direct) treatment effect was 7 points at 12m
 for (i in 1:1000){
-  qol12 <- rnorm(1000,7*group+0.3*qol0+0.6*qol3+10,3)
+  qol12 <- round(rnorm(1000,7*group+0.3*qol0+0.6*qol3+10,3))
 }
+age0 <- round(age0)
 summary(qol12)
 sd(qol12)
 plot(x=age0,y=qol12)
@@ -159,6 +160,8 @@ aggregate(qol[,4:6], by=list(Group=qol$group),
 #Group qol0.mean   qol0.sd qol0.missing qol3.mean   qol3.sd qol3.missing qol12.mean   qol12.sd qol12.missing
 #1     0 70.418033  9.176204     0.000000 66.440574  7.901638     0.000000  74.129924   6.666518    172.000000
 #2     1 70.955078  8.568358     0.000000 71.757812  7.429245     0.000000  82.591424   6.532383     59.000000
+aggregate(qol[,4:6], by=list(Group=qol$group),
+          function(x) c(mean = round(mean(x,na.rm=T)),missing=round(sum(is.na(x)))))
 
 # Table of mean outcome by arm, by time, by dropout
 summtable <- aggregate(qol[,4:6], by=list(Group=qol$group, Response_12m=qol$r_qol12),
