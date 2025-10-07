@@ -33,6 +33,7 @@ reference:
         - proposeMI
         - doMImice
         - doMNARMImice
+        - doRefBasedMI
       - title: Examples and Vignettes
         desc: Example datasets and interactive versions
       - contents:
