@@ -32,6 +32,7 @@ reference:
         - checkModSpec
         - proposeMI
         - doMImice
+        - doMNARMImice
       - title: Examples and Vignettes
         desc: Example datasets and interactive versions
       - contents:
