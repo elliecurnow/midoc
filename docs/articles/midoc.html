@@ -331,20 +331,7 @@ is not valid.
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
 example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
-for further details.
-
-Consider using a different analysis model and/or strategy, e.g.
-multiple imputation.
-
-For example, the analysis model outcome and complete record indicator
-are independent if, in addition to the specified covariates, the
-following sets of variables are included as covariates in the analysis
-model (note that this list is not necessarily exhaustive, particularly
-if your DAG is complex):
-
-mated
-
-c("mated", "sep_unmeas")</code></pre>
+for further details.</code></pre>
 <p>We can see that CRA would not be valid (we can also tell this by
 inspecting our DAG: there is an open path from <code>bmi7</code> to
 <code>r</code> via <code>mated</code> and <code>sep_unmeas</code> if we
@@ -399,12 +386,7 @@ is not valid.
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
 example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
-for further details.
-
-There are no other variables which could be added to the model to make
-the analysis model outcome and complete record indicator conditionally
-independent. Consider using a different strategy e.g. multiple
-imputation.</code></pre>
+for further details.</code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
@@ -618,16 +600,7 @@ imputation model predictors. Hence, multiple imputation methods which
 assume data are missing at random are not valid.
 
 Consider using a different imputation model and/or strategy (e.g.
-not-at-random fully conditional specification).  For example, the
-incomplete variable and its missingness indicator are independent if,
-in addition to the specified predictors, the following sets of
-variables are included as predictors in the imputation model (note that
-this list is not necessarily exhaustive, particularly if your DAG is
-complex):
-
-pregsize
-
-c("pregsize", "sep_unmeas")</code></pre>
+not-at-random fully conditional specification).</code></pre>
 <p><strong>Note</strong> In theory, and as suggested by the
 <code>checkMI</code> results shown above, MI would be valid if we added
 both birth weight and pregnancy size as auxiliary variables in our
@@ -843,7 +816,7 @@ as imputation is performed
 
 seed = NA) # It is good practice to choose a seed so your results are
 reproducible</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" width="700"><img src="midoc_files/figure-html/unnamed-chunk-22-2.png" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models - one for each partially
 observed variable - in <code>proposeMI</code>. For example, suppose

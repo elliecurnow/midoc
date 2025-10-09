@@ -119,19 +119,6 @@ Am J Epidemiol. <a href="doi:10.1093/aje/kwv114">doi:10.1093/aje/kwv114</a></p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> of interest, complete records analysis may still be valid. See, for</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> for further details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider using a different analysis model and/or strategy, e.g.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> multiple imputation.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For example, the analysis model outcome and complete record indicator</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> are independent if, in addition to the specified covariates, the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> following sets of variables are included as covariates in the analysis</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> model (note that this list is not necessarily exhaustive, particularly</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> if your DAG is complex):</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> mated</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("mated", "sep_unmeas")</span>
 <span class="r-in"><span><span class="co"># For the DAG in the example above, complete records analysis is valid</span></span></span>
 <span class="r-in"><span><span class="co">## if a different set of covariates is used</span></span></span>
 <span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
@@ -156,28 +143,6 @@ Am J Epidemiol. <a href="doi:10.1093/aje/kwv114">doi:10.1093/aje/kwv114</a></p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> of interest, complete records analysis may still be valid. See, for</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> for further details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> There are no other variables which could be added to the model to make</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> the analysis model outcome and complete record indicator conditionally</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> independent, without changing the estimand of interest. Consider using</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> a different strategy e.g. multiple imputation.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Alternatively, consider whether a different estimand could be of</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> interest. For example, the analysis model outcome and complete record</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> indicator are independent given each of the following sets of</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> variables:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "mated")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "matage", "mated")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "sep_unmeas")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "matage", "sep_unmeas")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "mated", "sep_unmeas")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> c("bmi3", "matage", "mated", "sep_unmeas")</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example DAG for which complete records analysis is never valid</span></span></span>
 <span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
@@ -192,11 +157,6 @@ Am J Epidemiol. <a href="doi:10.1093/aje/kwv114">doi:10.1093/aje/kwv114</a></p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> of interest, complete records analysis may still be valid. See, for</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> for further details.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> There are no other variables which could be added to the model to make</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> the analysis model outcome and complete record indicator conditionally</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> independent. Consider using a different strategy e.g. multiple</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> imputation.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
