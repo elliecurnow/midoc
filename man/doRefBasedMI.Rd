@@ -62,6 +62,7 @@ multivariate normal within each treatment arm. See
 \link[RefBasedMI]{RefBasedMI} for further details.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # First specify the imputation model as a 'mimod' object
 ## (suppressing the message)
 mimod_qol12 <- checkModSpec(formula="qol12 ~ group + age0 + qol0 + qol3",
@@ -81,4 +82,5 @@ doRefBasedMI(mipropobj=miprop_qol12, covs=c("age0","qol0"),
              depvar=c("qol3", "qol12"), treatvar="group",
              idvar="id", method="J2R", reference=1, seed=123,
              substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
+\dontshow{\}) # examplesIf}
 }

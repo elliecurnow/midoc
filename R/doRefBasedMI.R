@@ -33,7 +33,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' # First specify the imputation model as a 'mimod' object
 #' ## (suppressing the message)
 #' mimod_qol12 <- checkModSpec(formula="qol12 ~ group + age0 + qol0 + qol3",
