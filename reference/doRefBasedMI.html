@@ -132,7 +132,8 @@ multivariate normal within each treatment arm. See
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># First specify the imputation model as a 'mimod' object</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># interactive()</span></span></span>
+<span class="r-in"><span><span class="co"># First specify the imputation model as a 'mimod' object</span></span></span>
 <span class="r-in"><span><span class="co">## (suppressing the message)</span></span></span>
 <span class="r-in"><span><span class="va">mimod_qol12</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"qol12 ~ group + age0 + qol0 + qol3"</span>,</span></span>
 <span class="r-in"><span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>,</span></span>
@@ -151,29 +152,7 @@ multivariate normal within each treatment arm. See
 <span class="r-in"><span>             depvar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"qol3"</span>, <span class="st">"qol12"</span><span class="op">)</span>, treatvar<span class="op">=</span><span class="st">"group"</span>,</span></span>
 <span class="r-in"><span>             idvar<span class="op">=</span><span class="st">"id"</span>, method<span class="op">=</span><span class="st">"J2R"</span>, reference<span class="op">=</span><span class="fl">1</span>, seed<span class="op">=</span><span class="fl">123</span>,</span></span>
 <span class="r-in"><span>             substmod <span class="op">=</span> <span class="st">"lm(qol12 ~ factor(group) + age0 + qol0)"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Given the substantive model: lm(qol12 ~ factor(group) + age0 + qol0)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> using reference-based imputation method: J2R , multiple imputation</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> estimates are as follows:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>             term    estimate  std.error statistic       df       p.value</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1    (Intercept) -0.89924959 5.96794206 -0.150680 441.1305  8.802970e-01</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 factor(group)2  8.69866518 0.30224441 28.780235 589.2025 2.056566e-114</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3           age0  0.07936592 0.04366486  1.817615 678.7668  6.956370e-02</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 4           qol0  0.95106714 0.04859760 19.570250 320.1750  1.208342e-56</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           2.5 %     97.5 %      conf.low  conf.high</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 -12.628381685 10.8298825 -12.628381685 10.8298825</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2   8.105057644  9.2922727   8.105057644  9.2922727</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3  -0.006368514  0.1651004  -0.006368514  0.1651004</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 4   0.855456185  1.0466781   0.855456185  1.0466781</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
