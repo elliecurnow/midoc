@@ -104,6 +104,9 @@ aggregate(cbind(qol0,qol3,qol12,qol12_m1), by=list(Group=group),
 #Create data frame
 qol<-data.frame(id=id,group=group,age0=age0,qol0=qol0,qol3=qol3,qol12=qol12_m1)
 
+#RefBasedMI seems to need group values to be positive integers so add 1 to each value
+qol$group <- qol$group + 1
+
 #Create complete_record indicator/missing qol12 indicator
 qol$r_qol12 <- ifelse(apply(qol,1,anyNA)==F,1,0)
 #qol$r_cra <- ifelse(apply(qol,1,anyNA)==F,1,0)
@@ -118,7 +121,7 @@ summary(glm(r_qol12~group*qol12, family=poisson(log)))
 qol<-qol[order(qol$group),]
 
 #Define binary variables as factors
-qol$group <- as.factor(qol$group)
+#qol$group <- as.factor(qol$group)
 qol$r_qol12 <- as.factor(qol$r_qol12)
 #qol$r_cra <- as.factor(qol$r_cra)
 
@@ -232,7 +235,7 @@ summary(pool(with(mi_mnar_qol0_10,lm(qol12~group+qol0))),conf.int=TRUE)[2,c(1:2,
 
 #Delta differentially by group
 mi_mnar_qol0_5group <- mice(qol[,c(2,4,6)],method="mnar.norm",
-                            blots=list(qol12=list(ums="5*group1-10")),seed=123,printFlag=FALSE,m=200)
+                            blots=list(qol12=list(ums="5*group-10")),seed=123,printFlag=FALSE,m=200)
 summary(pool(with(mi_mnar_qol0_5group,lm(qol12~group+qol0))),conf.int=TRUE)[2,c(1:2,7:8)]
 #    term estimate    2.5 %   97.5 %
 #  group1 12.87647 12.20102 13.55191
