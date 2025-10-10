@@ -20,8 +20,8 @@ doRefBasedMI(
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}
 
-\item{covs}{The analysis model covariate(s), specified as a string (space
-delimited)}
+\item{covs}{The analysis model covariate(s), specified as a string
+(space delimited)}
 
 \item{depvar}{The longitudinal outcome variable(s), specified as a string
 (space delimited)}
@@ -65,7 +65,7 @@ multivariate normal within each treatment arm. See
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # First specify the imputation model as a 'mimod' object
 ## (suppressing the message)
-mimod_qol12 <- checkModSpec(formula="qol12 ~ group + age0 + qol0 + qol3",
+mimod_qol12 <- checkModSpec(formula="qol12 ~ factor(group) + age0 + qol0 + qol3",
                            family="gaussian(identity)",
                            data=qol,
                            message=FALSE)
@@ -78,8 +78,8 @@ miprop_qol12 <- proposeMI(mimodobj=mimod_qol12,
 # Create the set of imputed datasets using the proposed 'mice' options and
 ## specified reference-based imputation method; then, fit the substantive
 ## model to each imputed dataset and display the pooled results
-doRefBasedMI(mipropobj=miprop_qol12, covs=c("age0","qol0"),
-             depvar=c("qol3", "qol12"), treatvar="group",
+doRefBasedMI(mipropobj=miprop_qol12, covs="age0 qol0",
+             depvar="qol3 qol12", treatvar="group",
              idvar="id", method="J2R", reference=1, seed=123,
              substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
 \dontshow{\}) # examplesIf}
