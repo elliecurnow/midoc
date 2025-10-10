@@ -175,6 +175,8 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
                     substmod,
                     "using reference-based imputation method:",
                     method,
+                    "with reference = ",
+                    reference,
 "\n, multiple imputation estimates are as follows: \n \n",
               paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
               collapse = "\n")
