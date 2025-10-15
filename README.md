@@ -147,11 +147,12 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> little evidence of inconsistency between your data and the proposed
     #> DAG.
     #> 
-    #> Note that these results assume that relationships between variables are
-    #> linear. Consider exploring the specification of each relationship in
-    #> your model.  Also consider whether it is valid and possible to explore
-    #> relationships between partially observed variables using the observed
-    #> data, e.g. avoiding perfect prediction.
+    #> Note that there may also be other DAGs which your data are consistent
+    #> with. Also note that these results assume that relationships between
+    #> variables are linear. Consider exploring the specification of each
+    #> relationship in your model.  Also consider whether it is valid and
+    #> possible to explore relationships between partially observed variables
+    #> using the observed data, e.g. avoiding perfect prediction.
 
     checkCRA(y="bmi7", covs="matage mated", r_cra="r",
              mdag="   matage -> bmi7 
