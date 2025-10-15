@@ -623,7 +623,54 @@ imputation model predictors. Hence, multiple imputation methods which
 assume data are missing at random are not valid.
 
 Consider using a different imputation model and/or strategy (e.g.
-not-at-random fully conditional specification).</code></pre>
+not-at-random fully conditional specification).  For example, the
+incomplete variable and its missingness indicator are independent if
+each of the following sets of variables are used as predictors in the
+imputation model:
+
+mated
+
+c("matage", "mated")
+
+c("mated", "pregsize")
+
+c("bwt", "mated", "pregsize")
+
+c("matage", "mated", "pregsize")
+
+c("bwt", "matage", "mated", "pregsize")
+
+sep_unmeas
+
+c("bwt", "sep_unmeas")
+
+c("matage", "sep_unmeas")
+
+c("bwt", "matage", "sep_unmeas")
+
+c("mated", "sep_unmeas")
+
+c("bwt", "mated", "sep_unmeas")
+
+c("matage", "mated", "sep_unmeas")
+
+c("bwt", "matage", "mated", "sep_unmeas")
+
+c("pregsize", "sep_unmeas")
+
+c("bwt", "pregsize", "sep_unmeas")
+
+c("matage", "pregsize", "sep_unmeas")
+
+c("bwt", "matage", "pregsize", "sep_unmeas")
+
+c("mated", "pregsize", "sep_unmeas")
+
+c("bwt", "mated", "pregsize", "sep_unmeas")
+
+c("matage", "mated", "pregsize", "sep_unmeas")
+
+c("bwt", "matage", "mated", "pregsize", "sep_unmeas")</code></pre>
 <p><strong>Note</strong> In theory, and as suggested by the
 <code>checkMI</code> results shown above, MI would be valid if we added
 both birth weight and pregnancy size as auxiliary variables in our

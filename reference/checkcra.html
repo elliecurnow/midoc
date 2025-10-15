@@ -145,7 +145,7 @@ Am J Epidemiol. <a href="doi:10.1093/aje/kwv114">doi:10.1093/aje/kwv114</a></p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Based on the proposed directed acyclic graph (DAG), the analysis model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> outcome and complete record indicator are independent given analysis</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> model covariates. Hence, complete records analysis is valid.</span>
-<span class="r-in"><span><span class="co"># Example where complete records analysis is valid</span></span></span>
+<span class="r-in"><span><span class="co"># Example where complete records analysis is never valid</span></span></span>
 <span class="r-in"><span><span class="fu">checkCRA</span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>
 <span class="r-in"><span>         mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7</span></span></span>
 <span class="r-in"><span><span class="st">               sep_unmeas -&gt; mated sep_unmeas -&gt; r bmi7 -&gt; r"</span><span class="op">)</span></span></span>

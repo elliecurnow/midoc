@@ -112,7 +112,8 @@ Frontiers in Epidemiology. <a href="doi:10.3389/fepid.2023.1237447">doi:10.3389/
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example DAG for which multiple imputation is valid</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example DAG for which multiple imputation is valid, because collider</span></span></span>
+<span class="r-in"><span><span class="co">## variable 'bwt' is not included as a predictor</span></span></span>
 <span class="r-in"><span><span class="fu">checkMI</span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage mated pregsize"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span></span>
 <span class="r-in"><span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7</span></span></span>
 <span class="r-in"><span><span class="st">              sep_unmeas -&gt; mated sep_unmeas -&gt; r pregsize -&gt; bmi7</span></span></span>
@@ -122,18 +123,32 @@ Frontiers in Epidemiology. <a href="doi:10.3389/fepid.2023.1237447">doi:10.3389/
 <span class="r-msg co"><span class="r-pr">#&gt;</span> model predictors. Hence, multiple imputation methods which assume data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> are missing at random are valid in principle.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example DAG for which multiple imputation is not valid, due to a collider</span></span></span>
-<span class="r-in"><span><span class="fu">checkMI</span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage mated bwt"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span></span>
+<span class="r-in"><span><span class="co"># Example DAG for which multiple imputation is not valid</span></span></span>
+<span class="r-in"><span><span class="fu">checkMI</span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage"</span>, r_dep<span class="op">=</span><span class="st">"r"</span>,</span></span>
 <span class="r-in"><span>        mdag<span class="op">=</span><span class="st">"matage -&gt; bmi7 mated -&gt; matage mated -&gt; bmi7</span></span></span>
-<span class="r-in"><span><span class="st">              sep_unmeas -&gt; mated sep_unmeas -&gt; r pregsize -&gt; bmi7</span></span></span>
-<span class="r-in"><span><span class="st">              pregsize -&gt; bwt sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="st">               sep_unmeas -&gt; mated sep_unmeas -&gt; r"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Based on the proposed directed acyclic graph (DAG), the incomplete</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> variable and its missingness indicator are not independent given</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> imputation model predictors. Hence, multiple imputation methods which</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> assume data are missing at random are not valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Consider using a different imputation model and/or strategy (e.g.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> not-at-random fully conditional specification).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> not-at-random fully conditional specification).  For example, the</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> incomplete variable and its missingness indicator are independent if</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> each of the following sets of variables are used as predictors in the</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> imputation model:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> mated</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> c("matage", "mated")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> sep_unmeas</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> c("matage", "sep_unmeas")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> c("mated", "sep_unmeas")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> c("matage", "mated", "sep_unmeas")</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
