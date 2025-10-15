@@ -32,17 +32,17 @@
 #'   Frontiers in Epidemiology. <doi:10.3389/fepid.2023.1237447>
 #'
 #' @examples
-#' # Example DAG for which multiple imputation is valid
+#' # Example DAG for which multiple imputation is valid, because collider
+#' ## variable 'bwt' is not included as a predictor
 #' checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
 #'               pregsize -> bwt sep_unmeas -> bwt")
 #'
-#' # Example DAG for which multiple imputation is not valid, due to a collider
-#' checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
+#' # Example DAG for which multiple imputation is not valid
+#' checkMI(dep="bmi7", preds="matage", r_dep="r",
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
-#'               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
-#'               pregsize -> bwt sep_unmeas -> bwt")
+#'                sep_unmeas -> mated sep_unmeas -> r")
 checkMI <- function(dep, preds, r_dep, mdag) {
   mdagspec <- paste('dag {',mdag,'}')
   predsvec <- unlist(strsplit(preds," "))
@@ -52,18 +52,21 @@ checkMI <- function(dep, preds, r_dep, mdag) {
   } else {
       result1 <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are not independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are not valid. \n \nConsider using a different imputation model and/or strategy (e.g. not-at-random fully conditional specification).",
         collapse="\n")
-      #adjsets_r <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,r_dep),outcome=dep,type = "all")
+
+      #Updated to give broader guidance (making fewer assumptions about target estimand)
+      adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_dep,outcome=dep,type = "all")
       #adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")
       #if(length(adjsets_r)>0) (adjsets <- adjsets_r)
       #  else (adjsets <- adjsets_dep)
       #if(length(adjsets)>0){
-      # result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):\n \n",
-      #                    paste0(adjsets, prefix="\n", collapse = "\n"),collapse = "\n")
-        #print(adjsets)
-      #}
-        #else (result2 <- "")
-    #result <- paste(result1, "\n", result2, collapse = "\n")
-    result <- paste(result1, collapse = "\n")
+      if(length(adjsetsfull)==0){
+        result <- result1
+      } else {
+        result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if each of the following sets of variables are used as predictors in the imputation model:\n \n",
+                          paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
+
+        result <- paste(result1, "\n", result2, collapse = "\n")
+      }
   }
   message(paste(strwrap(result),collapse="\n"))
 }

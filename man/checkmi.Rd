@@ -39,17 +39,17 @@ variable is unrelated to its own missingness, given its imputation model
 predictors.
 }
 \examples{
-# Example DAG for which multiple imputation is valid
+# Example DAG for which multiple imputation is valid, because collider
+## variable 'bwt' is not included as a predictor
 checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
         mdag="matage -> bmi7 mated -> matage mated -> bmi7
               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
               pregsize -> bwt sep_unmeas -> bwt")
 
-# Example DAG for which multiple imputation is not valid, due to a collider
-checkMI(dep="bmi7", preds="matage mated bwt", r_dep="r",
+# Example DAG for which multiple imputation is not valid
+checkMI(dep="bmi7", preds="matage", r_dep="r",
         mdag="matage -> bmi7 mated -> matage mated -> bmi7
-              sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
-              pregsize -> bwt sep_unmeas -> bwt")
+               sep_unmeas -> mated sep_unmeas -> r")
 }
 \references{
 Curnow E, Tilling K, Heron JE, Cornish RP, Carpenter JR. 2023.

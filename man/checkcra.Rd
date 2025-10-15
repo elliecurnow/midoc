@@ -48,7 +48,7 @@ checkCRA(y="bmi7", covs="matage", r_cra="r",
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r")
-# Example where complete records analysis is valid
+# Example where complete records analysis is never valid
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
