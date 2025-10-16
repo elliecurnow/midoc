@@ -727,7 +727,8 @@ fractional polynomial of the fitted values
 P-value: 0
 
 A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model.</code></pre>
+specification of each relationship in your model, noting that the
+observed relationships may be distorted by data missing not at random.</code></pre>
 <p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
@@ -744,7 +745,8 @@ fractional polynomial of the fitted values
 P-value: 1
 
 A large p-value means there is little evidence of model
-mis-specification.</code></pre>
+mis-specification. Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p><strong>Note</strong> We must make sure we account for the non-linear
 relationship between BMI at age 7 years and maternal age in all other
 imputation models. For example, the imputation model for pregnancy size
@@ -764,7 +766,8 @@ plot in this case using the <code>plot = FALSE</code> option):</p>
 P-value: 0.038313
 
 A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model.</code></pre>
+specification of each relationship in your model, noting that the
+observed relationships may be distorted by data missing not at random.</code></pre>
 <p>There is some evidence of model mis-specification.</p>
 <p>Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:</p>
@@ -777,7 +780,8 @@ pregnancy size, there is little evidence of model mis-specification:</p>
 P-value: 0.555356
 
 A large p-value means there is little evidence of model
-mis-specification.</code></pre>
+mis-specification. Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p><strong>Tips for imputation model variable selection</strong></p>
 <ul>
 <li>
