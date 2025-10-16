@@ -65,9 +65,9 @@ checkModSpec <- function(formula, family, data, plot=TRUE, message=TRUE) {
     }
 
   if(pval > 0.1){
-    result2 <- paste("\nA large p-value means there is little evidence of model mis-specification.", collapse = "\n")
+    result2 <- paste("\nA large p-value means there is little evidence of model mis-specification. Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
   } else {
-    result2 <- paste("\nA small p-value means the model may be mis-specified. Check the specification of each relationship in your model.", collapse = "\n")
+    result2 <- paste("\nA small p-value means the model may be mis-specified. Check the specification of each relationship in your model, noting that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
   }
   result <- paste(result1, "\n", result2, collapse = "\n")
 

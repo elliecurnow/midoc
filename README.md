@@ -189,7 +189,8 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> P-value: 1
     #> 
     #> A large p-value means there is little evidence of model
-    #> mis-specification.
+    #> mis-specification. Note that the observed relationships may be
+    #> distorted by data missing not at random.
 
     miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
     #> Based on your proposed imputation model and dataset, your mice() call
