@@ -4,19 +4,22 @@
 \alias{exploreDAG}
 \title{Compares data with proposed DAG}
 \usage{
-exploreDAG(mdag, data)
+exploreDAG(mdag, data = NULL)
 }
 \arguments{
 \item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
-syntax}
+syntax, or as a \link[dagitty]{dagitty} graph object}
 
-\item{data}{A data frame containing all the variables stated in the DAG. All
-ordinal variables must be integer-coded and all categorical variables must
-be dummy-coded.}
+\item{data}{Optionally, a data frame containing all the variables stated in
+the DAG. All ordinal variables must be integer-coded and all categorical
+variables must be dummy-coded.}
 }
 \value{
-A message indicating whether the relationships between fully observed
-variables in the specified dataset are consistent with the proposed DAG
+A message listing the pairs of variables that are implied to be
+independent (possibly conditional on other variables) by the proposed DAG.
+Optionally, if a dataset is supplied, a message indicating whether the
+relationships between fully observed variables in the specified dataset are
+consistent with the proposed DAG.
 }
 \description{
 Explore whether relationships between fully observed variables in the
