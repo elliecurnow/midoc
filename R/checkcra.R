@@ -20,7 +20,7 @@
 #'   delimited)
 #' @param r_cra The complete record indicator, specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
-#'   syntax
+#'   syntax, or as a \link[dagitty]{dagitty} graph object
 #'
 #' @return A message indicating whether complete records analysis is valid under
 #'   the proposed DAG and analysis model outcome and covariate(s)
@@ -49,7 +49,15 @@
 #'          mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
 checkCRA <- function(y, covs, r_cra, mdag) {
-  mdagspec <- paste('dag {',mdag,'}')
+
+  #Check whether input DAG is a dagitty object or not
+  if(dagitty::is.dagitty(mdag)){
+    mdagspec <- mdag
+  } else {
+    mdagspec <- dagitty::dagitty(mdag, layout=T)
+  }
+  #mdagspec <- paste('dag {',mdag,'}')
+
   covsvec <- unlist(strsplit(covs," "))
   #If r does not depend on y conditional on covariates, then CRA is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), y, r_cra, covsvec)){

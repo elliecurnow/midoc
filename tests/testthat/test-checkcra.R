@@ -53,3 +53,16 @@ test_that("checkCRA correctly identifies that CRA is never valid",
 #given analysis model covariates. Hence, in general, complete records analysis is not valid.  In special cases, depending on the type of analysis model and estimand of interest, complete records analysis may still be valid. See, for example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) for further details.  There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent. Consider using a different strategy e.g. multiple imputation.")
   }
 )
+
+# Check output when a dagitty object is supplied
+dag <- dagitty::dagitty("matage -> bmi7 mated -> matage
+        mated -> bmi7 sep_unmeas -> mated bmi7 -> r", layout=T)
+res5<-evaluate_promise(checkCRA(y="bmi7", covs="matage mated", r_cra="r", mdag=dag))
+#Trim output for test purposes
+test_that("checkCRA correctly identifies that CRA is never valid when a dagitty object is supplied",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res5$messages), collapse=" "),"right"),1,128),
+                         "Based on the proposed directed acyclic graph (DAG), the analysis model outcome and complete record indicator are not independent")
+            #given analysis model covariates. Hence, in general, complete records analysis is not valid.  In special cases, depending on the type of analysis model and estimand of interest, complete records analysis may still be valid. See, for example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) for further details.  There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent. Consider using a different strategy e.g. multiple imputation.")
+          }
+)

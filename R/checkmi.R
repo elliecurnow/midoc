@@ -20,7 +20,7 @@
 #' @param r_dep The partially observed variable's missingness indicator,
 #'   specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
-#'   syntax
+#'   syntax, or as a \link[dagitty]{dagitty} graph object
 #'
 #' @return A message indicating whether multiple imputation is valid under the
 #'   proposed DAG and imputation model
@@ -44,7 +44,15 @@
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                sep_unmeas -> mated sep_unmeas -> r")
 checkMI <- function(dep, preds, r_dep, mdag) {
-  mdagspec <- paste('dag {',mdag,'}')
+
+  #Check whether input DAG is a dagitty object or not
+  if(dagitty::is.dagitty(mdag)){
+    mdagspec <- mdag
+  } else {
+    mdagspec <- dagitty::dagitty(mdag, layout=T)
+  }
+  #mdagspec <- paste('dag {',mdag,'}')
+
   predsvec <- unlist(strsplit(preds," "))
   #If r_dep does not depend on dep conditional on predictors, then MI is valid
   if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), dep, r_dep, predsvec)){

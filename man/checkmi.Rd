@@ -17,7 +17,7 @@ delimited)}
 specified as a string}
 
 \item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
-syntax}
+syntax, or as a \link[dagitty]{dagitty} graph object}
 }
 \value{
 A message indicating whether multiple imputation is valid under the
