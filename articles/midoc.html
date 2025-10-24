@@ -217,10 +217,12 @@ dataset are consistent with the proposed mDAG, specifying both our mDAG
 <span><span class="st">                  sep_unmeas -&gt; mated </span></span>
 <span><span class="st">                  sep_unmeas -&gt; r"</span>, </span>
 <span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following
-conditional independencies (where, for example, 'X _||_ Y | Z' should
-be read as 'X is independent of Y conditional on Z'). Note that
-variable names are abbreviated:
+<pre><code>The proposed directed acyclic graph (DAG) implies the following pairs
+of variables are (conditionally) independent (where, for example, 'X
+_||_ Y | Z' should be read as 'X is independent of Y conditional on
+Z'). Note that variable names are abbreviated. Consider whether these
+(conditional) independencies are plausible for your study, and update
+your DAG accordingly:
 
 bmi7 _||_ r | sp_n
 
@@ -482,10 +484,12 @@ follows.</p>
 <span><span class="st">                  pregsize -&gt; bwt  </span></span>
 <span><span class="st">                  sep_unmeas -&gt; bwt"</span>, </span>
 <span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following
-conditional independencies (where, for example, 'X _||_ Y | Z' should
-be read as 'X is independent of Y conditional on Z'). Note that
-variable names are abbreviated:
+<pre><code>The proposed directed acyclic graph (DAG) implies the following pairs
+of variables are (conditionally) independent (where, for example, 'X
+_||_ Y | Z' should be read as 'X is independent of Y conditional on
+Z'). Note that variable names are abbreviated. Consider whether these
+(conditional) independencies are plausible for your study, and update
+your DAG accordingly:
 
 bmi7 _||_ bwt | prgs, sp_n
 
