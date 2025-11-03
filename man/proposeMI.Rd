@@ -4,34 +4,49 @@
 \alias{proposeMI}
 \title{Suggests multiple imputation options}
 \usage{
-proposeMI(mimodobj, data, plot = TRUE, plotprompt = TRUE, message = TRUE)
+proposeMI(
+  mimodobj,
+  prop_complete = NA,
+  data = NULL,
+  plot = TRUE,
+  plotprompt = TRUE,
+  message = TRUE
+)
 }
 \arguments{
 \item{mimodobj}{An object, or list of objects, of type 'mimod', which stands
 for 'multiple imputation model', created by a call to
 \link[midoc]{checkModSpec}}
 
-\item{data}{A data frame containing all the variables required for imputation
-and the substantive analysis}
+\item{prop_complete}{Optionally, the proportion of complete records,
+specified as a number between 0 and 1. This is only required if a dataset
+is not specified. If a dataset is specified, the proportion of complete
+records will be calculated based on all columns included in the dataset.}
 
-\item{plot}{If TRUE (the default), displays diagnostic plots for the proposed
-'mice' call; use plot=FALSE to disable the plots}
+\item{data}{Optionally, a data frame containing all the variables required
+for imputation and the substantive analysis}
 
-\item{plotprompt}{If TRUE (the default), the user is prompted before the
-second plot is displayed; use plotprompt=FALSE to remove the prompt}
+\item{plot}{If TRUE (the default), and a dataset is supplied, displays
+diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
+the plots}
+
+\item{plotprompt}{If TRUE (the default), and a dataset is supplied, the user
+is prompted before the second plot is displayed; use plotprompt=FALSE to
+remove the prompt}
 
 \item{message}{If TRUE (the default), displays a message describing the
 proposed 'mice' options; use message=FALSE to suppress the message}
 }
 \value{
 An object of type 'miprop', which can be used to run 'mice' using the
-proposed options, plus, optionally, a message and diagnostic plots
-describing the proposed 'mice' options
+proposed options, plus optionally, a message and, if a dataset is supplied,
+diagnostic plots describing the proposed 'mice' options
 }
 \description{
 Suggests the \link[mice]{mice} options to perform multiple imputation, based
 on the proposed set of imputation models (one for each partially observed
-variable) and specified dataset.
+variable) and proportion of complete records. Optionally, if a dataset is
+supplied, diagnostic plots are created based on the proposed 'mice' options.
 }
 \examples{
 # First specify each imputation model as a 'mimod' object

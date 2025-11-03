@@ -2,23 +2,30 @@
 #'
 #' Suggests the \link[mice]{mice} options to perform multiple imputation, based
 #' on the proposed set of imputation models (one for each partially observed
-#' variable) and specified dataset.
+#' variable) and proportion of complete records. Optionally, if a dataset is
+#' supplied, diagnostic plots are created based on the proposed 'mice' options.
 #'
 #' @param mimodobj An object, or list of objects, of type 'mimod', which stands
 #'   for 'multiple imputation model', created by a call to
 #'   \link[midoc]{checkModSpec}
-#' @param data A data frame containing all the variables required for imputation
-#'   and the substantive analysis
-#' @param plot If TRUE (the default), displays diagnostic plots for the proposed
-#'   'mice' call; use plot=FALSE to disable the plots
-#' @param plotprompt If TRUE (the default), the user is prompted before the
-#'   second plot is displayed; use plotprompt=FALSE to remove the prompt
+#' @param prop_complete Optionally, the proportion of complete records,
+#'   specified as a number between 0 and 1. This is only required if a dataset
+#'   is not specified. If a dataset is specified, the proportion of complete
+#'   records will be calculated based on all columns included in the dataset.
+#' @param data Optionally, a data frame containing all the variables required
+#'   for imputation and the substantive analysis
+#' @param plot If TRUE (the default), and a dataset is supplied, displays
+#'   diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
+#'   the plots
+#' @param plotprompt If TRUE (the default), and a dataset is supplied, the user
+#'   is prompted before the second plot is displayed; use plotprompt=FALSE to
+#'   remove the prompt
 #' @param message If TRUE (the default), displays a message describing the
 #'   proposed 'mice' options; use message=FALSE to suppress the message
 #'
 #' @return An object of type 'miprop', which can be used to run 'mice' using the
-#'   proposed options, plus, optionally, a message and diagnostic plots
-#'   describing the proposed 'mice' options
+#'   proposed options, plus optionally, a message and, if a dataset is supplied,
+#'   diagnostic plots describing the proposed 'mice' options
 #'
 #' @export
 #'
@@ -43,9 +50,16 @@
 #' proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
 #'           data=bmi,
 #'           plot = FALSE)
-proposeMI <- function(mimodobj, data, plot = TRUE, plotprompt = TRUE, message = TRUE) {
+proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotprompt = TRUE, message = TRUE) {
 
-  m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
+  if (!is.null(data)) {
+    m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
+  } else {
+      if (is.na(prop_complete) | prop_complete <=0 | prop_complete >=1){
+        warning("\n\nprop_complete must be specified as a number between 0 and 1\n\n",
+                call.=FALSE, immediate.=TRUE)}
+      m_min <- ceiling((1-prop_complete)*100)
+  }
 
   if(max(lengths(mimodobj)==1)){
     mimod_count <- 1
@@ -53,36 +67,46 @@ proposeMI <- function(mimodobj, data, plot = TRUE, plotprompt = TRUE, message = 
     mimod_count <- length(mimodobj)
     }
 
-  #Specify method, formula, dataset name for each variable to be imputed
+  #Specify method, formula, and optionally dataset name for each variable to be imputed
   method <- vector("list", mimod_count)
   formulas_list <- vector("list", mimod_count)
-  #Keep specified dataset name as ref value
-  datalab <- deparse(substitute(data))
+
+  #Keep specified dataset name as ref value and check this is consistent for set of mimod objects
+  #if (!is.null(data)) {
+    datalab <- deparse(substitute(data))
+  #} else datalab <- "dataset_name"
 
   for (i in 1:mimod_count){
-    if (mimod_count > 1){
-        family <- mimodobj[[i]][["family"]]
-        formula <- mimodobj[[i]][["formula"]]
-        datalab_check <- mimodobj[[i]][["datalab"]]
-    } else {
-        family <- mimodobj[["family"]]
-        formula <- mimodobj[["formula"]]
-        datalab_check <- mimodobj[["datalab"]]
+      if (mimod_count > 1){
+          family <- mimodobj[[i]][["family"]]
+          formula <- mimodobj[[i]][["formula"]]
+          if (!is.null(data)) {
+            datalab_check <- mimodobj[[i]][["datalab"]]
+          }
+      } else {
+          family <- mimodobj[["family"]]
+          formula <- mimodobj[["formula"]]
+          if (!is.null(data)) {
+            datalab_check <- mimodobj[["datalab"]]
+          }
+      }
+
+    if (!is.null(data)){
+      if(datalab_check != datalab){
+          warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
+                  call.=FALSE, immediate.=TRUE)
+      }
     }
 
     if(family == "gaussian(identity)") {
       method[i] <- "norm"
     } else if(family == "binomial(logit)") {
       method[i] <- "logreg"
-      }
+    }
 
     formulas_list[i] <- c(stats::as.formula(paste(formula,collapse=" ")))
-
-    if (datalab_check != datalab){
-        warning("The names of the datasets used to specify the set of imputation models do not match the dataset provided.
-Check that the specification of each imputation model was explored using the same dataset.", call.=FALSE)
-        }
   }
+
 
     result <- paste("Based on your proposed imputation model and dataset, your mice() call should be as follows: \n \nmice(data = ",
                     datalab,
@@ -99,7 +123,7 @@ Check that the specification of each imputation model was explored using the sam
   if(message) {message(paste(strwrap(result),collapse="\n"))}
 
     #Optionally create a plot of observed versus imputed values and a trace plot for five imputed datasets
-    if (plot){
+    if (!is.null(data) & plot){
       imp <- mice::mice(data = data, method = method,
                         formulas = formulas_list, maxit = 20, printFlag = FALSE)
 
@@ -121,6 +145,6 @@ Check that the specification of each imputation model was explored using the sam
     }
 
   #Return an object with the proposed specification
-  miprop <- list(data=data,m= m_min,method=method,formulas = formulas_list)
+  miprop <- list(data=data,m=m_min,method=method,formulas = formulas_list)
   invisible(miprop)
 }
