@@ -22,9 +22,10 @@ relationships between fully observed variables in the specified dataset are
 consistent with the proposed DAG.
 }
 \description{
-Explore whether relationships between fully observed variables in the
-specified dataset are consistent with the proposed directed acyclic graph
-(DAG) using \link[dagitty]{localTests} functionality.
+Explore the relationships implied by the proposed directed acyclic graph
+(DAG). Optionally, if a dataset is supplied, explore whether relationships
+between fully observed variables in the specified dataset are consistent with
+the proposed DAG.
 }
 \examples{
 exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7
