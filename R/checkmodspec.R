@@ -92,8 +92,15 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
     }
     mimod <- list(formula = formula,family = family,
                   datalab=deparse(substitute(data)))
-  } else mimod <- list(formula = formula,family = family)
+  } else {
 
+    #Return message with stated formula and reminder about data check
+    if(message) {message(paste("The proposed parametric model is:",
+                               sQuote(formula),
+                               "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
+                               prefix="\n", collapse="\n"))}
+    mimod <- list(formula = formula,family = family)
+  }
   #Return an object with formula and family
   invisible(mimod)
 }
