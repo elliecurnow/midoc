@@ -26,12 +26,12 @@ test_that("proposeMI suggests correct mice options and creates expected object",
 mimod <- checkModSpec(
   formula="bmi7~matage+I(matage^2)+mated+pregsize",
   family="gaussian(identity)", message=FALSE)
-res2<-evaluate_promise(proposeMI(mimodobj=mimod))
+#res2<-evaluate_promise(proposeMI(mimodobj=mimod))
 #Trim output for test purposes
 test_that("proposeMI gives a warning if neither data nor prop_complete are specified",
           {
-            expect_equal(trimws(res2$warnings),
-                         "prop_complete must be specified as a number between 0 and 1")
+            expect_error(proposeMI(mimodobj=mimod),
+                         "'prop_complete' must be specified, or else 'data' must be specified")
           }
 )
 

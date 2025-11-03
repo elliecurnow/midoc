@@ -55,13 +55,16 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   if (!is.null(data)) {
     m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
   } else {
-      if (is.na(prop_complete) | prop_complete <=0 | prop_complete >=1){
-        warning("\n\nprop_complete must be specified as a number between 0 and 1\n\n",
-                call.=FALSE, immediate.=TRUE)}
+      if (is.na(prop_complete)){
+        stop("\n\n'prop_complete' must be specified, or else 'data' must be specified\n\n",
+                call.=TRUE)}
+      else if (!is.na(prop_complete) & (prop_complete <=0 | prop_complete >=1)){
+      stop("\n\n'prop_complete' must be a number between 0 and 1\n\n",
+           call.=TRUE)}
       m_min <- ceiling((1-prop_complete)*100)
   }
 
-  if(max(lengths(mimodobj)==1)){
+  if(max(lengths(mimodobj))==1){
     mimod_count <- 1
   } else {
     mimod_count <- length(mimodobj)
