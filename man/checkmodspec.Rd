@@ -2,9 +2,9 @@
 % Please edit documentation in R/checkmodspec.R
 \name{checkModSpec}
 \alias{checkModSpec}
-\title{Inspect parametric model specification}
+\title{Specify and inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data, plot = TRUE, message = TRUE)
+checkModSpec(formula, family, data = NULL, plot = TRUE, message = TRUE)
 }
 \arguments{
 \item{formula}{A symbolic description of the model to be fitted, with the
@@ -15,31 +15,33 @@ separated by + operators, on the right, specified as a string}
 used in the model, specified as a string; family functions that are
 supported are "gaussian(identity)" and "binomial(logit)"}
 
-\item{data}{A data frame containing all the variables stated in the formula}
+\item{data}{Optionally, a data frame containing all the variables stated in
+the formula}
 
-\item{plot}{If TRUE (the default) and there is evidence of model
-mis-specification, displays a plot which can be used to explore the
-functional form of each covariate in the specified model; use plot = FALSE
-to disable the plot}
+\item{plot}{If TRUE (the default), and a dataset is supplied, displays a plot
+which can be used to explore the functional form of each covariate in the
+specified model if there is evidence of model mis-specification; use plot =
+FALSE to disable the plot}
 
-\item{message}{If TRUE (the default), displays a message indicating whether
-the relationships between the dependent variable and covariates are likely
-to be correctly specified or not; use message = FALSE to suppress the
-message}
+\item{message}{If TRUE (the default), and a dataset is supplied, displays a
+message indicating whether the relationships between the dependent variable
+and covariates are likely to be correctly specified or not; use message =
+FALSE to suppress the message}
 }
 \value{
 An object of type 'mimod' (a list containing the specified formula,
-family, and dataset name). Optionally, a message indicating whether the
-relationships between the dependent variable and covariates are likely to
-be correctly specified or not. If there is evidence of model
-mis-specification, optionally returns a plot of the model residuals versus
-the fitted values which can be used to explore the appropriate functional
-form for the specified model.
+family, and, if specified, dataset name). Optionally, if required and a
+dataset is supplied, a message indicating whether the relationships between
+the dependent variable and covariates are likely to be correctly specified
+or not. If there is evidence of model mis-specification, optionally returns
+a plot of the model residuals versus the fitted values which can be used to
+explore the appropriate functional form for the specified model.
 }
 \description{
-Explore whether the observed relationships in the specified dataset are
-consistent with the proposed parametric model (which may represent the
-analysis or imputation model).
+Specify a parametric model (which may represent the analysis or imputation
+model). Optionally, if a dataset is supplied, explore whether the observed
+relationships in the specified dataset are consistent with the proposed
+parametric model.
 }
 \examples{
 # Example (incorrectly) assuming a linear relationship

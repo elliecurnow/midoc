@@ -56,3 +56,17 @@ test_that("checkModSpec correctly identifies that the proposed model is corretly
 "Model mis-specification method: Pregibon's link test  P-value: 0.381826  A large p-value means there is little evidence of model mis-specification. Note that the observed relationships may be distorted by data missing not at random.")
   }
 )
+
+# Check mimod object when a dataset is not supplied
+res5<-checkModSpec(
+  formula="mated~matage+I(matage^2)+bmi7+pregsize",
+  family="binomial(logit)")
+#Trim output for test purposes
+test_that("checkModSpec mimod object contains a formula and family",
+          {
+            expect_equal(res5$formula,
+                         "mated~matage+I(matage^2)+bmi7+pregsize")
+            expect_equal(res5$family,
+                         "binomial(logit)")
+          }
+)
