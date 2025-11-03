@@ -217,10 +217,12 @@ dataset are consistent with the proposed mDAG, specifying both our mDAG
 <span><span class="st">                  sep_unmeas -&gt; mated </span></span>
 <span><span class="st">                  sep_unmeas -&gt; r"</span>, </span>
 <span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following
-conditional independencies (where, for example, 'X _||_ Y | Z' should
-be read as 'X is independent of Y conditional on Z'). Note that
-variable names are abbreviated:
+<pre><code>The proposed directed acyclic graph (DAG) implies the following pairs
+of variables are (conditionally) independent (where, for example, 'X
+_||_ Y | Z' should be read as 'X is independent of Y conditional on
+Z'). Note that variable names are abbreviated. Consider whether these
+(conditional) independencies are plausible for your study, and update
+your DAG accordingly:
 
 bmi7 _||_ r | sp_n
 
@@ -253,11 +255,12 @@ be consistent with the proposed DAG. A large p-value means there is
 little evidence of inconsistency between your data and the proposed
 DAG.
 
-Note that these results assume that relationships between variables are
-linear. Consider exploring the specification of each relationship in
-your model.  Also consider whether it is valid and possible to explore
-relationships between partially observed variables using the observed
-data, e.g. avoiding perfect prediction.</code></pre>
+Note that there may also be other DAGs which your data are consistent
+with. Also note that these results assume that relationships between
+variables are linear. Consider exploring the specification of each
+relationship in your model.  Also consider whether it is valid and
+possible to explore relationships between partially observed variables
+using the observed data, e.g. avoiding perfect prediction.</code></pre>
 <p>Based on the relationships between fully observed variables maternal
 age, maternal education, and missingness of BMI at age 7 years, we can
 see that there is little evidence of inconsistency between our dataset
@@ -331,7 +334,26 @@ is not valid.
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
 example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
-for further details.</code></pre>
+for further details.
+
+Consider using a different strategy e.g. multiple imputation, or a
+different analysis model, noting that a different analysis model may
+not be aligned with your estimand.
+
+For example, the analysis model outcome and complete record indicator
+are independent given each of the following sets of variables:
+
+mated
+
+c("matage", "mated")
+
+sep_unmeas
+
+c("matage", "sep_unmeas")
+
+c("mated", "sep_unmeas")
+
+c("matage", "mated", "sep_unmeas")</code></pre>
 <p>We can see that CRA would not be valid (we can also tell this by
 inspecting our DAG: there is an open path from <code>bmi7</code> to
 <code>r</code> via <code>mated</code> and <code>sep_unmeas</code> if we
@@ -386,7 +408,9 @@ is not valid.
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
 example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
-for further details.</code></pre>
+for further details.
+
+Consider using a different strategy e.g. multiple imputation.</code></pre>
 </div>
 <div class="section level2">
 <h2 id="step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy">Step 3 Check whether multiple imputation is likely to be a valid
@@ -460,10 +484,12 @@ follows.</p>
 <span><span class="st">                  pregsize -&gt; bwt  </span></span>
 <span><span class="st">                  sep_unmeas -&gt; bwt"</span>, </span>
 <span>           data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>The proposed directed acyclic graph (DAG) implies the following
-conditional independencies (where, for example, 'X _||_ Y | Z' should
-be read as 'X is independent of Y conditional on Z'). Note that
-variable names are abbreviated:
+<pre><code>The proposed directed acyclic graph (DAG) implies the following pairs
+of variables are (conditionally) independent (where, for example, 'X
+_||_ Y | Z' should be read as 'X is independent of Y conditional on
+Z'). Note that variable names are abbreviated. Consider whether these
+(conditional) independencies are plausible for your study, and update
+your DAG accordingly:
 
 bmi7 _||_ bwt | prgs, sp_n
 
@@ -524,11 +550,12 @@ be consistent with the proposed DAG. A large p-value means there is
 little evidence of inconsistency between your data and the proposed
 DAG.
 
-Note that these results assume that relationships between variables are
-linear. Consider exploring the specification of each relationship in
-your model.  Also consider whether it is valid and possible to explore
-relationships between partially observed variables using the observed
-data, e.g. avoiding perfect prediction.</code></pre>
+Note that there may also be other DAGs which your data are consistent
+with. Also note that these results assume that relationships between
+variables are linear. Consider exploring the specification of each
+relationship in your model.  Also consider whether it is valid and
+possible to explore relationships between partially observed variables
+using the observed data, e.g. avoiding perfect prediction.</code></pre>
 <p>Our results suggest that our updated mDAG is plausible.</p>
 <p>Note that CRA is still valid for our updated mDAG. We can check this
 using <code>checkCRA</code> once more:</p>
@@ -600,7 +627,54 @@ imputation model predictors. Hence, multiple imputation methods which
 assume data are missing at random are not valid.
 
 Consider using a different imputation model and/or strategy (e.g.
-not-at-random fully conditional specification).</code></pre>
+not-at-random fully conditional specification).  For example, the
+incomplete variable and its missingness indicator are independent if
+each of the following sets of variables are used as predictors in the
+imputation model:
+
+mated
+
+c("matage", "mated")
+
+c("mated", "pregsize")
+
+c("bwt", "mated", "pregsize")
+
+c("matage", "mated", "pregsize")
+
+c("bwt", "matage", "mated", "pregsize")
+
+sep_unmeas
+
+c("bwt", "sep_unmeas")
+
+c("matage", "sep_unmeas")
+
+c("bwt", "matage", "sep_unmeas")
+
+c("mated", "sep_unmeas")
+
+c("bwt", "mated", "sep_unmeas")
+
+c("matage", "mated", "sep_unmeas")
+
+c("bwt", "matage", "mated", "sep_unmeas")
+
+c("pregsize", "sep_unmeas")
+
+c("bwt", "pregsize", "sep_unmeas")
+
+c("matage", "pregsize", "sep_unmeas")
+
+c("bwt", "matage", "pregsize", "sep_unmeas")
+
+c("mated", "pregsize", "sep_unmeas")
+
+c("bwt", "mated", "pregsize", "sep_unmeas")
+
+c("matage", "mated", "pregsize", "sep_unmeas")
+
+c("bwt", "matage", "mated", "pregsize", "sep_unmeas")</code></pre>
 <p><strong>Note</strong> In theory, and as suggested by the
 <code>checkMI</code> results shown above, MI would be valid if we added
 both birth weight and pregnancy size as auxiliary variables in our
@@ -657,7 +731,8 @@ fractional polynomial of the fitted values
 P-value: 0
 
 A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model.</code></pre>
+specification of each relationship in your model, noting that the
+observed relationships may be distorted by data missing not at random.</code></pre>
 <p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
@@ -674,7 +749,8 @@ fractional polynomial of the fitted values
 P-value: 1
 
 A large p-value means there is little evidence of model
-mis-specification.</code></pre>
+mis-specification. Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p><strong>Note</strong> We must make sure we account for the non-linear
 relationship between BMI at age 7 years and maternal age in all other
 imputation models. For example, the imputation model for pregnancy size
@@ -694,7 +770,8 @@ plot in this case using the <code>plot = FALSE</code> option):</p>
 P-value: 0.038313
 
 A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model.</code></pre>
+specification of each relationship in your model, noting that the
+observed relationships may be distorted by data missing not at random.</code></pre>
 <p>There is some evidence of model mis-specification.</p>
 <p>Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:</p>
@@ -707,7 +784,8 @@ pregnancy size, there is little evidence of model mis-specification:</p>
 P-value: 0.555356
 
 A large p-value means there is little evidence of model
-mis-specification.</code></pre>
+mis-specification. Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p><strong>Tips for imputation model variable selection</strong></p>
 <ul>
 <li>

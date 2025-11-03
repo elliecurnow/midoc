@@ -83,10 +83,12 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
                       pregsize -> bwt  
                       sep_unmeas -> bwt", 
                data=bmi)
-    #> The proposed directed acyclic graph (DAG) implies the following
-    #> conditional independencies (where, for example, 'X _||_ Y | Z' should
-    #> be read as 'X is independent of Y conditional on Z'). Note that
-    #> variable names are abbreviated:
+    #> The proposed directed acyclic graph (DAG) implies the following pairs
+    #> of variables are (conditionally) independent (where, for example, 'X
+    #> _||_ Y | Z' should be read as 'X is independent of Y conditional on
+    #> Z'). Note that variable names are abbreviated. Consider whether these
+    #> (conditional) independencies are plausible for your study, and update
+    #> your DAG accordingly:
     #> 
     #> bmi7 _||_ bwt | prgs, sp_n
     #> 
