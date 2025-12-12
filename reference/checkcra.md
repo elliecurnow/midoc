@@ -1,0 +1,120 @@
+# Inspect complete records analysis model
+
+Check complete records analysis is valid under the proposed analysis
+model and directed acyclic graph (DAG). Validity means that the proposed
+approach will allow unbiased estimation of the estimand(s) of interest,
+including regression parameters, associations, and causal effects.
+
+## Usage
+
+``` r
+checkCRA(y, covs, r_cra, mdag)
+```
+
+## Arguments
+
+- y:
+
+  The analysis model outcome, specified as a string
+
+- covs:
+
+  The analysis model covariate(s), specified as a string (space
+  delimited)
+
+- r_cra:
+
+  The complete record indicator, specified as a string
+
+- mdag:
+
+  The DAG, specified as a string using
+  [dagitty](https://rdrr.io/pkg/dagitty/man/dagitty.html) syntax, or as
+  a [dagitty](https://rdrr.io/pkg/dagitty/man/dagitty.html) graph object
+
+## Value
+
+A message indicating whether complete records analysis is valid under
+the proposed DAG and analysis model outcome and covariate(s)
+
+## Details
+
+The DAG should include all observed and unobserved variables related to
+the analysis model variables and their missingness, as well as all
+required missingness indicators.
+
+In general, complete records analysis is valid if the analysis model
+outcome and complete record indicator are unrelated, conditional on the
+specified covariates. This is determined using the proposed DAG by
+checking whether the analysis model and complete record indicator are
+'d-separated', given the covariates.
+
+## References
+
+Hughes R, Heron J, Sterne J, Tilling K. 2019. Accounting for missing
+data in statistical analyses: multiple imputation is not always the
+answer. Int J Epidemiol. <doi:10.1093/ije/dyz032>
+
+Bartlett JW, Harel O, Carpenter JR. 2015. Asymptotically Unbiased
+Estimation of Exposure Odds Ratios in Complete Records Logistic
+Regression. Am J Epidemiol. <doi:10.1093/aje/kwv114>
+
+## Examples
+
+``` r
+# Example DAG for which complete records analysis is not valid
+checkCRA(y="bmi7", covs="matage", r_cra="r",
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r")
+#> Based on the proposed directed acyclic graph (DAG), the analysis model
+#> outcome and complete record indicator are not independent given
+#> analysis model covariates. Hence, in general, complete records analysis
+#> is not valid.
+#> 
+#> In special cases, depending on the type of analysis model and estimand
+#> of interest, complete records analysis may still be valid. See, for
+#> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
+#> for further details.
+#> 
+#> Consider using a different strategy e.g. multiple imputation, or a
+#> different analysis model, noting that a different analysis model may
+#> not be aligned with your estimand.
+#> 
+#> For example, the analysis model outcome and complete record indicator
+#> are independent given each of the following sets of variables:
+#> 
+#> mated
+#> 
+#> c("matage", "mated")
+#> 
+#> sep_unmeas
+#> 
+#> c("matage", "sep_unmeas")
+#> 
+#> c("mated", "sep_unmeas")
+#> 
+#> c("matage", "mated", "sep_unmeas")
+# For the DAG in the example above, complete records analysis is valid
+## if a different set of covariates is used
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r")
+#> Based on the proposed directed acyclic graph (DAG), the analysis model
+#> outcome and complete record indicator are independent given analysis
+#> model covariates. Hence, complete records analysis is valid.
+# Example where complete records analysis is never valid
+checkCRA(y="bmi7", covs="matage mated", r_cra="r",
+         mdag="matage -> bmi7 mated -> matage mated -> bmi7
+               sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
+#> Based on the proposed directed acyclic graph (DAG), the analysis model
+#> outcome and complete record indicator are not independent given
+#> analysis model covariates. Hence, in general, complete records analysis
+#> is not valid.
+#> 
+#> In special cases, depending on the type of analysis model and estimand
+#> of interest, complete records analysis may still be valid. See, for
+#> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
+#> for further details.
+#> 
+#> Consider using a different strategy e.g. multiple imputation.
+```

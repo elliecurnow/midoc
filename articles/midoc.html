@@ -167,9 +167,10 @@ dataset (<code>data</code>), as follows.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, </span>
 <span>             covs<span class="op">=</span><span class="st">"matage mated"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>  pattern bmi7 matage mated   n pct
-1       1    1      1     1 592  59
-2       2    0      1     1 408  41</code></pre>
+<pre><code>[[1]]
+     pattern bmi7 matage mated   n pct
+[1,]       1    1      1     1 592  59
+[2,]       2    0      1     1 408  41</code></pre>
 <p>We see that there are two missing data patterns: either all variables
 are observed, or BMI at age 7 years is missing and all covariates are
 observed. We will use indicator variable “R” to denote the missingness
@@ -205,7 +206,7 @@ are specified as we intended:</p>
 layout of the mDAG shown below - although this is not necessary when
 using <code>midoc</code>, go to the dagitty <a href="https://www.dagitty.net/" class="external-link">website</a> if you would like to find
 out more about using “dagitty” to draw mDAGs.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-7-1.png" width="500px" height="400px"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="500px" height="400px"></p>
 <p>As a final check of our mDAG, we will use the <code>midoc</code>
 function <code>exploreDAG</code> to explore whether relationships in the
 dataset are consistent with the proposed mDAG, specifying both our mDAG
@@ -461,16 +462,17 @@ inspect the missing data patterns in our dataset once again using
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, </span>
 <span>             covs<span class="op">=</span><span class="st">"matage mated pregsize bwt"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>  pattern bmi7 matage mated pregsize bwt   n pct
-1       1    1      1     1        1   1 592  59
-2       2    0      1     1        1   1 408  41</code></pre>
+<pre><code>[[1]]
+     pattern bmi7 matage mated pregsize bwt   n pct
+[1,]       1    1      1     1        1   1 592  59
+[2,]       2    0      1     1        1   1 408  41</code></pre>
 <p>We can see that our auxiliary variables are fully observed.</p>
 <p>We assume that pregnancy size is a cause of BMI at age 7 years, but
 not its missingness. We assume birth weight is related to both BMI at 7
 years (via pregnancy size) and its missingness (via SEP). We will now
 add these variables to our mDAG. Below, we have shown our updated
 mDAG.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" width="500px" height="400px"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="500px" height="400px"></p>
 <p>We will also once again explore whether relationships in the dataset
 are consistent with the updated mDAG using <code>exploreDAG</code>, as
 follows.</p>
@@ -733,7 +735,7 @@ P-value: 0
 A small p-value means the model may be mis-specified. Check the
 specification of each relationship in your model, noting that the
 observed relationships may be distorted by data missing not at random.</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
 7 years and maternal age.</p>
@@ -894,7 +896,7 @@ as imputation is performed
 
 seed = NA) # It is good practice to choose a seed so your results are
 reproducible</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="700"></p>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models - one for each partially
 observed variable - in <code>proposeMI</code>. For example, suppose
@@ -1044,7 +1046,7 @@ size</td>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
