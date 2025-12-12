@@ -49,7 +49,7 @@ proposeMI(
 
   If TRUE (the default), and a dataset is supplied, the user is prompted
   before the second plot is displayed; use plotprompt=FALSE to remove
-  the prompt
+  the prompt and display all plots at the same time
 
 - message:
 

@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   midoc: midoc.html
-last_built: 2025-12-12T10:18Z
+last_built: 2025-12-12T10:20Z
 urls:
   reference: https://elliecurnow.github.io/midoc/reference
   article: https://elliecurnow.github.io/midoc/articles

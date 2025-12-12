@@ -62,9 +62,10 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 ![](reference/figures/README-unnamed-chunk-2-1.png)
 
 ``` R
-#>   pattern bmi7 matage mated   n pct
-#> 1       1    1      1     1 592  59
-#> 2       2    0      1     1 408  41
+#> [[1]]
+#>      pattern bmi7 matage mated   n pct
+#> [1,]       1    1      1     1 592  59
+#> [2,]       2    0      1     1 408  41
 
 exploreDAG(mdag=" matage -> bmi7 
                   mated -> matage 
