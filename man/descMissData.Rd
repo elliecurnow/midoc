@@ -4,7 +4,7 @@
 \alias{descMissData}
 \title{Lists missing data patterns in the specified dataset}
 \usage{
-descMissData(y, covs, data, plot = FALSE)
+descMissData(y, covs, data, by = NULL, plot = FALSE)
 }
 \arguments{
 \item{y}{The analysis model outcome, specified as a string}
@@ -12,12 +12,17 @@ descMissData(y, covs, data, plot = FALSE)
 \item{covs}{The analysis model covariate(s), specified as a string (space
 delimited)}
 
-\item{data}{A data frame containing the specified analysis model outcome and
-covariate(s)}
+\item{data}{A data frame containing the specified analysis model outcome,
+covariate(s), and if specified, stratification variable(s)}
+
+\item{by}{Optional stratification variable(s), which must be a factor, or
+list of factors; if specified, the data are subsetted by the values of the
+factor(s) and missing data patterns are displayed for each subset in turn}
 
 \item{plot}{If TRUE, displays a plot using \link[mice]{md.pattern} to
-visualise the missing data patterns; use plot = FALSE (the default) to
-disable the plot}
+visualise the missing data patterns; if stratification variable(s) are
+specified, a separate plot will be displayed for each subset; use plot =
+FALSE (the default) to disable the plot}
 }
 \value{
 A summary of the missing data patterns
@@ -27,13 +32,13 @@ This function summarises the missing data patterns in the specified dataset.
 Each row in the output corresponds to a missing data pattern (1=observed,
 0=missing). The number and percentage of observations is also displayed for
 each missing data pattern. The first column indicates the number of missing
-data patterns. The second column refers to the analysis model outcome
-('y'), with all other variables ('covs') displayed in subsequent columns.
+data patterns. The second column refers to the analysis model outcome ('y'),
+with all other variables ('covs') displayed in subsequent columns.
 Alternatively, 'y' can be used to display the primary variable of interest,
 e.g. 'y' could refer to the exposure, with all other variables listed in
 'covs'.
 }
 \examples{
 descMissData(y="bmi7", covs="matage mated", data=bmi)
-descMissData(y="bmi7", covs="matage mated pregsize bwt", data=bmi, plot=TRUE)
+descMissData(y="bmi7", covs="matage mated bwt", by="pregsize", data=bmi)
 }
