@@ -15,7 +15,7 @@ Runs an interactive version of the midoc vignette: Multiple Imputation DOCtor
 \link[shiny]{shiny-package} apps using your own DAG and data.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Run the interactive vignette
 midocVignette()
 \dontshow{\}) # examplesIf}

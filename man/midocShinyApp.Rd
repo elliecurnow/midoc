@@ -15,7 +15,7 @@ explore midoc functions using exemplar datasets or apply midoc functions
 using your own DAG and data.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Run the browser-based version of the midoc package
 midocShinyApp()
 \dontshow{\}) # examplesIf}
