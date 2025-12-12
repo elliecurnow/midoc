@@ -32,7 +32,7 @@ the plots}
 
 \item{plotprompt}{If TRUE (the default), and a dataset is supplied, the user
 is prompted before the second plot is displayed; use plotprompt=FALSE to
-remove the prompt}
+remove the prompt and display all plots at the same time}
 
 \item{message}{If TRUE (the default), displays a message describing the
 proposed 'mice' options; use message=FALSE to suppress the message}
