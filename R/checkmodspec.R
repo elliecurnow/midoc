@@ -15,8 +15,7 @@
 #'   the formula
 #' @param plot If TRUE (the default), and a dataset is supplied, displays a plot
 #'   which can be used to explore the functional form of each covariate in the
-#'   specified model if there is evidence of model mis-specification; use plot =
-#'   FALSE to disable the plot
+#'   specified model; use plot = FALSE to disable the plot
 #' @param message If TRUE (the default), and a dataset is supplied, displays a
 #'   message indicating whether the relationships between the dependent variable
 #'   and covariates are likely to be correctly specified or not; use message =
@@ -51,34 +50,44 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
       mod <- stats::glm(stats::as.formula(formula), data=data)
       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
       modfittest <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
-      pval <- round(1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual),6)
+      #pval <- round(1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual),6)
 
-      result1 <- paste("Model mis-specification method: regression of model residuals on a fractional polynomial of the fitted values \n \nP-value:",
-                       paste0(pval),collapse = "\n")
+      result1 <- paste("Method used to explore the relationship between the model residuals (y) and fitted values (fitvals): regression of model residuals on a fractional polynomial of the fitted values\n",
+                       #paste0(pval),
+                       "\n", paste0(gsub(" ", "@",utils::capture.output(summary(modfittest))),prefix="\n",collapse = "\n"),
+                       collapse = "\n")
         }
 
     else if(family == "binomial(logit)"){
       mod <- stats::glm(formula=stats::as.formula(formula),family="binomial", data=data)
       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
       modfittest <- blorr::blr_linktest(mod)
-      pval <- round(stats::coef(modfittest)[3,4],6)
+      #pval <- round(stats::coef(modfittest)[3,4],6)
 
-      result1 <- paste("Model mis-specification method: Pregibon's link test\n \nP-value:",
-                       paste0(pval),collapse = "\n")
+      result1 <- paste("Method used to explore the relationship between the model residuals (resp) and fitted values (fit): Pregibon's link test\n",
+                       #paste0(pval)
+                       "\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       collapse = "\n")
       }
 
-    if(pval > 0.1){
-      result2 <- paste("\nA large p-value means there is little evidence of model mis-specification. Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
-    } else {
-      result2 <- paste("\nA small p-value means the model may be mis-specified. Check the specification of each relationship in your model, noting that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
-    }
+    #Removed condition on pval
+    #if(pval > 0.1){
+      result2 <- paste("\nInterpretation: A weak relationship between the model residuals and fitted values
+                       means there is little evidence of model mis-specification. A strong relationship
+                       between the model residuals and fitted values means the model may be mis-specified.
+                       \n\nConsider whether the specified model is plausible for your study, and update it accordingly.
+                       Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
+    #} else {
+    #result2 <- paste("\nA strong relationship between the model residuals and fitted values means the model may be mis-specified. Check the specification of each relationship in your model, noting that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
+    #}
     result <- paste(result1, "\n", result2, collapse = "\n")
 
     #Return message with model check results
-    if(message) {message(paste(strwrap(result),collapse="\n"))}
+    if(message) {message(paste(gsub("@", " ",strwrap(result)),collapse="\n"))}
 
     #Optionally create a plot of residual vs fitted values when evidence of mis-specification
-    if (plot & pval <= 0.1){
+    #if (plot & pval <= 0.1){
+    if (plot){
       if (family == "gaussian(identity)"){
         plot(modfit$fitvals,modfit$r,xlab="",ylab="",
              main="Residuals versus fitted values",

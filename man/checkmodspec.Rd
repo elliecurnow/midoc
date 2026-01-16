@@ -20,8 +20,7 @@ the formula}
 
 \item{plot}{If TRUE (the default), and a dataset is supplied, displays a plot
 which can be used to explore the functional form of each covariate in the
-specified model if there is evidence of model mis-specification; use plot =
-FALSE to disable the plot}
+specified model; use plot = FALSE to disable the plot}
 
 \item{message}{If TRUE (the default), and a dataset is supplied, displays a
 message indicating whether the relationships between the dependent variable
