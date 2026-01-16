@@ -181,10 +181,10 @@ exploreDAG(mdag="matage -> bmi7
 
     matage _||_ r | mated 0.02998323 0.343547 -0.03206946 0.09180567
 
-    Interpretation: A small p-value means the stated variables may not be
-    (conditionally) independent in the specified dataset: your data may not
-    be consistent with the proposed DAG. A large p-value means there is
-    little evidence of inconsistency between your data and the proposed
+    Interpretation: A strong correlation means the stated variables may not
+    be (conditionally) independent in the specified dataset: your data may
+    not be consistent with the proposed DAG. A weak correlation means there
+    is little evidence of inconsistency between your data and the proposed
     DAG.
 
     Note that there may also be other DAGs which your data are consistent
@@ -491,10 +491,10 @@ exploreDAG(mdag="matage -> bmi7
 
     pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273
 
-    Interpretation: A small p-value means the stated variables may not be
-    (conditionally) independent in the specified dataset: your data may not
-    be consistent with the proposed DAG. A large p-value means there is
-    little evidence of inconsistency between your data and the proposed
+    Interpretation: A strong correlation means the stated variables may not
+    be (conditionally) independent in the specified dataset: your data may
+    not be consistent with the proposed DAG. A weak correlation means there
+    is little evidence of inconsistency between your data and the proposed
     DAG.
 
     Note that there may also be other DAGs which your data are consistent
