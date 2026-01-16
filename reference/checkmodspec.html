@@ -79,8 +79,7 @@ the formula</p></dd>
 <dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
 <dd><p>If TRUE (the default), and a dataset is supplied, displays a plot
 which can be used to explore the functional form of each covariate in the
-specified model if there is evidence of model mis-specification; use plot =
-FALSE to disable the plot</p></dd>
+specified model; use plot = FALSE to disable the plot</p></dd>
 
 
 <dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
@@ -113,26 +112,87 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example (incorrectly) assuming a linear relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore the relationship between the model residuals (y)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values (fitvals): regression of model residuals on a</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> P-value: 0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> A small p-value means the model may be mis-specified. Check the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> specification of each relationship in your model, noting that the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> observed relationships may be distorted by data missing not at random.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> glm(formula = y ~ ., family = family, data = data, weights = weights, </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     offset = offset, x = TRUE, y = TRUE)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>               Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (Intercept) -5.908e-15  5.512e-02    0.00        1    </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fitvals.1   -5.268e-02  3.215e-03  -16.39   &lt;2e-16 ***</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fitvals.2    1.629e-02  9.926e-04   16.41   &lt;2e-16 ***</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ---</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (Dispersion parameter for gaussian family taken to be 1.798351)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Null deviance: 1547.8  on 591  degrees of freedom</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Residual deviance: 1059.2  on 589  degrees of freedom</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> AIC: 2032.4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Interpretation: A weak relationship between the model residuals and</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fitted values means there is little evidence of model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> mis-specification. A strong relationship between the model residuals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values means the model may be mis-specified.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> distorted by data missing not at random.</span>
 <span class="r-plt img"><img src="checkmodspec-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>  <span class="co">## For the example above, (correctly) assuming a quadratic relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Model mis-specification method: regression of model residuals on a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore the relationship between the model residuals (y)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values (fitvals): regression of model residuals on a</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> P-value: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> A large p-value means there is little evidence of model</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> mis-specification. Note that the observed relationships may be</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> glm(formula = y ~ ., family = family, data = data, weights = weights, </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     offset = offset, x = TRUE, y = TRUE)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>               Estimate Std. Error t value Pr(&gt;|t|)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (Intercept) -3.409e-17  4.560e-02       0        1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (Dispersion parameter for gaussian family taken to be 1.230712)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     Null deviance: 727.35  on 591  degrees of freedom</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Residual deviance: 727.35  on 591  degrees of freedom</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> AIC: 1805.9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Interpretation: A weak relationship between the model residuals and</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> fitted values means there is little evidence of model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> mis-specification. A strong relationship between the model residuals</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values means the model may be mis-specified.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> distorted by data missing not at random.</span>
+<span class="r-plt img"><img src="checkmodspec-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

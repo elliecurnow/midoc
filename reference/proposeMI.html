@@ -116,11 +116,13 @@ diagnostic plots describing the proposed 'mice' options</p>
 <span class="r-in"><span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>,</span></span>
 <span class="r-in"><span>                           data<span class="op">=</span><span class="va">bmi</span>,</span></span>
 <span class="r-in"><span>                           message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="proposeMI-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">mimod_pregsize</span> <span class="op">&lt;-</span> <span class="fu"><a href="checkmodspec.html">checkModSpec</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>                           formula<span class="op">=</span><span class="st">"pregsize~bmi7+matage+I(matage^2)+mated"</span>,</span></span>
 <span class="r-in"><span>                           family<span class="op">=</span><span class="st">"binomial(logit)"</span>,</span></span>
 <span class="r-in"><span>                           data<span class="op">=</span><span class="va">bmi</span>,</span></span>
 <span class="r-in"><span>                           message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="proposeMI-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Display the proposed 'mice' options</span></span></span>
 <span class="r-in"><span><span class="co">## When specifying a single imputation model</span></span></span>
@@ -165,8 +167,8 @@ diagnostic plots describing the proposed 'mice' options</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> seed = NA) # It is good practice to choose a seed so your results are</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> reproducible</span>
-<span class="r-plt img"><img src="proposeMI-1.png" alt="" width="700" height="433"></span>
-<span class="r-plt img"><img src="proposeMI-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="proposeMI-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="proposeMI-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co">## When specifying more than one imputation model (suppressing the plots)</span></span></span>
 <span class="r-in"><span><span class="fu">proposeMI</span><span class="op">(</span>mimodobj<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mimod_bmi7</span>,<span class="va">mimod_pregsize</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>          data<span class="op">=</span><span class="va">bmi</span>,</span></span>

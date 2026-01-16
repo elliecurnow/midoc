@@ -34,8 +34,7 @@ checkModSpec(formula, family, data = NULL, plot = TRUE, message = TRUE)
 
   If TRUE (the default), and a dataset is supplied, displays a plot
   which can be used to explore the functional form of each covariate in
-  the specified model if there is evidence of model mis-specification;
-  use plot = FALSE to disable the plot
+  the specified model; use plot = FALSE to disable the plot
 
 - message:
 
@@ -68,24 +67,84 @@ Epidemiol. <doi:10.1016/j.jclinepi.2023.06.011>
 # Example (incorrectly) assuming a linear relationship
 checkModSpec(formula="bmi7~matage+mated+pregsize",
              family="gaussian(identity)", data=bmi)
-#> Model mis-specification method: regression of model residuals on a
+#> Method used to explore the relationship between the model residuals (y)
+#> and fitted values (fitvals): regression of model residuals on a
 #> fractional polynomial of the fitted values
 #> 
-#> P-value: 0
+#> Call:
 #> 
-#> A small p-value means the model may be mis-specified. Check the
-#> specification of each relationship in your model, noting that the
-#> observed relationships may be distorted by data missing not at random.
+#> glm(formula = y ~ ., family = family, data = data, weights = weights, 
+#> 
+#>     offset = offset, x = TRUE, y = TRUE)
+#> 
+#> Coefficients:
+#> 
+#>               Estimate Std. Error t value Pr(>|t|)    
+#> 
+#> (Intercept) -5.908e-15  5.512e-02    0.00        1    
+#> 
+#> fitvals.1   -5.268e-02  3.215e-03  -16.39   <2e-16 ***
+#> 
+#> fitvals.2    1.629e-02  9.926e-04   16.41   <2e-16 ***
+#> 
+#> ---
+#> 
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#> 
+#> (Dispersion parameter for gaussian family taken to be 1.798351)
+#> 
+#>     Null deviance: 1547.8  on 591  degrees of freedom
+#> 
+#> Residual deviance: 1059.2  on 589  degrees of freedom
+#> 
+#> AIC: 2032.4
+#> 
+#> Number of Fisher Scoring iterations: 2
+#> 
+#> Interpretation: A weak relationship between the model residuals and
+#> fitted values means there is little evidence of model
+#> mis-specification. A strong relationship between the model residuals
+#> and fitted values means the model may be mis-specified.
+#> 
+#> Consider whether the specified model is plausible for your study, and
+#> update it accordingly.  Note that the observed relationships may be
+#> distorted by data missing not at random.
 
   ## For the example above, (correctly) assuming a quadratic relationship
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              family="gaussian(identity)", data=bmi)
-#> Model mis-specification method: regression of model residuals on a
+#> Method used to explore the relationship between the model residuals (y)
+#> and fitted values (fitvals): regression of model residuals on a
 #> fractional polynomial of the fitted values
 #> 
-#> P-value: 1
+#> Call:
 #> 
-#> A large p-value means there is little evidence of model
-#> mis-specification. Note that the observed relationships may be
+#> glm(formula = y ~ ., family = family, data = data, weights = weights, 
+#> 
+#>     offset = offset, x = TRUE, y = TRUE)
+#> 
+#> Coefficients:
+#> 
+#>               Estimate Std. Error t value Pr(>|t|)
+#> 
+#> (Intercept) -3.409e-17  4.560e-02       0        1
+#> 
+#> (Dispersion parameter for gaussian family taken to be 1.230712)
+#> 
+#>     Null deviance: 727.35  on 591  degrees of freedom
+#> 
+#> Residual deviance: 727.35  on 591  degrees of freedom
+#> 
+#> AIC: 1805.9
+#> 
+#> Number of Fisher Scoring iterations: 2
+#> 
+#> Interpretation: A weak relationship between the model residuals and
+#> fitted values means there is little evidence of model
+#> mis-specification. A strong relationship between the model residuals
+#> and fitted values means the model may be mis-specified.
+#> 
+#> Consider whether the specified model is plausible for your study, and
+#> update it accordingly.  Note that the observed relationships may be
 #> distorted by data missing not at random.
 ```

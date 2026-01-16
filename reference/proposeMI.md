@@ -71,11 +71,13 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)",
                            data=bmi,
                            message=FALSE)
+
 mimod_pregsize <- checkModSpec(
                            formula="pregsize~bmi7+matage+I(matage^2)+mated",
                            family="binomial(logit)",
                            data=bmi,
                            message=FALSE)
+
 
 # Display the proposed 'mice' options
 ## When specifying a single imputation model

@@ -691,14 +691,48 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
              data=bmi)
 ```
 
-    Model mis-specification method: regression of model residuals on a
+    Method used to explore the relationship between the model residuals (y)
+    and fitted values (fitvals): regression of model residuals on a
     fractional polynomial of the fitted values
 
-    P-value: 0
+    Call:
 
-    A small p-value means the model may be mis-specified. Check the
-    specification of each relationship in your model, noting that the
-    observed relationships may be distorted by data missing not at random.
+    glm(formula = y ~ ., family = family, data = data, weights = weights, 
+
+        offset = offset, x = TRUE, y = TRUE)
+
+    Coefficients:
+
+                  Estimate Std. Error t value Pr(>|t|)    
+
+    (Intercept) -5.908e-15  5.512e-02    0.00        1    
+
+    fitvals.1   -5.268e-02  3.215e-03  -16.39   <2e-16 ***
+
+    fitvals.2    1.629e-02  9.926e-04   16.41   <2e-16 ***
+
+    ---
+
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    (Dispersion parameter for gaussian family taken to be 1.798351)
+
+        Null deviance: 1547.8  on 591  degrees of freedom
+
+    Residual deviance: 1059.2  on 589  degrees of freedom
+
+    AIC: 2032.4
+
+    Number of Fisher Scoring iterations: 2
+
+    Interpretation: A weak relationship between the model residuals and
+    fitted values means there is little evidence of model
+    mis-specification. A strong relationship between the model residuals
+    and fitted values means the model may be mis-specified.
+
+    Consider whether the specified model is plausible for your study, and
+    update it accordingly.  Note that the observed relationships may be
+    distorted by data missing not at random.
 
 ![](midoc_files/figure-html/unnamed-chunk-18-1.png)
 
@@ -715,14 +749,42 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              data=bmi)
 ```
 
-    Model mis-specification method: regression of model residuals on a
+    Method used to explore the relationship between the model residuals (y)
+    and fitted values (fitvals): regression of model residuals on a
     fractional polynomial of the fitted values
 
-    P-value: 1
+    Call:
 
-    A large p-value means there is little evidence of model
-    mis-specification. Note that the observed relationships may be
+    glm(formula = y ~ ., family = family, data = data, weights = weights, 
+
+        offset = offset, x = TRUE, y = TRUE)
+
+    Coefficients:
+
+                  Estimate Std. Error t value Pr(>|t|)
+
+    (Intercept) -3.409e-17  4.560e-02       0        1
+
+    (Dispersion parameter for gaussian family taken to be 1.230712)
+
+        Null deviance: 727.35  on 591  degrees of freedom
+
+    Residual deviance: 727.35  on 591  degrees of freedom
+
+    AIC: 1805.9
+
+    Number of Fisher Scoring iterations: 2
+
+    Interpretation: A weak relationship between the model residuals and
+    fitted values means there is little evidence of model
+    mis-specification. A strong relationship between the model residuals
+    and fitted values means the model may be mis-specified.
+
+    Consider whether the specified model is plausible for your study, and
+    update it accordingly.  Note that the observed relationships may be
     distorted by data missing not at random.
+
+![](midoc_files/figure-html/unnamed-chunk-19-1.png)
 
 **Note** We must make sure we account for the non-linear relationship
 between BMI at age 7 years and maternal age in all other imputation
@@ -741,13 +803,47 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
              plot=FALSE)
 ```
 
-    Model mis-specification method: Pregibon's link test
+    Method used to explore the relationship between the model residuals
+    (resp) and fitted values (fit): Pregibon's link test
 
-    P-value: 0.038313
+    Call:
 
-    A small p-value means the model may be mis-specified. Check the
-    specification of each relationship in your model, noting that the
-    observed relationships may be distorted by data missing not at random.
+    glm(formula = resp ~ fit + fit2, family = binomial(link = "logit"), 
+
+        data = newdat)
+
+    Coefficients:
+
+                Estimate Std. Error z value Pr(>|z|)    
+
+    (Intercept)  0.47860    0.43221   1.107   0.2681    
+
+    fit          1.58205    0.35739   4.427 9.57e-06 ***
+
+    fit2         0.14532    0.07015   2.071   0.0383 *  
+
+    ---
+
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    (Dispersion parameter for binomial family taken to be 1)
+
+        Null deviance: 422.18  on 591  degrees of freedom
+
+    Residual deviance: 378.36  on 589  degrees of freedom
+
+    AIC: 384.36
+
+    Number of Fisher Scoring iterations: 6
+
+    Interpretation: A weak relationship between the model residuals and
+    fitted values means there is little evidence of model
+    mis-specification. A strong relationship between the model residuals
+    and fitted values means the model may be mis-specified.
+
+    Consider whether the specified model is plausible for your study, and
+    update it accordingly.  Note that the observed relationships may be
+    distorted by data missing not at random.
 
 There is some evidence of model mis-specification.
 
@@ -760,13 +856,49 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
              data=bmi)
 ```
 
-    Model mis-specification method: Pregibon's link test
+    Method used to explore the relationship between the model residuals
+    (resp) and fitted values (fit): Pregibon's link test
 
-    P-value: 0.555356
+    Call:
 
-    A large p-value means there is little evidence of model
-    mis-specification. Note that the observed relationships may be
+    glm(formula = resp ~ fit + fit2, family = binomial(link = "logit"), 
+
+        data = newdat)
+
+    Coefficients:
+
+                Estimate Std. Error z value Pr(>|z|)   
+
+    (Intercept)  0.14518    0.38628   0.376  0.70703   
+
+    fit          1.23212    0.42541   2.896  0.00378 **
+
+    fit2         0.06609    0.11206   0.590  0.55536   
+
+    ---
+
+    Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+    (Dispersion parameter for binomial family taken to be 1)
+
+        Null deviance: 422.18  on 591  degrees of freedom
+
+    Residual deviance: 367.89  on 589  degrees of freedom
+
+    AIC: 373.89
+
+    Number of Fisher Scoring iterations: 6
+
+    Interpretation: A weak relationship between the model residuals and
+    fitted values means there is little evidence of model
+    mis-specification. A strong relationship between the model residuals
+    and fitted values means the model may be mis-specified.
+
+    Consider whether the specified model is plausible for your study, and
+    update it accordingly.  Note that the observed relationships may be
     distorted by data missing not at random.
+
+![](midoc_files/figure-html/unnamed-chunk-21-1.png)
 
 **Tips for imputation model variable selection**
 
@@ -831,6 +963,11 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)", 
                            data=bmi,
                            message=FALSE)
+```
+
+![](midoc_files/figure-html/unnamed-chunk-22-1.png)
+
+``` r
 miprop <- proposeMI(mimodobj=mimod_bmi7, 
                     data=bmi,
                     plotprompt=FALSE)
@@ -876,7 +1013,7 @@ miprop <- proposeMI(mimodobj=mimod_bmi7,
     seed = NA) # It is good practice to choose a seed so your results are
     reproducible
 
-![](midoc_files/figure-html/unnamed-chunk-22-1.png)
+![](midoc_files/figure-html/unnamed-chunk-22-2.png)
 
 **Note** Given multiple partially observed variables, we can specify a
 list of imputation models - one for each partially observed variable -

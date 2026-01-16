@@ -727,14 +727,48 @@ between BMI at age 7 years and maternal age.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Model mis-specification method: regression of model residuals on a
+<pre><code>Method used to explore the relationship between the model residuals (y)
+and fitted values (fitvals): regression of model residuals on a
 fractional polynomial of the fitted values
 
-P-value: 0
+Call:
 
-A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model, noting that the
-observed relationships may be distorted by data missing not at random.</code></pre>
+glm(formula = y ~ ., family = family, data = data, weights = weights, 
+
+    offset = offset, x = TRUE, y = TRUE)
+
+Coefficients:
+
+              Estimate Std. Error t value Pr(&gt;|t|)    
+
+(Intercept) -5.908e-15  5.512e-02    0.00        1    
+
+fitvals.1   -5.268e-02  3.215e-03  -16.39   &lt;2e-16 ***
+
+fitvals.2    1.629e-02  9.926e-04   16.41   &lt;2e-16 ***
+
+---
+
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 1.798351)
+
+    Null deviance: 1547.8  on 591  degrees of freedom
+
+Residual deviance: 1059.2  on 589  degrees of freedom
+
+AIC: 2032.4
+
+Number of Fisher Scoring iterations: 2
+
+Interpretation: A weak relationship between the model residuals and
+fitted values means there is little evidence of model
+mis-specification. A strong relationship between the model residuals
+and fitted values means the model may be mis-specified.
+
+Consider whether the specified model is plausible for your study, and
+update it accordingly.  Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
@@ -745,14 +779,41 @@ mis-specification.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Model mis-specification method: regression of model residuals on a
+<pre><code>Method used to explore the relationship between the model residuals (y)
+and fitted values (fitvals): regression of model residuals on a
 fractional polynomial of the fitted values
 
-P-value: 1
+Call:
 
-A large p-value means there is little evidence of model
-mis-specification. Note that the observed relationships may be
+glm(formula = y ~ ., family = family, data = data, weights = weights, 
+
+    offset = offset, x = TRUE, y = TRUE)
+
+Coefficients:
+
+              Estimate Std. Error t value Pr(&gt;|t|)
+
+(Intercept) -3.409e-17  4.560e-02       0        1
+
+(Dispersion parameter for gaussian family taken to be 1.230712)
+
+    Null deviance: 727.35  on 591  degrees of freedom
+
+Residual deviance: 727.35  on 591  degrees of freedom
+
+AIC: 1805.9
+
+Number of Fisher Scoring iterations: 2
+
+Interpretation: A weak relationship between the model residuals and
+fitted values means there is little evidence of model
+mis-specification. A strong relationship between the model residuals
+and fitted values means the model may be mis-specified.
+
+Consider whether the specified model is plausible for your study, and
+update it accordingly.  Note that the observed relationships may be
 distorted by data missing not at random.</code></pre>
+<p><img src="midoc_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="700"></p>
 <p><strong>Note</strong> We must make sure we account for the non-linear
 relationship between BMI at age 7 years and maternal age in all other
 imputation models. For example, the imputation model for pregnancy size
@@ -767,13 +828,47 @@ plot in this case using the <code>plot = FALSE</code> option):</p>
 <span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>,</span>
 <span>             data<span class="op">=</span><span class="va">bmi</span>, </span>
 <span>             plot<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Model mis-specification method: Pregibon's link test
+<pre><code>Method used to explore the relationship between the model residuals
+(resp) and fitted values (fit): Pregibon's link test
 
-P-value: 0.038313
+Call:
 
-A small p-value means the model may be mis-specified. Check the
-specification of each relationship in your model, noting that the
-observed relationships may be distorted by data missing not at random.</code></pre>
+glm(formula = resp ~ fit + fit2, family = binomial(link = "logit"), 
+
+    data = newdat)
+
+Coefficients:
+
+            Estimate Std. Error z value Pr(&gt;|z|)    
+
+(Intercept)  0.47860    0.43221   1.107   0.2681    
+
+fit          1.58205    0.35739   4.427 9.57e-06 ***
+
+fit2         0.14532    0.07015   2.071   0.0383 *  
+
+---
+
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 422.18  on 591  degrees of freedom
+
+Residual deviance: 378.36  on 589  degrees of freedom
+
+AIC: 384.36
+
+Number of Fisher Scoring iterations: 6
+
+Interpretation: A weak relationship between the model residuals and
+fitted values means there is little evidence of model
+mis-specification. A strong relationship between the model residuals
+and fitted values means the model may be mis-specified.
+
+Consider whether the specified model is plausible for your study, and
+update it accordingly.  Note that the observed relationships may be
+distorted by data missing not at random.</code></pre>
 <p>There is some evidence of model mis-specification.</p>
 <p>Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:</p>
@@ -781,13 +876,48 @@ pregnancy size, there is little evidence of model mis-specification:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+I(matage^2)+bmi7+mated"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Model mis-specification method: Pregibon's link test
+<pre><code>Method used to explore the relationship between the model residuals
+(resp) and fitted values (fit): Pregibon's link test
 
-P-value: 0.555356
+Call:
 
-A large p-value means there is little evidence of model
-mis-specification. Note that the observed relationships may be
+glm(formula = resp ~ fit + fit2, family = binomial(link = "logit"), 
+
+    data = newdat)
+
+Coefficients:
+
+            Estimate Std. Error z value Pr(&gt;|z|)   
+
+(Intercept)  0.14518    0.38628   0.376  0.70703   
+
+fit          1.23212    0.42541   2.896  0.00378 **
+
+fit2         0.06609    0.11206   0.590  0.55536   
+
+---
+
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 422.18  on 591  degrees of freedom
+
+Residual deviance: 367.89  on 589  degrees of freedom
+
+AIC: 373.89
+
+Number of Fisher Scoring iterations: 6
+
+Interpretation: A weak relationship between the model residuals and
+fitted values means there is little evidence of model
+mis-specification. A strong relationship between the model residuals
+and fitted values means the model may be mis-specified.
+
+Consider whether the specified model is plausible for your study, and
+update it accordingly.  Note that the observed relationships may be
 distorted by data missing not at random.</code></pre>
+<p><img src="midoc_files/figure-html/unnamed-chunk-21-1.png" class="r-plt" alt="" width="700"></p>
 <p><strong>Tips for imputation model variable selection</strong></p>
 <ul>
 <li>
@@ -853,8 +983,10 @@ observed.</p>
 <code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
 <span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>                           data<span class="op">=</span><span class="va">bmi</span>,</span>
-<span>                           message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, </span>
+<span>                           message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, </span>
 <span>                    data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                    plotprompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on your proposed imputation model and dataset, your mice() call
@@ -896,7 +1028,7 @@ as imputation is performed
 
 seed = NA) # It is good practice to choose a seed so your results are
 reproducible</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-22-2.png" class="r-plt" alt="" width="700"></p>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models - one for each partially
 observed variable - in <code>proposeMI</code>. For example, suppose
@@ -905,7 +1037,7 @@ simplicity, that pregnancy size was missing completely at random. Then
 we could construct our proposed “mice” call using
 <code>proposeMI</code>, as follows. Here, we again suppress the model
 checking messages.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span>
 <span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>,</span>
 <span>                           data<span class="op">=</span><span class="va">bmi</span>,</span>
@@ -929,7 +1061,7 @@ imputed dataset and the pooled results will be displayed (equivalent to
 using the “mice” functions <code>with</code> and <code>pool</code>). If
 the substantive model is not specified, only the imputation step will be
 performed.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/doMImice.html">doMImice</a></span><span class="op">(</span><span class="va">miprop</span>, seed<span class="op">=</span><span class="fl">123</span>, substmod<span class="op">=</span><span class="st">"lm(bmi7 ~ matage + I(matage^2) + mated)"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,
 multiple imputation estimates are as follows:
