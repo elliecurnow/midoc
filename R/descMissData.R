@@ -1,23 +1,24 @@
 #' Lists missing data patterns in the specified dataset
 #'
-#' This function summarises the missing data patterns in the specified dataset.
-#' Each row in the output corresponds to a missing data pattern (1=observed,
-#' 0=missing). The number and percentage of observations is also displayed for
-#' each missing data pattern. The first column indicates the number of missing
-#' data patterns. The second column refers to the analysis model outcome ('y'),
-#' with all other variables ('covs') displayed in subsequent columns.
-#' Alternatively, 'y' can be used to display the primary variable of interest,
-#' e.g. 'y' could refer to the exposure, with all other variables listed in
-#' 'covs'.
+#' Summarises the missing data patterns in the specified dataset. Each row in
+#' the output corresponds to a missing data pattern (1=observed, 0=missing). The
+#' number and percentage of observations is also displayed for each missing data
+#' pattern. The first column indicates the number of missing data patterns. The
+#' second column refers to the analysis model outcome ('y'), with all other
+#' variables ('covs') displayed in subsequent columns. Alternatively, 'y' can
+#' indicate the primary variable of interest, e.g. 'y' could refer to an
+#' exposure or intervention, with all other variables listed in 'covs'.
 #'
-#' @param y The analysis model outcome, specified as a string
+#' @param y The analysis model outcome variable(s), specified as a string (space
+#'   delimited) or a list
 #' @param covs The analysis model covariate(s), specified as a string (space
-#'   delimited)
+#'   delimited) or a list
+#' @param by Optional stratification variable(s), specified as a string (space
+#'   delimited) or a list of factors; if specified, the data are subsetted by
+#'   the values of the factor(s) and missing data patterns are displayed for
+#'   each subset in turn
 #' @param data A data frame containing the specified analysis model outcome,
 #'   covariate(s), and if specified, stratification variable(s)
-#' @param by Optional stratification variable(s), which must be a factor, or
-#'   list of factors; if specified, the data are subsetted by the values of the
-#'   factor(s) and missing data patterns are displayed for each subset in turn
 #' @param plot If TRUE, displays a plot using \link[mice]{md.pattern} to
 #'   visualise the missing data patterns; if stratification variable(s) are
 #'   specified, a separate plot will be displayed for each subset; use plot =
@@ -29,15 +30,18 @@
 #' @examples
 #' descMissData(y="bmi7", covs="matage mated", data=bmi)
 #' descMissData(y="bmi7", covs="matage mated bwt", by="pregsize", data=bmi)
-descMissData <- function(y, covs, data, by=NULL, plot=FALSE) {
+descMissData <- function(y, covs, by=NULL, data, plot=FALSE) {
+
+  ylist <- unlist(strsplit(y," "))
   covslist <- unlist(strsplit(covs," "))
 
   if(is.null(by)){
-    mdtab <- list(mice::md.pattern(data[,c(y,covslist)],plot=plot))
+    mdtab <- list(mice::md.pattern(data[,c(ylist,covslist)],plot=plot))
   } else {
-    mdtab <- by(data[,c(y,covslist)],data[,c(by)],
+    bylist <- unlist(strsplit(by," "))
+    mdtab <- by(data[,c(ylist,covslist)],data[,c(bylist)],
                 function(x) mice::md.pattern(x,plot=plot))
-    names(dimnames(mdtab)) = by
+    names(dimnames(mdtab)) = bylist
   }
 
   for (i in 1:length(mdtab)){
@@ -52,7 +56,7 @@ descMissData <- function(y, covs, data, by=NULL, plot=FALSE) {
     pattern <- 1:(nrow(mdtmp))
 
     #Reorder so outcome is listed first
-    mdtmp2 <- mdtmp[,c(y,covslist)]
+    mdtmp2 <- mdtmp[,c(ylist,covslist)]
 
     #Combine with summary variables
     mdtmp3 <- cbind(pattern,mdtmp2,n,pct)
