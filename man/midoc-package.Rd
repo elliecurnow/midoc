@@ -26,5 +26,12 @@ Authors:
   \item James Carpenter
 }
 
+Other contributors:
+\itemize{
+  \item Holly Taylor [contributor]
+  \item Imogen Joseph [contributor]
+  \item Eddie Heath [contributor]
+}
+
 }
 \keyword{internal}
