@@ -206,7 +206,7 @@ are specified as we intended:</p>
 layout of the mDAG shown below - although this is not necessary when
 using <code>midoc</code>, go to the dagitty <a href="https://www.dagitty.net/" class="external-link">website</a> if you would like to find
 out more about using “dagitty” to draw mDAGs.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="500px" height="400px"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="500px" height="400px"></p>
 <p>As a final check of our mDAG, we will use the <code>midoc</code>
 function <code>exploreDAG</code> to explore whether relationships in the
 dataset are consistent with the proposed mDAG, specifying both our mDAG
@@ -472,7 +472,7 @@ not its missingness. We assume birth weight is related to both BMI at 7
 years (via pregnancy size) and its missingness (via SEP). We will now
 add these variables to our mDAG. Below, we have shown our updated
 mDAG.</p>
-<p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="500px" height="400px"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="500px" height="400px"></p>
 <p>We will also once again explore whether relationships in the dataset
 are consistent with the updated mDAG using <code>exploreDAG</code>, as
 follows.</p>
@@ -735,7 +735,7 @@ P-value: 0
 A small p-value means the model may be mis-specified. Check the
 specification of each relationship in your model, noting that the
 observed relationships may be distorted by data missing not at random.</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="700"></p>
 <p>We will use the <code>midoc</code> function <code>checkModSpec</code>
 again, this time specifying a quadratic relationship between BMI at age
 7 years and maternal age.</p>
@@ -896,7 +896,7 @@ as imputation is performed
 
 seed = NA) # It is good practice to choose a seed so your results are
 reproducible</code></pre>
-<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" width="700"></p>
+<p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="700"></p>
 <p><strong>Note</strong> Given multiple partially observed variables, we
 can specify a list of imputation models - one for each partially
 observed variable - in <code>proposeMI</code>. For example, suppose

@@ -13,16 +13,22 @@
 
 - **James Carpenter**. Author.
 
+- **Holly Taylor**. Contributor.
+
+- **Imogen Joseph**. Contributor.
+
+- **Eddie Heath**. Contributor.
+
 ## Citation
 
-Curnow E, Heron J, Cornish R, Tilling K, Carpenter J (2025). *midoc: A
+Curnow E, Heron J, Cornish R, Tilling K, Carpenter J (2026). *midoc: A
 Decision-Making System for Multiple Imputation*. R package version
 1.0.0.9000, <https://elliecurnow.github.io/midoc/>.
 
     @Manual{,
       title = {midoc: A Decision-Making System for Multiple Imputation},
       author = {Elinor Curnow and Jon Heron and Rosie Cornish and Kate Tilling and James Carpenter},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.0.0.9000},
       url = {https://elliecurnow.github.io/midoc/},
     }

@@ -31,3 +31,11 @@ Authors:
 - Kate Tilling
 
 - James Carpenter
+
+Other contributors:
+
+- Holly Taylor \[contributor\]
+
+- Imogen Joseph \[contributor\]
+
+- Eddie Heath \[contributor\]
