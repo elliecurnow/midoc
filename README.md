@@ -43,12 +43,18 @@ You can learn more about these commands in `vignette("midoc","midoc")`.
 
 ## Installation
 
+You can install the latest release of midoc from CRAN with:
+
+``` r
+install.packages('midoc')
+```
+
 You can install the development version of midoc from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("elliecurnow/midoc")
+# install.packages("remotes")
+remotes::install_github("elliecurnow/midoc")
 ```
 
 ## Usage
@@ -68,7 +74,7 @@ head(bmi)
 descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="Plot of missing data pattern." width="100%" />
 
     #> [[1]]
     #>      pattern bmi7 matage mated   n pct
@@ -144,10 +150,10 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> 
     #> pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273
     #> 
-    #> Interpretation: A small p-value means the stated variables may not be
-    #> (conditionally) independent in the specified dataset: your data may not
-    #> be consistent with the proposed DAG. A large p-value means there is
-    #> little evidence of inconsistency between your data and the proposed
+    #> Interpretation: A strong correlation means the stated variables may not
+    #> be (conditionally) independent in the specified dataset: your data may
+    #> not be consistent with the proposed DAG. A weak correlation means there
+    #> is little evidence of inconsistency between your data and the proposed
     #> DAG.
     #> 
     #> Note that there may also be other DAGs which your data are consistent
@@ -186,57 +192,88 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 
     mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                                family="gaussian(identity)", data=bmi)
-    #> Model mis-specification method: regression of model residuals on a
+    #> Method used to explore the relationship between the model residuals (y)
+    #> and fitted values (fitvals): regression of model residuals on a
     #> fractional polynomial of the fitted values
     #> 
-    #> P-value: 1
+    #> Call:
     #> 
-    #> A large p-value means there is little evidence of model
-    #> mis-specification. Note that the observed relationships may be
+    #> glm(formula = y ~ ., family = family, data = data, weights = weights, 
+    #> 
+    #>     offset = offset, x = TRUE, y = TRUE)
+    #> 
+    #> Coefficients:
+    #> 
+    #>               Estimate Std. Error t value Pr(>|t|)
+    #> 
+    #> (Intercept) -4.316e-15  4.560e-02       0        1
+    #> 
+    #> (Dispersion parameter for gaussian family taken to be 1.230712)
+    #> 
+    #>     Null deviance: 727.35  on 591  degrees of freedom
+    #> 
+    #> Residual deviance: 727.35  on 591  degrees of freedom
+    #> 
+    #> AIC: 1805.9
+    #> 
+    #> Number of Fisher Scoring iterations: 2
+    #> 
+    #> Interpretation: A weak relationship between the model residuals and
+    #> fitted values means there is little evidence of model
+    #> mis-specification. A strong relationship between the model residuals
+    #> and fitted values means the model may be mis-specified.
+    #> 
+    #> Consider whether the specified model is plausible for your study, and
+    #> update it accordingly.  Note that the observed relationships may be
     #> distorted by data missing not at random.
 
-    miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
-    #> Based on your proposed imputation model and dataset, your mice() call
-    #> should be as follows:
-    #> 
-    #> mice(data = bmi , # You may need to specify a subset of the columns in
-    #> your dataset
-    #> 
-    #> m = 41 , # You should use at least this number of imputations based on
-    #> the proportion of complete records in your dataset
-    #> 
-    #> method = c( 'norm' ) # Specify a method for each incomplete variable.
-    #> If displayed, the box-and-whisker plots can be used to inform your
-    #> choice of method(s): for example, if the imputation model does not
-    #> predict extreme values appropriately, consider a different imputation
-    #> model/method e.g. PMM. Note the distribution of imputed and observed
-    #> values is displayed for numeric variables only. The distribution may
-    #> differ if data are missing at random or missing not at random. If you
-    #> suspect data are missing not at random, the plots can also inform your
-    #> choice of sensitivity parameter.
-    #> 
-    #> formulas = formulas_list , # Note that you do not additionally need to
-    #> specify a 'predmatrix'
-    #> 
-    #> # The formulas_list specifies the conditional imputation models, which
-    #> are as follows:
-    #> 
-    #> 'bmi7 ~ matage + I(matage^2) + mated + pregsize'
-    #> 
-    #> maxit = 10 , # If you have more than one incomplete variable, you
-    #> should check this number of iterations is sufficient by inspecting the
-    #> trace plots, if displayed. Consider increasing the number of iterations
-    #> if there is a trend that does not stabilise by the 10th iteration. Note
-    #> that iteration is not performed when only one variable is partially
-    #> observed.
-    #> 
-    #> printFlag = FALSE , # Change to printFlag=TRUE to display the history
-    #> as imputation is performed
-    #> 
-    #> seed = NA) # It is good practice to choose a seed so your results are
-    #> reproducible
+<img src="man/figures/README-unnamed-chunk-2-2.png" alt="Plot of residuals versus fitted values." width="100%" />
 
-<img src="man/figures/README-unnamed-chunk-2-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-2-3.png" width="100%" />
+``` r
+
+miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
+#> Based on your proposed imputation model and dataset, your mice() call
+#> should be as follows:
+#> 
+#> mice(data = bmi , # You may need to specify a subset of the columns in
+#> your dataset
+#> 
+#> m = 41 , # You should use at least this number of imputations based on
+#> the proportion of complete records in your dataset
+#> 
+#> method = c( 'norm' ) # Specify a method for each incomplete variable.
+#> If displayed, the box-and-whisker plots can be used to inform your
+#> choice of method(s): for example, if the imputation model does not
+#> predict extreme values appropriately, consider a different imputation
+#> model/method e.g. PMM. Note the distribution of imputed and observed
+#> values is displayed for numeric variables only. The distribution may
+#> differ if data are missing at random or missing not at random. If you
+#> suspect data are missing not at random, the plots can also inform your
+#> choice of sensitivity parameter.
+#> 
+#> formulas = formulas_list , # Note that you do not additionally need to
+#> specify a 'predmatrix'
+#> 
+#> # The formulas_list specifies the conditional imputation models, which
+#> are as follows:
+#> 
+#> 'bmi7 ~ matage + I(matage^2) + mated + pregsize'
+#> 
+#> maxit = 10 , # If you have more than one incomplete variable, you
+#> should check this number of iterations is sufficient by inspecting the
+#> trace plots, if displayed. Consider increasing the number of iterations
+#> if there is a trend that does not stabilise by the 10th iteration. Note
+#> that iteration is not performed when only one variable is partially
+#> observed.
+#> 
+#> printFlag = FALSE , # Change to printFlag=TRUE to display the history
+#> as imputation is performed
+#> 
+#> seed = NA) # It is good practice to choose a seed so your results are
+#> reproducible
+```
+
+<img src="man/figures/README-unnamed-chunk-2-3.png" alt="Plot of imputed (red) values, with distribution of observed (blue) values for comparison." width="100%" /><img src="man/figures/README-unnamed-chunk-2-4.png" alt="Trace plots across 20 iterations." width="100%" />
 
 ``` r
 
