@@ -99,7 +99,6 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 
 doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-
 ```
 
 ```{r, include=FALSE}
@@ -108,5 +107,3 @@ doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 #You can also embed plots, for example:
 
 ```
-
-
