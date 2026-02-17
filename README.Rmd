@@ -51,8 +51,8 @@ install.packages('midoc')
 You can install the development version of midoc from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("elliecurnow/midoc")
+# install.packages("remotes")
+remotes::install_github("elliecurnow/midoc")
 ```
 ## Usage
 
