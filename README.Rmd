@@ -42,6 +42,12 @@ You can learn more about these commands in `vignette("midoc","midoc")`.
 
 ## Installation
 
+You can install the latest release of midoc from CRAN with:
+
+```r
+install.packages('midoc')
+```
+
 You can install the development version of midoc from [GitHub](https://github.com/) with:
 
 ``` r
