@@ -42,15 +42,21 @@ You can learn more about these commands in `vignette("midoc","midoc")`.
 
 ## Installation
 
+You can install the latest release of midoc from CRAN with:
+
+```r
+install.packages('midoc')
+```
+
 You can install the development version of midoc from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("elliecurnow/midoc")
+# install.packages("remotes")
+remotes::install_github("elliecurnow/midoc")
 ```
 ## Usage
 
-```{r}
+```{r fig.alt=c("Plot of missing data pattern.", "Plot of residuals versus fitted values.", "Plot of imputed (red) values, with distribution of observed (blue) values for comparison.", "Trace plots across 20 iterations.")}
 library(midoc)
 
 head(bmi)
@@ -93,7 +99,6 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 
 doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-
 ```
 
 ```{r, include=FALSE}
@@ -102,5 +107,3 @@ doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 #You can also embed plots, for example:
 
 ```
-
-
