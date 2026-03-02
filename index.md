@@ -34,12 +34,18 @@ You can learn more about these commands in
 
 ## Installation
 
+You can install the latest release of midoc from CRAN with:
+
+``` r
+install.packages('midoc')
+```
+
 You can install the development version of midoc from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("elliecurnow/midoc")
+# install.packages("remotes")
+remotes::install_github("elliecurnow/midoc")
 ```
 
 ## Usage
@@ -59,7 +65,8 @@ head(bmi)
 descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 ```
 
-![](reference/figures/README-unnamed-chunk-2-1.png)
+![Plot of missing data
+pattern.](reference/figures/README-unnamed-chunk-2-1.png)
 
 ``` R
 #> [[1]]
@@ -136,10 +143,10 @@ exploreDAG(mdag=" matage -> bmi7
 #> 
 #> pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273
 #> 
-#> Interpretation: A small p-value means the stated variables may not be
-#> (conditionally) independent in the specified dataset: your data may not
-#> be consistent with the proposed DAG. A large p-value means there is
-#> little evidence of inconsistency between your data and the proposed
+#> Interpretation: A strong correlation means the stated variables may not
+#> be (conditionally) independent in the specified dataset: your data may
+#> not be consistent with the proposed DAG. A weak correlation means there
+#> is little evidence of inconsistency between your data and the proposed
 #> DAG.
 #> 
 #> Note that there may also be other DAGs which your data are consistent
@@ -178,14 +185,46 @@ checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
 
 mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)", data=bmi)
-#> Model mis-specification method: regression of model residuals on a
+#> Method used to explore the relationship between the model residuals (y)
+#> and fitted values (fitvals): regression of model residuals on a
 #> fractional polynomial of the fitted values
 #> 
-#> P-value: 1
+#> Call:
 #> 
-#> A large p-value means there is little evidence of model
-#> mis-specification. Note that the observed relationships may be
+#> glm(formula = y ~ ., family = family, data = data, weights = weights, 
+#> 
+#>     offset = offset, x = TRUE, y = TRUE)
+#> 
+#> Coefficients:
+#> 
+#>               Estimate Std. Error t value Pr(>|t|)
+#> 
+#> (Intercept) -4.316e-15  4.560e-02       0        1
+#> 
+#> (Dispersion parameter for gaussian family taken to be 1.230712)
+#> 
+#>     Null deviance: 727.35  on 591  degrees of freedom
+#> 
+#> Residual deviance: 727.35  on 591  degrees of freedom
+#> 
+#> AIC: 1805.9
+#> 
+#> Number of Fisher Scoring iterations: 2
+#> 
+#> Interpretation: A weak relationship between the model residuals and
+#> fitted values means there is little evidence of model
+#> mis-specification. A strong relationship between the model residuals
+#> and fitted values means the model may be mis-specified.
+#> 
+#> Consider whether the specified model is plausible for your study, and
+#> update it accordingly.  Note that the observed relationships may be
 #> distorted by data missing not at random.
+```
+
+![Plot of residuals versus fitted
+values.](reference/figures/README-unnamed-chunk-2-2.png)
+
+``` r
 
 miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> Based on your proposed imputation model and dataset, your mice() call
@@ -229,7 +268,11 @@ miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> reproducible
 ```
 
-![](reference/figures/README-unnamed-chunk-2-2.png)![](reference/figures/README-unnamed-chunk-2-3.png)
+![Plot of imputed (red) values, with distribution of observed (blue)
+values for
+comparison.](reference/figures/README-unnamed-chunk-2-3.png)![Trace
+plots across 20
+iterations.](reference/figures/README-unnamed-chunk-2-4.png)
 
 ``` r
 
