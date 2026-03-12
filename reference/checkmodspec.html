@@ -112,9 +112,8 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example (incorrectly) assuming a linear relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore the relationship between the model residuals (y)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values (fitvals): regression of model residuals on a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore model specification: regression of model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> residuals (y) on a fractional polynomial of the fitted values (fitvals)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -151,6 +150,9 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
 <span class="r-msg co"><span class="r-pr">#&gt;</span> mis-specification. A strong relationship between the model residuals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values means the model may be mis-specified.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that an intercept-only model will be displayed if there is a weak</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> relationship between the model residuals and fitted values.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> distorted by data missing not at random.</span>
@@ -158,9 +160,8 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
 <span class="r-in"><span>  <span class="co">## For the example above, (correctly) assuming a quadratic relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore the relationship between the model residuals (y)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values (fitvals): regression of model residuals on a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> fractional polynomial of the fitted values</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore model specification: regression of model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> residuals (y) on a fractional polynomial of the fitted values (fitvals)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -188,6 +189,9 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
 <span class="r-msg co"><span class="r-pr">#&gt;</span> fitted values means there is little evidence of model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> mis-specification. A strong relationship between the model residuals</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> and fitted values means the model may be mis-specified.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that an intercept-only model will be displayed if there is a weak</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> relationship between the model residuals and fitted values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>

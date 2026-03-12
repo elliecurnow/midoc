@@ -727,9 +727,8 @@ between BMI at age 7 years and maternal age.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Method used to explore the relationship between the model residuals (y)
-and fitted values (fitvals): regression of model residuals on a
-fractional polynomial of the fitted values
+<pre><code>Method used to explore model specification: regression of model
+residuals (y) on a fractional polynomial of the fitted values (fitvals)
 
 Call:
 
@@ -766,6 +765,9 @@ fitted values means there is little evidence of model
 mis-specification. A strong relationship between the model residuals
 and fitted values means the model may be mis-specified.
 
+Note that an intercept-only model will be displayed if there is a weak
+relationship between the model residuals and fitted values.
+
 Consider whether the specified model is plausible for your study, and
 update it accordingly.  Note that the observed relationships may be
 distorted by data missing not at random.</code></pre>
@@ -779,9 +781,8 @@ mis-specification.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Method used to explore the relationship between the model residuals (y)
-and fitted values (fitvals): regression of model residuals on a
-fractional polynomial of the fitted values
+<pre><code>Method used to explore model specification: regression of model
+residuals (y) on a fractional polynomial of the fitted values (fitvals)
 
 Call:
 
@@ -810,6 +811,9 @@ fitted values means there is little evidence of model
 mis-specification. A strong relationship between the model residuals
 and fitted values means the model may be mis-specified.
 
+Note that an intercept-only model will be displayed if there is a weak
+relationship between the model residuals and fitted values.
+
 Consider whether the specified model is plausible for your study, and
 update it accordingly.  Note that the observed relationships may be
 distorted by data missing not at random.</code></pre>
@@ -828,8 +832,12 @@ plot in this case using the <code>plot = FALSE</code> option):</p>
 <span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>,</span>
 <span>             data<span class="op">=</span><span class="va">bmi</span>, </span>
 <span>             plot<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Method used to explore the relationship between the model residuals
-(resp) and fitted values (fit): Pregibon's link test
+<pre><code>Registered S3 method overwritten by 'car':
+  method           from
+  na.action.merMod lme4</code></pre>
+<pre><code>Method used to explore model specification: Pregibon's link test, a
+regression of the model outcome (resp) on the fitted values (fit) and
+the square of the fitted values (fit2)
 
 Call:
 
@@ -861,10 +869,11 @@ AIC: 384.36
 
 Number of Fisher Scoring iterations: 6
 
-Interpretation: A weak relationship between the model residuals and
-fitted values means there is little evidence of model
-mis-specification. A strong relationship between the model residuals
-and fitted values means the model may be mis-specified.
+Interpretation: A weak relationship between the model outcome and the
+square of the fitted values (fit2) means there is little evidence of
+model mis-specification. A strong relationship between the model
+outcome and the square of the fitted values (fit2) means the model may
+be mis-specified.
 
 Consider whether the specified model is plausible for your study, and
 update it accordingly.  Note that the observed relationships may be
@@ -872,12 +881,13 @@ distorted by data missing not at random.</code></pre>
 <p>There is some evidence of model mis-specification.</p>
 <p>Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"pregsize~matage+I(matage^2)+bmi7+mated"</span>, </span>
 <span>             family<span class="op">=</span><span class="st">"binomial(logit)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Method used to explore the relationship between the model residuals
-(resp) and fitted values (fit): Pregibon's link test
+<pre><code>Method used to explore model specification: Pregibon's link test, a
+regression of the model outcome (resp) on the fitted values (fit) and
+the square of the fitted values (fit2)
 
 Call:
 
@@ -909,10 +919,11 @@ AIC: 373.89
 
 Number of Fisher Scoring iterations: 6
 
-Interpretation: A weak relationship between the model residuals and
-fitted values means there is little evidence of model
-mis-specification. A strong relationship between the model residuals
-and fitted values means the model may be mis-specified.
+Interpretation: A weak relationship between the model outcome and the
+square of the fitted values (fit2) means there is little evidence of
+model mis-specification. A strong relationship between the model
+outcome and the square of the fitted values (fit2) means the model may
+be mis-specified.
 
 Consider whether the specified model is plausible for your study, and
 update it accordingly.  Note that the observed relationships may be
@@ -979,13 +990,13 @@ displayed. Note that both plots are shown without prompting
 (<code>plotprompt = FALSE</code>). There is no need to adjust the number
 of iterations when, as in our dataset, only one variable is partially
 observed.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>, </span>
 <span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>                           data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                           message<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="midoc_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">miprop</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proposeMI.html">proposeMI</a></span><span class="op">(</span>mimodobj<span class="op">=</span><span class="va">mimod_bmi7</span>, </span>
 <span>                    data<span class="op">=</span><span class="va">bmi</span>,</span>
 <span>                    plotprompt<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -1037,7 +1048,7 @@ simplicity, that pregnancy size was missing completely at random. Then
 we could construct our proposed “mice” call using
 <code>proposeMI</code>, as follows. Here, we again suppress the model
 checking messages.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mimod_bmi7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkmodspec.html">checkModSpec</a></span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span>
 <span>                           family<span class="op">=</span><span class="st">"gaussian(identity)"</span>,</span>
 <span>                           data<span class="op">=</span><span class="va">bmi</span>,</span>
@@ -1061,7 +1072,7 @@ imputed dataset and the pooled results will be displayed (equivalent to
 using the “mice” functions <code>with</code> and <code>pool</code>). If
 the substantive model is not specified, only the imputation step will be
 performed.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/doMImice.html">doMImice</a></span><span class="op">(</span><span class="va">miprop</span>, seed<span class="op">=</span><span class="fl">123</span>, substmod<span class="op">=</span><span class="st">"lm(bmi7 ~ matage + I(matage^2) + mated)"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,
 multiple imputation estimates are as follows:

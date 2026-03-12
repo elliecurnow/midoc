@@ -77,6 +77,9 @@ mimod_pregsize <- checkModSpec(
                            family="binomial(logit)",
                            data=bmi,
                            message=FALSE)
+#> Registered S3 method overwritten by 'car':
+#>   method           from
+#>   na.action.merMod lme4
 
 
 # Display the proposed 'mice' options

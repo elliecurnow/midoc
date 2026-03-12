@@ -67,9 +67,8 @@ Epidemiol. <doi:10.1016/j.jclinepi.2023.06.011>
 # Example (incorrectly) assuming a linear relationship
 checkModSpec(formula="bmi7~matage+mated+pregsize",
              family="gaussian(identity)", data=bmi)
-#> Method used to explore the relationship between the model residuals (y)
-#> and fitted values (fitvals): regression of model residuals on a
-#> fractional polynomial of the fitted values
+#> Method used to explore model specification: regression of model
+#> residuals (y) on a fractional polynomial of the fitted values (fitvals)
 #> 
 #> Call:
 #> 
@@ -106,6 +105,9 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
 #> mis-specification. A strong relationship between the model residuals
 #> and fitted values means the model may be mis-specified.
 #> 
+#> Note that an intercept-only model will be displayed if there is a weak
+#> relationship between the model residuals and fitted values.
+#> 
 #> Consider whether the specified model is plausible for your study, and
 #> update it accordingly.  Note that the observed relationships may be
 #> distorted by data missing not at random.
@@ -113,9 +115,8 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
   ## For the example above, (correctly) assuming a quadratic relationship
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              family="gaussian(identity)", data=bmi)
-#> Method used to explore the relationship between the model residuals (y)
-#> and fitted values (fitvals): regression of model residuals on a
-#> fractional polynomial of the fitted values
+#> Method used to explore model specification: regression of model
+#> residuals (y) on a fractional polynomial of the fitted values (fitvals)
 #> 
 #> Call:
 #> 
@@ -143,6 +144,9 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 #> fitted values means there is little evidence of model
 #> mis-specification. A strong relationship between the model residuals
 #> and fitted values means the model may be mis-specified.
+#> 
+#> Note that an intercept-only model will be displayed if there is a weak
+#> relationship between the model residuals and fitted values.
 #> 
 #> Consider whether the specified model is plausible for your study, and
 #> update it accordingly.  Note that the observed relationships may be

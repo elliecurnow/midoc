@@ -691,9 +691,8 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
              data=bmi)
 ```
 
-    Method used to explore the relationship between the model residuals (y)
-    and fitted values (fitvals): regression of model residuals on a
-    fractional polynomial of the fitted values
+    Method used to explore model specification: regression of model
+    residuals (y) on a fractional polynomial of the fitted values (fitvals)
 
     Call:
 
@@ -730,6 +729,9 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
     mis-specification. A strong relationship between the model residuals
     and fitted values means the model may be mis-specified.
 
+    Note that an intercept-only model will be displayed if there is a weak
+    relationship between the model residuals and fitted values.
+
     Consider whether the specified model is plausible for your study, and
     update it accordingly.  Note that the observed relationships may be
     distorted by data missing not at random.
@@ -749,9 +751,8 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              data=bmi)
 ```
 
-    Method used to explore the relationship between the model residuals (y)
-    and fitted values (fitvals): regression of model residuals on a
-    fractional polynomial of the fitted values
+    Method used to explore model specification: regression of model
+    residuals (y) on a fractional polynomial of the fitted values (fitvals)
 
     Call:
 
@@ -780,6 +781,9 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
     mis-specification. A strong relationship between the model residuals
     and fitted values means the model may be mis-specified.
 
+    Note that an intercept-only model will be displayed if there is a weak
+    relationship between the model residuals and fitted values.
+
     Consider whether the specified model is plausible for your study, and
     update it accordingly.  Note that the observed relationships may be
     distorted by data missing not at random.
@@ -803,8 +807,13 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
              plot=FALSE)
 ```
 
-    Method used to explore the relationship between the model residuals
-    (resp) and fitted values (fit): Pregibon's link test
+    Registered S3 method overwritten by 'car':
+      method           from
+      na.action.merMod lme4
+
+    Method used to explore model specification: Pregibon's link test, a
+    regression of the model outcome (resp) on the fitted values (fit) and
+    the square of the fitted values (fit2)
 
     Call:
 
@@ -836,10 +845,11 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
 
     Number of Fisher Scoring iterations: 6
 
-    Interpretation: A weak relationship between the model residuals and
-    fitted values means there is little evidence of model
-    mis-specification. A strong relationship between the model residuals
-    and fitted values means the model may be mis-specified.
+    Interpretation: A weak relationship between the model outcome and the
+    square of the fitted values (fit2) means there is little evidence of
+    model mis-specification. A strong relationship between the model
+    outcome and the square of the fitted values (fit2) means the model may
+    be mis-specified.
 
     Consider whether the specified model is plausible for your study, and
     update it accordingly.  Note that the observed relationships may be
@@ -856,8 +866,9 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
              data=bmi)
 ```
 
-    Method used to explore the relationship between the model residuals
-    (resp) and fitted values (fit): Pregibon's link test
+    Method used to explore model specification: Pregibon's link test, a
+    regression of the model outcome (resp) on the fitted values (fit) and
+    the square of the fitted values (fit2)
 
     Call:
 
@@ -889,10 +900,11 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
 
     Number of Fisher Scoring iterations: 6
 
-    Interpretation: A weak relationship between the model residuals and
-    fitted values means there is little evidence of model
-    mis-specification. A strong relationship between the model residuals
-    and fitted values means the model may be mis-specified.
+    Interpretation: A weak relationship between the model outcome and the
+    square of the fitted values (fit2) means there is little evidence of
+    model mis-specification. A strong relationship between the model
+    outcome and the square of the fitted values (fit2) means the model may
+    be mis-specified.
 
     Consider whether the specified model is plausible for your study, and
     update it accordingly.  Note that the observed relationships may be
