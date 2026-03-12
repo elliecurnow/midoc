@@ -52,7 +52,8 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
       modfittest <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
       #pval <- round(1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual),6)
 
-      result1 <- paste("Method used to explore the relationship between the model residuals (y) and fitted values (fitvals): regression of model residuals on a fractional polynomial of the fitted values\n",
+      result1 <- paste("Method used to explore model specification: regression of model residuals (y) on a fractional
+                       polynomial of the fitted values (fitvals)",
                        #paste0(pval),
                        "\n", paste0(gsub(" ", "@",utils::capture.output(summary(modfittest))),prefix="\n",collapse = "\n"),
                        collapse = "\n")
@@ -64,7 +65,9 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
       modfittest <- blorr::blr_linktest(mod)
       #pval <- round(stats::coef(modfittest)[3,4],6)
 
-      result1 <- paste("Method used to explore the relationship between the model residuals (resp) and fitted values (fit): Pregibon's link test\n",
+      result1 <- paste("Method used to explore model specification:
+                       Pregibon's link test, a regression of the model outcome (resp)
+                       on the fitted values (fit) and the square of the fitted values (fit2)\n",
                        #paste0(pval)
                        "\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
                        collapse = "\n")
@@ -72,31 +75,47 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
 
     #Removed condition on pval
     #if(pval > 0.1){
-      result2 <- paste("\nInterpretation: A weak relationship between the model residuals and fitted values
-                       means there is little evidence of model mis-specification. A strong relationship
-                       between the model residuals and fitted values means the model may be mis-specified.
-                       \n\nConsider whether the specified model is plausible for your study, and update it accordingly.
-                       Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
     #} else {
     #result2 <- paste("\nA strong relationship between the model residuals and fitted values means the model may be mis-specified. Check the specification of each relationship in your model, noting that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
     #}
+    if(family == "gaussian(identity)"){
+      result2 <- paste("\nInterpretation: A weak relationship between the model residuals and fitted values
+                       means there is little evidence of model mis-specification. A strong relationship
+                       between the model residuals and fitted values means the model may be mis-specified.
+                       \n\nNote that an intercept-only model will be displayed if there is a weak relationship between
+                       the model residuals and fitted values.
+                       \n\nConsider whether the specified model is plausible for your study, and update it accordingly.
+                       Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
+
+    } else {
+      result2 <- paste("\nInterpretation: A weak relationship between the model outcome and
+                       the square of the fitted values (fit2)
+                       means there is little evidence of model mis-specification. A strong relationship
+                       between the model outcome and
+                       the square of the fitted values (fit2) means the model may be mis-specified.
+                       \n\nConsider whether the specified model is plausible for your study, and update it accordingly.
+                       Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
+
+    }
     result <- paste(result1, "\n", result2, collapse = "\n")
 
     #Return message with model check results
     if(message) {message(paste(gsub("@", " ",strwrap(result)),collapse="\n"))}
 
-    #Optionally create a plot of residual vs fitted values when evidence of mis-specification
+    #Optionally create a plot of residual vs fitted values
     #if (plot & pval <= 0.1){
     if (plot){
       if (family == "gaussian(identity)"){
-        plot(modfit$fitvals,modfit$r,xlab="",ylab="",
+        plot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",
              main="Residuals versus fitted values",
              sub=list("This plot may suggest the appropriate functional form \nfor the specified model",cex=0.8))
+        graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
       else if (family == "binomial(logit)"){
-      arm::binnedplot(modfit$fitvals,modfit$r,xlab="",ylab="",col.int="white",
+        arm::binnedplot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",col.int="white",
                       main="Residuals versus (binned) fitted values",
                       sub=list("This plot may suggest the appropriate functional form \nfor the specified model", cex=0.8))
+        graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
     }
     mimod <- list(formula = formula,family = family,

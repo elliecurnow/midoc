@@ -6,7 +6,7 @@ res1<-evaluate_promise(checkModSpec(formula="bmi7~matage+mated+pregsize",
 test_that("checkModSpec correctly runs for the proposed gaussian model",
   {
     expect_equal(substr(trimws(paste0(gsub("\n"," ",res1$messages), collapse=" "),"right"),1,157),
-"Method used to explore the relationship between the model residuals (y) and fitted values (fitvals): regression of model residuals on a fractional polynomial")
+"Method used to explore model specification: regression of model residuals (y) on a fractional polynomial of the fitted values (fitvals)  Call:  glm(formula =")
     expect_equal(res1$result$formula, "bmi7~matage+mated+pregsize")
     expect_equal(res1$result$family, "gaussian(identity)")
     expect_equal(res1$result$datalab, "bmi")
@@ -35,7 +35,7 @@ res3<-evaluate_promise(checkModSpec(formula="mated~matage+bmi7+pregsize",
 test_that("checkModSpec correctly runs for the proposed logistic model",
   {
     expect_equal(substr(trimws(paste0(gsub("\n"," ",res3$messages), collapse=" "),"right"),1,120),
-                 "Method used to explore the relationship between the model residuals (resp) and fitted values (fit): Pregibon's link test")
+                 "Method used to explore model specification: Pregibon's link test, a regression of the model outcome (resp) on the fitted")
     expect_equal(res3$result$formula, "mated~matage+bmi7+pregsize")
     expect_equal(res3$result$family, "binomial(logit)")
     expect_equal(res3$result$datalab, "bmi")
