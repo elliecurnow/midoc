@@ -48,6 +48,7 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)",
                            data=bmi,
                            message=FALSE)
+
 # Save the proposed 'mice' options as a 'miprop' object
 ## (suppressing the message)
 miprop <- proposeMI(mimodobj=mimod_bmi7,

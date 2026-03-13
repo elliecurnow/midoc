@@ -44,6 +44,8 @@ Example datasets and interactive versions
   Randomised controlled trial data
 - [`adr`](https://elliecurnow.github.io/midoc/reference/adr.md) :
   Administrative data
+- [`asrds`](https://elliecurnow.github.io/midoc/reference/asrds.md) :
+  Adapted Self-Report Delinquency Scale data
 - [`midocVignette()`](https://elliecurnow.github.io/midoc/reference/midocVignette.md)
   : Run an interactive vignette for the midoc package
 - [`midocShinyApp()`](https://elliecurnow.github.io/midoc/reference/midocShinyApp.md)

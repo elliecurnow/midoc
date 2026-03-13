@@ -161,8 +161,8 @@ aggregate(qol[,4:6], by=list(Group=qol$group),
                        function(x) c(mean = mean(x,na.rm=T), sd = sd(x,na.rm=T),
                                      missing=sum(is.na(x))))
 #Group qol0.mean   qol0.sd qol0.missing qol3.mean   qol3.sd qol3.missing qol12.mean   qol12.sd qol12.missing
-#1     0 70.418033  9.176204     0.000000 66.440574  7.901638     0.000000  74.129924   6.666518    172.000000
-#2     1 70.955078  8.568358     0.000000 71.757812  7.429245     0.000000  82.591424   6.532383     59.000000
+#1     0 70.418033  9.176204     0.000000 66.440574  7.901638     0.000000  74.132911   6.654851    172.000000
+#2     1 70.955078  8.568358     0.000000 71.757812  7.429245     0.000000  82.582781   6.501897     59.000000
 aggregate(qol[,4:6], by=list(Group=qol$group),
           function(x) c(mean = round(mean(x,na.rm=T)),missing=round(sum(is.na(x)))))
 
@@ -211,7 +211,7 @@ summary(pool(with(mi_mar_qol0,lm(qol12~group+qol0))),conf.int=TRUE)[2,c(1:2,7:8)
 #mi_mar_qol3 <- mice(qol[,c(1,4,5)],method="norm",seed=123,printFlag=FALSE,m=200)
 #summary(pool(with(mi_mar_qol3,lm(qol12~group))),conf.int=TRUE)[2,c(1:2,7:8)]
 
-#qol0 and qol3 - recovers full data estiate as expected
+#qol0 and qol3 - recovers full data estimate as expected
 mi_mar_qol03 <- mice(qol[,c(2,4:6)],method="norm",seed=123,printFlag=FALSE,m=200)
 summary(pool(with(mi_mar_qol03,lm(qol12~group+qol0))),conf.int=TRUE)[2,c(1:2,7:8)]
 #   term estimate    2.5 %   97.5 %
@@ -303,3 +303,20 @@ summary(pool(with(mi_mar_linage,lm(qol12~group))),conf.int=TRUE)[2,c(1:2,7:8)]
 
 #CI is wider and estimate is slightly over-estimated compared with model with quad age term
 
+#Linear mixed model results
+#First re-shape data
+qol_long <- reshape(qol,
+                    direction = "long",
+                    idvar = "id",
+                    varying = list(names(qol)[4:6]),
+                    v.names = "qol",
+                    timevar = "time",
+                    times = c("0", "3", "12"))
+qol_ml <- lmer(qol ~ time*factor(group) + (1 | id), data = qol_long)
+summary(qol_ml)
+c(summary(qol_ml)$coefficients[5,], confint(qol_ml)[7,])
+#Estimate Std. Error    t value      2.5 %     97.5 %
+#  9.8583496  0.2559871 38.5111221  9.3565869 10.3597110
+# Equivalent to MI using qol3 as aux variable
+
+#All results can also be adjusted for baseline age

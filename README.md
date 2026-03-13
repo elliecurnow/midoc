@@ -192,9 +192,8 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 
     mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                                family="gaussian(identity)", data=bmi)
-    #> Method used to explore the relationship between the model residuals (y)
-    #> and fitted values (fitvals): regression of model residuals on a
-    #> fractional polynomial of the fitted values
+    #> Method used to explore model specification: regression of model
+    #> residuals (y) on a fractional polynomial of the fitted values (fitvals)
     #> 
     #> Call:
     #> 
@@ -204,9 +203,9 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> 
     #> Coefficients:
     #> 
-    #>               Estimate Std. Error t value Pr(>|t|)
+    #>              Estimate Std. Error t value Pr(>|t|)
     #> 
-    #> (Intercept) -4.316e-15  4.560e-02       0        1
+    #> (Intercept) -3.65e-16   4.56e-02       0        1
     #> 
     #> (Dispersion parameter for gaussian family taken to be 1.230712)
     #> 
@@ -222,6 +221,9 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> fitted values means there is little evidence of model
     #> mis-specification. A strong relationship between the model residuals
     #> and fitted values means the model may be mis-specified.
+    #> 
+    #> Note that an intercept-only model will be displayed if there is a weak
+    #> relationship between the model residuals and fitted values.
     #> 
     #> Consider whether the specified model is plausible for your study, and
     #> update it accordingly.  Note that the observed relationships may be

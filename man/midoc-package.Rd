@@ -28,7 +28,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Holly Taylor [contributor]
+  \item Holly Sachdeva [contributor]
   \item Imogen Joseph [contributor]
   \item Eddie Heath [contributor]
 }

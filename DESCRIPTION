@@ -8,7 +8,7 @@ Authors@R: c(
     person("Rosie", "Cornish", role = "aut"),
     person("Kate", "Tilling", role = "aut"),
     person("James", "Carpenter", role = "aut"),
-    person("Holly", "Taylor", role = "ctb"),
+    person("Holly", "Sachdeva", role = "ctb"),
     person("Imogen", "Joseph", role = "ctb"),
     person("Eddie", "Heath", role = "ctb")
            )

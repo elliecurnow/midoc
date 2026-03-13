@@ -55,3 +55,21 @@
 #' }
 "adr"
 
+#' Adapted Self-Report Delinquency Scale data
+#'
+#' A simulated dataset
+#' @format ## `asrds`
+#' A data frame with 1000 rows and 5 columns:
+#' \describe{
+#'   \item{asrds17}{Child's Adapted Self-Report Delinquency Scale (ASRDS) value
+#'   at age 17 years, as a percentage of the maximum possible value of the
+#'   square-root of ASRDS}
+#'   \item{log_income5}{Logarithm of the family income per annum, in UK pounds,
+#'   when the child is aged 5 years}
+#'   \item{mated}{Mother's educational level at time of pregnancy: post-16 years
+#'   qualification or not}
+#'   \item{asrds14}{Child's ASRDS value at age 14 years, as a percentage of the
+#'   maximum possible value of the square-root of ASRDS}
+#'   \item{r_cra}{Missingness indicator: complete record (case) or not}
+#'   }
+"asrds"
