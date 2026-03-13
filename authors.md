@@ -13,7 +13,7 @@
 
 - **James Carpenter**. Author.
 
-- **Holly Taylor**. Contributor.
+- **Holly Sachdeva**. Contributor.
 
 - **Imogen Joseph**. Contributor.
 

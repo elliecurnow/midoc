@@ -34,7 +34,7 @@ Authors:
 
 Other contributors:
 
-- Holly Taylor \[contributor\]
+- Holly Sachdeva \[contributor\]
 
 - Imogen Joseph \[contributor\]
 
