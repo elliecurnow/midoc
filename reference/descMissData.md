@@ -13,7 +13,7 @@ other variables listed in 'covs'.
 ## Usage
 
 ``` r
-descMissData(y, covs, by = NULL, data, plot = FALSE)
+descMissData(y, data, covs = NULL, by = NULL, plot = FALSE)
 ```
 
 ## Arguments
@@ -23,9 +23,14 @@ descMissData(y, covs, by = NULL, data, plot = FALSE)
   The analysis model outcome variable(s), specified as a string (space
   delimited) or a list
 
+- data:
+
+  A data frame containing the specified analysis model outcome,
+  covariate(s), and if specified, stratification variable(s)
+
 - covs:
 
-  The analysis model covariate(s), specified as a string (space
+  Optional analysis model covariate(s), specified as a string (space
   delimited) or a list
 
 - by:
@@ -33,12 +38,8 @@ descMissData(y, covs, by = NULL, data, plot = FALSE)
   Optional stratification variable(s), specified as a string (space
   delimited) or a list of factors; if specified, the data are subsetted
   by the values of the factor(s) and missing data patterns are displayed
-  for each subset in turn
-
-- data:
-
-  A data frame containing the specified analysis model outcome,
-  covariate(s), and if specified, stratification variable(s)
+  for each subset in turn; can only be used when the total number of
+  variables listed in 'y' and 'covs' is greater than one
 
 - plot:
 

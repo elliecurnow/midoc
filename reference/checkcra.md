@@ -15,12 +15,13 @@ checkCRA(y, covs, r_cra, mdag)
 
 - y:
 
-  The analysis model outcome, specified as a string
+  The analysis model outcome variable(s), specified as a string (space
+  delimited) or a list
 
 - covs:
 
   The analysis model covariate(s), specified as a string (space
-  delimited)
+  delimited) or a list
 
 - r_cra:
 
@@ -40,14 +41,14 @@ the proposed DAG and analysis model outcome and covariate(s)
 ## Details
 
 The DAG should include all observed and unobserved variables related to
-the analysis model variables and their missingness, as well as all
-required missingness indicators.
+the analysis model variables and their missingness, as well as the
+complete record ("missingness") indicator.
 
 In general, complete records analysis is valid if the analysis model
 outcome and complete record indicator are unrelated, conditional on the
 specified covariates. This is determined using the proposed DAG by
-checking whether the analysis model and complete record indicator are
-'d-separated', given the covariates.
+checking whether the analysis model outcome(s) and complete record
+indicator are 'd-separated', given the covariates.
 
 ## References
 
@@ -67,9 +68,9 @@ checkCRA(y="bmi7", covs="matage", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r")
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
-#> outcome and complete record indicator are not independent given
-#> analysis model covariates. Hence, in general, complete records analysis
-#> is not valid.
+#> outcome(s) and complete record indicator are not independent given
+#> analysis model covariate(s). Hence, in general, complete records
+#> analysis is not valid.
 #> 
 #> In special cases, depending on the type of analysis model and estimand
 #> of interest, complete records analysis may still be valid. See, for
@@ -80,8 +81,9 @@ checkCRA(y="bmi7", covs="matage", r_cra="r",
 #> different analysis model, noting that a different analysis model may
 #> not be aligned with your estimand.
 #> 
-#> For example, the analysis model outcome and complete record indicator
-#> are independent given each of the following sets of variables:
+#> For example, the analysis model outcome(s) and complete record
+#> indicator are independent given each of the following sets of
+#> variables:
 #> 
 #> mated
 #> 
@@ -100,21 +102,24 @@ checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r")
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
-#> outcome and complete record indicator are independent given analysis
-#> model covariates. Hence, complete records analysis is valid.
+#> outcome(s) and complete record indicator are independent given analysis
+#> model covariate(s). Hence, complete records analysis is valid.
 # Example where complete records analysis is never valid
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
-#> outcome and complete record indicator are not independent given
-#> analysis model covariates. Hence, in general, complete records analysis
-#> is not valid.
+#> outcome(s) and complete record indicator are not independent given
+#> analysis model covariate(s). Hence, in general, complete records
+#> analysis is not valid.
 #> 
 #> In special cases, depending on the type of analysis model and estimand
 #> of interest, complete records analysis may still be valid. See, for
 #> example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
 #> for further details.
 #> 
-#> Consider using a different strategy e.g. multiple imputation.
+#> It is not possible to adjust the analysis model so that the analysis
+#> model outcome(s) and complete record indicator are (conditionally)
+#> independent.  Consider using a different strategy e.g. multiple
+#> imputation.
 ```

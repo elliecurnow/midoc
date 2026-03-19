@@ -261,9 +261,9 @@ checkCRA(y="bmi7",
 ```
 
     Based on the proposed directed acyclic graph (DAG), the analysis model
-    outcome and complete record indicator are not independent given
-    analysis model covariates. Hence, in general, complete records analysis
-    is not valid.
+    outcome(s) and complete record indicator are not independent given
+    analysis model covariate(s). Hence, in general, complete records
+    analysis is not valid.
 
     In special cases, depending on the type of analysis model and estimand
     of interest, complete records analysis may still be valid. See, for
@@ -274,8 +274,9 @@ checkCRA(y="bmi7",
     different analysis model, noting that a different analysis model may
     not be aligned with your estimand.
 
-    For example, the analysis model outcome and complete record indicator
-    are independent given each of the following sets of variables:
+    For example, the analysis model outcome(s) and complete record
+    indicator are independent given each of the following sets of
+    variables:
 
     mated
 
@@ -318,8 +319,8 @@ checkCRA(y="bmi7",
 ```
 
     Based on the proposed directed acyclic graph (DAG), the analysis model
-    outcome and complete record indicator are independent given analysis
-    model covariates. Hence, complete records analysis is valid.
+    outcome(s) and complete record indicator are independent given analysis
+    model covariate(s). Hence, complete records analysis is valid.
 
 **Note** If our outcome, BMI at age 7 years, was itself a cause of
 missingness, CRA would always be invalid, *i.e.* there would be no other
@@ -340,16 +341,19 @@ checkCRA(y="bmi7",
 ```
 
     Based on the proposed directed acyclic graph (DAG), the analysis model
-    outcome and complete record indicator are not independent given
-    analysis model covariates. Hence, in general, complete records analysis
-    is not valid.
+    outcome(s) and complete record indicator are not independent given
+    analysis model covariate(s). Hence, in general, complete records
+    analysis is not valid.
 
     In special cases, depending on the type of analysis model and estimand
     of interest, complete records analysis may still be valid. See, for
     example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114)
     for further details.
 
-    Consider using a different strategy e.g. multiple imputation.
+    It is not possible to adjust the analysis model so that the analysis
+    model outcome(s) and complete record indicator are (conditionally)
+    independent.  Consider using a different strategy e.g. multiple
+    imputation.
 
 ## Step 3 Check whether multiple imputation is likely to be a valid strategy
 
@@ -524,8 +528,8 @@ checkCRA(y="bmi7",
 ```
 
     Based on the proposed directed acyclic graph (DAG), the analysis model
-    outcome and complete record indicator are independent given analysis
-    model covariates. Hence, complete records analysis is valid.
+    outcome(s) and complete record indicator are independent given analysis
+    model covariate(s). Hence, complete records analysis is valid.
 
 We will now use the `midoc` function `checkMI` applied to our DAG to
 check whether MI is valid when the imputation model predictors for BMI
@@ -542,7 +546,7 @@ model variables in the imputation model for BMI at age 7 years.
 ``` r
 checkMI(dep="bmi7", 
         preds="matage mated pregsize", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 
@@ -553,10 +557,11 @@ checkMI(dep="bmi7",
               sep_unmeas -> bwt")
 ```
 
-    Based on the proposed directed acyclic graph (DAG), the incomplete
-    variable and its missingness indicator are independent given imputation
-    model predictors. Hence, multiple imputation methods which assume data
-    are missing at random are valid in principle.
+    Based on the proposed directed acyclic graph (DAG), the partially
+    observed variable(s) and complete record indicator are independent
+    given the fully observed imputation model predictor(s). Hence, multiple
+    imputation methods which assume data are missing at random are valid in
+    principle.
 
 We will next consider the imputation model including birth weight. The
 results are shown below. These suggest that MI would not be valid if we
@@ -569,7 +574,7 @@ path from `bmi7` to `r` via `bwt`.
 ``` r
 checkMI(dep="bmi7", 
         preds="matage mated bwt", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 
@@ -580,16 +585,17 @@ checkMI(dep="bmi7",
               sep_unmeas -> bwt")
 ```
 
-    Based on the proposed directed acyclic graph (DAG), the incomplete
-    variable and its missingness indicator are not independent given
-    imputation model predictors. Hence, multiple imputation methods which
-    assume data are missing at random are not valid.
+    Based on the proposed directed acyclic graph (DAG), the partially
+    observed variable(s) and complete record indicator are not independent
+    given the fully observed imputation model predictor(s). Hence, multiple
+    imputation methods which assume data are missing at random may not be
+    not valid.
 
     Consider using a different imputation model and/or strategy (e.g.
     not-at-random fully conditional specification).  For example, the
-    incomplete variable and its missingness indicator are independent if
-    each of the following sets of variables are used as predictors in the
-    imputation model:
+    partially observed variable(s) and complete record indicator are
+    independent if each of the following sets of variables are used as
+    predictors in the imputation model(s):
 
     mated
 
