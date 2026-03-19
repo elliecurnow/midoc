@@ -4,22 +4,23 @@
 \alias{descMissData}
 \title{Lists missing data patterns in the specified dataset}
 \usage{
-descMissData(y, covs, by = NULL, data, plot = FALSE)
+descMissData(y, data, covs = NULL, by = NULL, plot = FALSE)
 }
 \arguments{
 \item{y}{The analysis model outcome variable(s), specified as a string (space
 delimited) or a list}
 
-\item{covs}{The analysis model covariate(s), specified as a string (space
+\item{data}{A data frame containing the specified analysis model outcome,
+covariate(s), and if specified, stratification variable(s)}
+
+\item{covs}{Optional analysis model covariate(s), specified as a string (space
 delimited) or a list}
 
 \item{by}{Optional stratification variable(s), specified as a string (space
 delimited) or a list of factors; if specified, the data are subsetted by
 the values of the factor(s) and missing data patterns are displayed for
-each subset in turn}
-
-\item{data}{A data frame containing the specified analysis model outcome,
-covariate(s), and if specified, stratification variable(s)}
+each subset in turn; can only be used when the total number of variables
+listed in 'y' and 'covs' is greater than one}
 
 \item{plot}{If TRUE, displays a plot using \link[mice]{md.pattern} to
 visualise the missing data patterns; if stratification variable(s) are

@@ -1,29 +1,34 @@
 #' Inspect multiple imputation model
 #'
-#' Check multiple imputation is valid under the proposed imputation model and
+#' Check multiple imputation is valid under the proposed imputation model(s) and
 #' directed acyclic graph (DAG). Validity means that the proposed approach will
 #' allow unbiased estimation of the estimand(s) of interest, including
-#' regression parameters, associations, and causal effects. The imputation model
-#' should include all other analysis model variables as predictors, as well as
-#' any auxiliary variables. The DAG should include all observed and unobserved
-#' variables related to the analysis model variables and their missingness, as
-#' well as all required missingness indicators.
+#' regression parameters, associations, and causal effects.
 #'
-#' In principle, multiple imputation is valid if each partially observed
-#' variable is unrelated to its own missingness, given its imputation model
-#' predictors.
+#' Imputation model(s) should include all other analysis model variables as
+#' predictors, as well as any auxiliary variables. The DAG should include all
+#' observed and unobserved variables related to the analysis model variables and
+#' their missingness, as well as the complete record ("missingness") indicator.
 #'
-#' @param dep The partially observed variable to be imputed, specified as a
-#'   string
-#' @param preds The imputation model predictor(s), specified as a string (space
-#'   delimited)
-#' @param r_dep The partially observed variable's missingness indicator,
-#'   specified as a string
+#' In principle, multiple imputation is valid if all partially observed
+#' variables are unrelated to missingness, given the (fully observed) imputation
+#' model predictors. This is determined using the proposed DAG by checking
+#' whether all the partially observed variables are 'd-separated' from the
+#' complete record indicator, conditional on the imputation model predictors. It
+#' is assumed that all the specified imputation model predictors are fully
+#' observed and will be used to impute all the specified partially observed
+#' variables.
+#'
+#' @param dep The partially observed variable(s) to be imputed, specified as a
+#'   string (space delimited) or a list
+#' @param preds The (fully observed) imputation model predictor(s), specified as
+#'   a string (space delimited) or a list
+#' @param r_cra The complete record indicator, specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
 #'   syntax, or as a \link[dagitty]{dagitty} graph object
 #'
 #' @return A message indicating whether multiple imputation is valid under the
-#'   proposed DAG and imputation model
+#'   proposed DAG and imputation model predictor(s)
 #' @export
 #'
 #' @references Curnow E, Tilling K, Heron JE, Cornish RP, Carpenter JR. 2023.
@@ -34,16 +39,16 @@
 #' @examples
 #' # Example DAG for which multiple imputation is valid, because collider
 #' ## variable 'bwt' is not included as a predictor
-#' checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+#' checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
 #'               pregsize -> bwt sep_unmeas -> bwt")
 #'
 #' # Example DAG for which multiple imputation is not valid
-#' checkMI(dep="bmi7", preds="matage", r_dep="r",
+#' checkMI(dep="bmi7", preds="matage", r_cra="r",
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                sep_unmeas -> mated sep_unmeas -> r")
-checkMI <- function(dep, preds, r_dep, mdag) {
+checkMI <- function(dep, preds, r_cra, mdag) {
 
   #Check whether input DAG is a dagitty object or not
   if(dagitty::is.dagitty(mdag)){
@@ -53,16 +58,28 @@ checkMI <- function(dep, preds, r_dep, mdag) {
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
-  predsvec <- unlist(strsplit(preds," "))
-  #If r_dep does not depend on dep conditional on predictors, then MI is valid
-  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), dep, r_dep, predsvec)){
-    result <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are valid in principle.", collapse="\n")
+  predslist <- unlist(strsplit(preds," "))
+  deplist <- unlist(strsplit(dep," "))
+
+  #If r_cra does not depend on dep conditional on predictors, then MI is valid
+  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra, predslist)){
+    result <- paste("Based on the proposed directed acyclic graph (DAG),
+                    the partially observed variable(s) and complete record indicator
+                    are independent given the fully observed imputation model predictor(s). Hence,
+                    multiple imputation methods which assume data are missing at random
+                    are valid in principle.", collapse="\n")
   } else {
-      result1 <- paste("Based on the proposed directed acyclic graph (DAG), the incomplete variable and its missingness indicator are not independent given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are not valid. \n \nConsider using a different imputation model and/or strategy (e.g. not-at-random fully conditional specification).",
+      result1 <- paste("Based on the proposed directed acyclic graph (DAG),
+                       the partially observed variable(s) and complete record indicator
+                       are not independent given the fully observed imputation model predictor(s). Hence,
+                       multiple imputation methods which assume data are missing at random
+                       may not be not valid.
+                       \n \nConsider using a different imputation model and/or strategy
+                       (e.g. not-at-random fully conditional specification).",
         collapse="\n")
 
       #Updated to give broader guidance (making fewer assumptions about target estimand)
-      adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_dep,outcome=dep,type = "all")
+      adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=deplist,type = "all")
       #adjsets_dep <- dagitty::adjustmentSets(mdagspec,exposure=c(predsvec,dep),outcome=r_dep,type = "all")
       #if(length(adjsets_r)>0) (adjsets <- adjsets_r)
       #  else (adjsets <- adjsets_dep)
@@ -70,7 +87,9 @@ checkMI <- function(dep, preds, r_dep, mdag) {
       if(length(adjsetsfull)==0){
         result <- result1
       } else {
-        result2 <- paste("For example, the incomplete variable and its missingness indicator are independent if each of the following sets of variables are used as predictors in the imputation model:\n \n",
+        result2 <- paste("For example, the partially observed variable(s) and complete record indicator
+                         are independent if each of the following sets of variables are used as predictors
+                         in the imputation model(s):\n \n",
                           paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
 
         result <- paste(result1, "\n", result2, collapse = "\n")

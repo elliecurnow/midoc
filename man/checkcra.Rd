@@ -7,10 +7,11 @@
 checkCRA(y, covs, r_cra, mdag)
 }
 \arguments{
-\item{y}{The analysis model outcome, specified as a string}
+\item{y}{The analysis model outcome variable(s), specified as a string (space
+delimited) or a list}
 
 \item{covs}{The analysis model covariate(s), specified as a string (space
-delimited)}
+delimited) or a list}
 
 \item{r_cra}{The complete record indicator, specified as a string}
 
@@ -29,14 +30,14 @@ regression parameters, associations, and causal effects.
 }
 \details{
 The DAG should include all observed and unobserved variables related to the
-analysis model variables and their missingness, as well as all required
-missingness indicators.
+analysis model variables and their missingness, as well as the complete
+record ("missingness") indicator.
 
 In general, complete records analysis is valid if the analysis model outcome
 and complete record indicator are unrelated, conditional on the specified
 covariates. This is determined using the proposed DAG by checking whether the
-analysis model and complete record indicator are 'd-separated', given the
-covariates.
+analysis model outcome(s) and complete record indicator are 'd-separated',
+given the covariates.
 }
 \examples{
 # Example DAG for which complete records analysis is not valid

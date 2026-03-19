@@ -19,3 +19,14 @@ test_that("descMissData output is as expected when 'by' is specified",
 "c(1, 2, 1, 0, 1, 1, 1, 1, 524, 365, 59, 41) c(1, 2, 1, 0, 1, 1, 1, 1, 68, 43, 61, 39)")
           }
 )
+
+# Check output when only 'y' is specified
+res3<-evaluate_promise(descMissData(y="bmi7",data=bmi))
+## Plot is not tested
+#There's a trailing blank, but only visible in testing, so just trim for test purposes
+test_that("descMissData output is as expected when 'by' is specified",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res3$result), collapse=" "),"right"),
+                         "c(1, 2, 0, 1, 408, 592, 41, 59)")
+          }
+)

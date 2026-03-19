@@ -285,7 +285,7 @@ We will first consider the imputation model including pregnancy size. The result
 ```{r, R.options=list(width=80)}
 checkMI(dep="bmi7", 
         preds="matage mated pregsize", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 
@@ -302,7 +302,7 @@ We will next consider the imputation model including birth weight. The results a
 ```{r, R.options=list(width=80)}
 checkMI(dep="bmi7", 
         preds="matage mated bwt", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 

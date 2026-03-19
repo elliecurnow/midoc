@@ -35,12 +35,12 @@ set.seed(5668)
 mated <- rbinom(1000,1,0.6)
 
 log_income5 <- rnorm(1000, 2*mated + 8.5, 0.5)
-summary(log_income)
+summary(log_income5)
 
-asrds14 <- rnorm(1000, -4*mated - 7*log_income + 115, 8)
+asrds14 <- rnorm(1000, -4*mated - 7*log_income5 + 115, 8)
 summary(asrds14)
 
-asrds17 <- rnorm(1000, 0.5*asrds14 - 3*mated - 6*log_income + 90, 6)
+asrds17 <- rnorm(1000, 0.5*asrds14 - 3*mated - 6*log_income5 + 90, 6)
 summary(asrds17)
 
 # Missing mechanism for log_income: MAR | mated and asrds14
@@ -110,12 +110,12 @@ range(log_income5)
 hist(log_income5)
 
 x<-c(7:12)
-plot(x=x, y=c(-10.28*(x-8.99)),type='o',pch=18,xlab="Log income",
+plot(x=x, y=c(-10.1*(x-9)),type='o',pch=18,xlab="Log income",
      ylab="")
 title(ylab="Mean difference in scaled ASRDS at age 17 relative \nto a child with log(family income) of 9",
       mgp=c(2,1,0),cex.lab=0.9)
 # On the income scale:
-plot(x=exp(x), y=c(-10.28*(x-8.99)),type='o',pch=18,xlab="Income (£ pa)",
+plot(x=exp(x), y=c(-10.1*(x-9)),type='o',pch=18,xlab="Income (£ pa)",
      ylab="")
 title(ylab="Mean difference in scaled ASRDS at age 17 relative \nto a child with family income of ~£8000",
       mgp=c(2,1,0),cex.lab=0.9)
@@ -141,17 +141,19 @@ c(cram$coefficients[2], confint(cra)[2,])
 asrds_mdag <- 'dag {
   asrds14 [pos="0.3,-0.5"]
   asrds17 [pos="1.7,0.7"]
-  log_income [pos="-1.5,0.7"]
-  mated [pos="-2,-1"]
+  log_income5 [pos="-1.5,0.7"]
+  mated [pos="-2,0"]
   r_cra [pos="1.7,-1"]
+  sep_unmeas5 [pos="-1.5,-0.5"]
   asrds14 -> asrds17
-  asrds14 -> r_cra
-  log_income -> asrds14
-  log_income -> asrds17
+  log_income5 -> asrds14
+  log_income5 -> asrds17
   mated -> asrds14
   mated -> asrds17
-  mated -> log_income
-  mated -> r_cra
+  mated -> log_income5
+  sep_unmeas5 -> r_cra
+  mated -> sep_unmeas5
+  sep_unmeas5 -> asrds14
 }'
 plot(dagitty::dagitty(asrds_mdag))
 

@@ -4,50 +4,55 @@
 \alias{checkMI}
 \title{Inspect multiple imputation model}
 \usage{
-checkMI(dep, preds, r_dep, mdag)
+checkMI(dep, preds, r_cra, mdag)
 }
 \arguments{
-\item{dep}{The partially observed variable to be imputed, specified as a
-string}
+\item{dep}{The partially observed variable(s) to be imputed, specified as a
+string (space delimited) or a list}
 
-\item{preds}{The imputation model predictor(s), specified as a string (space
-delimited)}
+\item{preds}{The (fully observed) imputation model predictor(s), specified as
+a string (space delimited) or a list}
 
-\item{r_dep}{The partially observed variable's missingness indicator,
-specified as a string}
+\item{r_cra}{The complete record indicator, specified as a string}
 
 \item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
 syntax, or as a \link[dagitty]{dagitty} graph object}
 }
 \value{
 A message indicating whether multiple imputation is valid under the
-proposed DAG and imputation model
+proposed DAG and imputation model predictor(s)
 }
 \description{
-Check multiple imputation is valid under the proposed imputation model and
+Check multiple imputation is valid under the proposed imputation model(s) and
 directed acyclic graph (DAG). Validity means that the proposed approach will
 allow unbiased estimation of the estimand(s) of interest, including
-regression parameters, associations, and causal effects. The imputation model
-should include all other analysis model variables as predictors, as well as
-any auxiliary variables. The DAG should include all observed and unobserved
-variables related to the analysis model variables and their missingness, as
-well as all required missingness indicators.
+regression parameters, associations, and causal effects.
 }
 \details{
-In principle, multiple imputation is valid if each partially observed
-variable is unrelated to its own missingness, given its imputation model
-predictors.
+Imputation model(s) should include all other analysis model variables as
+predictors, as well as any auxiliary variables. The DAG should include all
+observed and unobserved variables related to the analysis model variables and
+their missingness, as well as the complete record ("missingness") indicator.
+
+In principle, multiple imputation is valid if all partially observed
+variables are unrelated to missingness, given the (fully observed) imputation
+model predictors. This is determined using the proposed DAG by checking
+whether all the partially observed variables are 'd-separated' from the
+complete record indicator, conditional on the imputation model predictors. It
+is assumed that all the specified imputation model predictors are fully
+observed and will be used to impute all the specified partially observed
+variables.
 }
 \examples{
 # Example DAG for which multiple imputation is valid, because collider
 ## variable 'bwt' is not included as a predictor
-checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
         mdag="matage -> bmi7 mated -> matage mated -> bmi7
               sep_unmeas -> mated sep_unmeas -> r pregsize -> bmi7
               pregsize -> bwt sep_unmeas -> bwt")
 
 # Example DAG for which multiple imputation is not valid
-checkMI(dep="bmi7", preds="matage", r_dep="r",
+checkMI(dep="bmi7", preds="matage", r_cra="r",
         mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r")
 }

@@ -6,18 +6,19 @@
 #' regression parameters, associations, and causal effects.
 #'
 #' The DAG should include all observed and unobserved variables related to the
-#' analysis model variables and their missingness, as well as all required
-#' missingness indicators.
+#' analysis model variables and their missingness, as well as the complete
+#' record ("missingness") indicator.
 #'
 #' In general, complete records analysis is valid if the analysis model outcome
 #' and complete record indicator are unrelated, conditional on the specified
 #' covariates. This is determined using the proposed DAG by checking whether the
-#' analysis model and complete record indicator are 'd-separated', given the
-#' covariates.
+#' analysis model outcome(s) and complete record indicator are 'd-separated',
+#' given the covariates.
 #'
-#' @param y The analysis model outcome, specified as a string
+#' @param y The analysis model outcome variable(s), specified as a string (space
+#'   delimited) or a list
 #' @param covs The analysis model covariate(s), specified as a string (space
-#'   delimited)
+#'   delimited) or a list
 #' @param r_cra The complete record indicator, specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
 #'   syntax, or as a \link[dagitty]{dagitty} graph object
@@ -58,28 +59,47 @@ checkCRA <- function(y, covs, r_cra, mdag) {
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
-  covsvec <- unlist(strsplit(covs," "))
+  ylist <- unlist(strsplit(y," "))
+  covslist <- unlist(strsplit(covs," "))
+
   #If r does not depend on y conditional on covariates, then CRA is valid
-  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), y, r_cra, covsvec)){
-    result <- paste("Based on the proposed directed acyclic graph (DAG), the analysis model outcome and complete record indicator are independent given analysis model covariates. Hence, complete records analysis is valid.", collapse="\n")
+  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra, covslist)){
+    result <- paste("Based on the proposed directed acyclic graph (DAG),
+                    the analysis model outcome(s) and complete record indicator
+                    are independent given analysis model covariate(s). Hence,
+                    complete records analysis is valid.", collapse="\n")
   }
   else {
-    result1 <- paste("Based on the proposed directed acyclic graph (DAG), the analysis model outcome and complete record indicator are not independent given analysis model covariates. Hence, in general, complete records analysis is not valid. \n \nIn special cases, depending on the type of analysis model and estimand of interest, complete records analysis may still be valid. See, for example, Bartlett et al. (2015) (https://doi.org/10.1093/aje/kwv114) for further details.\n",collapse = "\n")
+    result1 <- paste("Based on the proposed directed acyclic graph (DAG),
+                     the analysis model outcome(s) and complete record indicator
+                     are not independent given analysis model covariate(s). Hence,
+                     in general, complete records analysis is not valid.
+                     \n \nIn special cases, depending on the type of analysis
+                     model and estimand of interest, complete records analysis
+                     may still be valid. See, for example, Bartlett et al. (2015)
+                     (https://doi.org/10.1093/aje/kwv114) for further details.\n",collapse = "\n")
 
     #adjsets <- dagitty::adjustmentSets(mdagspec,exposure=c(covsvec,r_cra),outcome=y,type = "all")
-    adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=y,type = "all")
+    adjsetsfull <- dagitty::adjustmentSets(mdagspec,exposure=r_cra,outcome=ylist,type = "all")
 
     #Updated to give broader guidance (making fewer assumptions about target estimand)
     #if(length(adjsets)==0 & length(adjsetsfull)==0){
     if(length(adjsetsfull)==0){
-      result2 <- paste("Consider using a different strategy e.g. multiple imputation.",collapse = "\n")
+      result2 <- paste("It is not possible to adjust the analysis model
+                       so that the analysis model outcome(s) and complete record
+                       indicator are (conditionally) independent.
+                       Consider using a different strategy e.g. multiple imputation.",collapse = "\n")
     }
     #if(length(adjsets)==0 & length(adjsetsfull)>0){
     #  result2 <- paste("There are no other variables which could be added to the model to make the analysis model outcome and complete record indicator conditionally independent, without changing the estimand of interest. Consider using a different strategy e.g. multiple imputation. \n \nAlternatively, consider whether a different estimand could be of interest. For example, the analysis model outcome and complete record indicator are independent given each of the following sets of variables:\n \n",
     #      paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
       #print(adjsetsfull)
     else {
-      result2 <- paste("Consider using a different strategy e.g. multiple imputation, or a different analysis model, noting that a different analysis model may not be aligned with your estimand. \n \nFor example, the analysis model outcome and complete record indicator are independent given each of the following sets of variables:\n \n",
+      result2 <- paste("Consider using a different strategy e.g. multiple imputation,
+                       or a different analysis model, noting that a different analysis
+                       model may not be aligned with your estimand.
+                       \n \nFor example, the analysis model outcome(s) and complete
+                       record indicator are independent given each of the following sets of variables:\n \n",
               paste0(adjsetsfull, prefix="\n", collapse = "\n"), collapse = "\n")
       #print(adjsetsfull)
     }
