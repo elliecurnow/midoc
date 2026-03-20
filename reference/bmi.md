@@ -35,4 +35,4 @@ bmi
 
 - r:
 
-  Missingness indicator: whether bmi7 is reported or not
+  Missingness indicator: complete record (case) or not

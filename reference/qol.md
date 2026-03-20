@@ -37,6 +37,6 @@ A data frame with 1000 rows and 6 columns:
   Participant's quality of life at 12 months post-randomisation,
   measured using EQ-VAS
 
-- r_qol12:
+- r:
 
-  Missingness indicator: whether qol12 is reported or not
+  Missingness indicator: complete record (case) or not

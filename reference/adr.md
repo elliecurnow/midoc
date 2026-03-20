@@ -35,6 +35,6 @@ A data frame with 1000 rows and 5 columns:
   percentage, calculated from the total of an individual's English,
   maths and science scores
 
-- r_log_income:
+- r_cra:
 
-  Missingness indicator: whether log_income is reported or not
+  Missingness indicator: complete record (case) or not
