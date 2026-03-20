@@ -173,10 +173,10 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
                       pregsize -> bwt  
                       sep_unmeas -> bwt")
     #> Based on the proposed directed acyclic graph (DAG), the analysis model
-    #> outcome and complete record indicator are independent given analysis
-    #> model covariates. Hence, complete records analysis is valid.
+    #> outcome(s) and complete record indicator are independent given analysis
+    #> model covariate(s). Hence, complete records analysis is valid.
 
-    checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+    checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
             mdag="    matage -> bmi7 
                       mated -> matage 
                       mated -> bmi7 
@@ -185,10 +185,11 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
                       pregsize -> bmi7 
                       pregsize -> bwt  
                       sep_unmeas -> bwt")
-    #> Based on the proposed directed acyclic graph (DAG), the incomplete
-    #> variable and its missingness indicator are independent given imputation
-    #> model predictors. Hence, multiple imputation methods which assume data
-    #> are missing at random are valid in principle.
+    #> Based on the proposed directed acyclic graph (DAG), the partially
+    #> observed variable(s) and complete record indicator are independent
+    #> given the fully observed imputation model predictor(s). Hence, multiple
+    #> imputation methods which assume data are missing at random are valid in
+    #> principle.
 
     mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                                family="gaussian(identity)", data=bmi)

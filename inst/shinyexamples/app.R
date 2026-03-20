@@ -1511,7 +1511,7 @@ doMImice_server <- function(input, output, session) {
       updateSelectInput(session, "impfamily",
                         selected = "gaussian(identity)")
       updateTextAreaInput(session, "substmod",
-                        value = "lm(bmi7 ~ matage + I(matage^2) + mated + pregsize)")
+                        value = "lm(bmi7 ~ matage + I(matage^2) + mated)")
     } else {
       updateTextAreaInput(session, "impformula", value = "")
       updateSelectInput(session, "impfamily", selected = "")

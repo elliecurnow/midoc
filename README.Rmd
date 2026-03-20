@@ -83,7 +83,7 @@ checkCRA(y="bmi7", covs="matage mated", r_cra="r",
                   pregsize -> bwt  
                   sep_unmeas -> bwt")
 
-checkMI(dep="bmi7", preds="matage mated pregsize", r_dep="r",
+checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
         mdag="    matage -> bmi7 
                   mated -> matage 
                   mated -> bmi7 

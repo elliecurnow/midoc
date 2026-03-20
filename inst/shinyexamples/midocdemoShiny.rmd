@@ -193,11 +193,11 @@ We will now draw our mDAG and visually check that the relationships are specifie
 
 ```{r, echo=FALSE, out.width="500px", out.height="400px", dpi=200}
 plot(dagitty::dagitty('dag {
-  bmi7 [pos="0,-0.5"]
-  matage [pos="-2,-0.5"]
-  mated [pos="-1,0.5"]
-  sep_unmeas [pos="2,-1.5"]
-  r [pos="2,-0.5"]
+  bmi7 [pos="0.9,-0.4"]
+  matage [pos="-1.5,-0.4"]
+  mated [pos="-2,0.5"]
+  r [pos="0.9,-1.5"]
+  sep_unmeas [pos="-2.3,-1.5"]
   mated -> bmi7 
   mated -> matage 
   matage -> bmi7 
@@ -380,7 +380,7 @@ shiny::shinyApp(ui = ui, server = server)
   * Data exploration, for example, by performing a logistic regression of each missingness indicator on your analysis model variables - noting that you may have to exclude any variables with a large proportion of missing data to avoid perfect prediction  
 
 ## Step 2 Check whether complete records analysis is likely to be a valid strategy
-Our next step is to determine whether complete records analysis (CRA) is a valid strategy, using our mDAG. Remember that, in general, CRA will be valid if the analysis model outcome is unrelated to the complete records indicator, conditional on the analysis model covariates [5](https://doi.org/10.1093/ije/dyz032) (in special cases, depending on the type of analysis model and estimand of interest, this rule can be relaxed [6](https://doi.org/10.1093/aje/kwv114) - here, we will consider the general setting without making any assumptions about the fitted model). 
+Our next step is to determine whether complete records analysis (CRA) is a valid strategy, using our mDAG. In general, CRA will be valid if the analysis model outcome is unrelated to the complete records indicator, conditional on the analysis model covariates [5](https://doi.org/10.1093/ije/dyz032) (in special cases, depending on the type of analysis model and estimand of interest, this rule can be relaxed [6](https://doi.org/10.1093/aje/kwv114) - here, we will consider the general setting without making any assumptions about the fitted model). 
 
 Suppose we decide to estimate the unadjusted association between BMI at age 7 years and maternal age, without including our confounder maternal education in the model. We will use the `midoc` function `checkCRA` applied to our mDAG to check whether CRA is valid for this model, specifying our outcome (`y`), covariates, *i.e.* our independent variables, (`covs`), complete records indicator (`r_cra`), and mDAG (`mdag`), as follows:
 
@@ -501,7 +501,7 @@ shiny::shinyApp(ui = ui, server = server)
 ```
 
 ## Step 3 Check whether multiple imputation is likely to be a valid strategy
-Although CRA is valid for our example, we may also wish to perform MI. Remember that MI is valid in principle if each partially observed variable is unrelated to its missingness, given its imputation model predictors. Furthermore, we should include all other analysis model variables in the imputation model for each partially observed variable, in the form implied by the analysis model, so that the analysis and imputation models are "compatible". In theory, given multiple partially observed variables, validity of MI may imply different causes of missingness for each missing data pattern. For example, if both BMI at age 7 years and maternal education were partially observed, MI would only be valid if missingness of BMI at age 7 years was unrelated to maternal education among individuals missing both BMI at age 7 years and maternal education (given the other observed data). Missingness of BMI at age 7 years could be related to maternal education among individuals with observed maternal education. In practice, we recommend focusing on the most common missing data patterns and/or variables with the most missing data. Less common missing data patterns can often be assumed to be missing completely at random - it is unlikely to change your final conclusions if this assumption is incorrect. 
+Although CRA is valid for our example, we may also wish to perform MI. MI is valid in principle if all partially observed variables are unrelated to missingness, given the (fully observed) imputation model predictors. We should include all other analysis model variables in the imputation model for each partially observed variable, in the form implied by the analysis model, so that the analysis and imputation models are "compatible". 
 
 In our example, we only have a single partially observed variable (BMI at age 7 years), so it is relatively simple to check the validity of MI based on our mDAG. We have already verified (using `checkCRA`) that BMI at age 7 years is unrelated to its missingness, given maternal age and maternal education. Therefore, we know that MI will be valid if we use only these variables in the imputation model for BMI at age 7 years (because the analysis model and the imputation model are exactly the same in this case). However, MI using just maternal age and maternal education in the imputation model for BMI at age 7 years will recover no additional information compared to CRA. Therefore, we may wish to include "auxiliary variables" in our imputation model for BMI at age 7 years. These are additional variables that are included as predictors in the imputation model but that are not required for the analysis model. If we choose auxiliary variables that are predictive of BMI at age 7 years, we can improve the precision of our MI estimate - reduce its standard error - compared to the CRA estimate. 
 
@@ -521,13 +521,13 @@ We assume that pregnancy size is a cause of BMI at age 7 years, but not its miss
 
 ```{r, echo=FALSE, out.width="500px", out.height="400px", dpi=200}
 plot(dagitty::dagitty('dag {
-  bmi7 [pos="0,-0.5"]
-  matage [pos="-2,-0.5"]
-  mated [pos="-1,0.5"]
-  r [pos="2,-0.5"]
-  bwt [pos="1,-1"]
-  pregsize [pos="0,-1.5"]
-  sep_unmeas [pos="2,-1.5"]
+  bmi7 [pos="0.9,-0.4"]
+  bwt [pos="-0.9,-0.8"]
+  matage [pos="-1.5,-0.4"]
+  mated [pos="-2,0.5"]
+  pregsize [pos="-1.1,-1.3"]
+  r [pos="0.9,-1.5"]
+  sep_unmeas [pos="-2.3,-1.5"]
   matage -> bmi7
   mated -> bmi7
   mated -> matage
@@ -574,14 +574,14 @@ checkCRA(y="bmi7",
 
 
 
-We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), missingness indicator for the partially observed variable (`r_dep`), and mDAG (`mdag`). 
+We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), complete record indicator (`r_dep`), and mDAG (`mdag`). 
 
 We will first consider the imputation model including pregnancy size. The results are shown below. These suggest that MI would be valid in principle if we included pregnancy size as well as the other analysis model variables in the imputation model for BMI at age 7 years. 
 
 ```{r, R.options=list(width=80)}
 checkMI(dep="bmi7", 
         preds="matage mated pregsize", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 
@@ -598,7 +598,7 @@ We will next consider the imputation model including birth weight. The results a
 ```{r, R.options=list(width=80)}
 checkMI(dep="bmi7", 
         preds="matage mated bwt", 
-        r_dep="r",
+        r_cra="r",
         mdag="matage -> bmi7 
               mated -> matage 
               mated -> bmi7 
@@ -638,8 +638,8 @@ ui <- shiny::fluidPage(
                   label = "Imputation model predictors, separated by a space",
                   value = "matage mated"),
       
-      shiny::textInput(inputId = "r_dep",
-                  label = "Partially observed variable's missingness indicator",
+      shiny::textInput(inputId = "r_cra",
+                  label = "Complete record indicator",
                   value = "r"),
 
       shiny::textAreaInput(inputId = "mdag",
@@ -668,7 +668,7 @@ server <- function(input, output) {
 
   checkmi <- shiny::reactive({
         testthat::evaluate_promise(
-          midoc::checkMI(input$dep,input$preds,input$r_dep,input$mdag))$messages
+          midoc::checkMI(input$dep,input$preds,input$r_cra,input$mdag))$messages
   })
     
   output$checkmi <- shiny::bindEvent(shiny::renderPrint({
