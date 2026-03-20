@@ -303,9 +303,9 @@ large proportion of missing data to avoid perfect prediction</p></li>
 valid strategy<a class="anchor" aria-label="anchor" href="#step-2-check-whether-complete-records-analysis-is-likely-to-be-a-valid-strategy"></a>
 </h2>
 <p>Our next step is to determine whether complete records analysis (CRA)
-is a valid strategy, using our mDAG. Remember that, in general, CRA will
-be valid if the analysis model outcome is unrelated to the complete
-records indicator, conditional on the analysis model covariates <a href="https://doi.org/10.1093/ije/dyz032" class="external-link">5</a> (in special cases,
+is a valid strategy, using our mDAG. In general, CRA will be valid if
+the analysis model outcome is unrelated to the complete records
+indicator, conditional on the analysis model covariates <a href="https://doi.org/10.1093/ije/dyz032" class="external-link">5</a> (in special cases,
 depending on the type of analysis model and estimand of interest, this
 rule can be relaxed <a href="https://doi.org/10.1093/aje/kwv114" class="external-link">6</a> -
 here, we will consider the general setting without making any
@@ -422,24 +422,12 @@ imputation.</code></pre>
 strategy<a class="anchor" aria-label="anchor" href="#step-3-check-whether-multiple-imputation-is-likely-to-be-a-valid-strategy"></a>
 </h2>
 <p>Although CRA is valid for our example, we may also wish to perform
-MI. Remember that MI is valid in principle if each partially observed
-variable is unrelated to its missingness, given its imputation model
-predictors. Furthermore, we should include all other analysis model
-variables in the imputation model for each partially observed variable,
-in the form implied by the analysis model, so that the analysis and
-imputation models are “compatible”. In theory, given multiple partially
-observed variables, validity of MI may imply different causes of
-missingness for each missing data pattern. For example, if both BMI at
-age 7 years and maternal education were partially observed, MI would
-only be valid if missingness of BMI at age 7 years was unrelated to
-maternal education among individuals missing both BMI at age 7 years and
-maternal education (given the other observed data). Missingness of BMI
-at age 7 years could be related to maternal education among individuals
-with observed maternal education. In practice, we recommend focusing on
-the most common missing data patterns and/or variables with the most
-missing data. Less common missing data patterns can often be assumed to
-be missing completely at random - it is unlikely to change your final
-conclusions if this assumption is incorrect.</p>
+MI. MI is valid in principle if all partially observed variables are
+unrelated to missingness (“R”), given the (fully observed) imputation
+model predictors. We should include all other analysis model variables
+in the imputation model for each partially observed variable, in the
+form implied by the analysis model, so that the analysis and imputation
+models are “compatible”.</p>
 <p>In our example, we only have a single partially observed variable
 (BMI at age 7 years), so it is relatively simple to check the validity
 of MI based on our mDAG. We have already verified (using
@@ -472,10 +460,9 @@ inspect the missing data patterns in our dataset once again using
 [2,]       2    0      1     1        1   1 408  41</code></pre>
 <p>We can see that our auxiliary variables are fully observed.</p>
 <p>We assume that pregnancy size is a cause of BMI at age 7 years, but
-not its missingness. We assume birth weight is related to both BMI at 7
-years (via pregnancy size) and its missingness (via SEP). We will now
-add these variables to our mDAG. Below, we have shown our updated
-mDAG.</p>
+not missingness. We assume birth weight is related to both BMI at 7
+years (via pregnancy size) and missingness (via SEP). We will now add
+these variables to our mDAG. Below, we have shown our updated mDAG.</p>
 <p><img src="midoc_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="500px" height="400px"></p>
 <p>We will also once again explore whether relationships in the dataset
 are consistent with the updated mDAG using <code>exploreDAG</code>, as
@@ -945,26 +932,25 @@ include:</p>
 between the partially observed variable and its predictors are correctly
 specified in the imputation model <em>e.g.</em> using fractional
 polynomial selection</p></li>
-<li><p>All auxiliary variables that are related to both missingness of
-the partially observed variable and the missing data itself, conditional
-on the analysis model variables</p></li>
+<li><p>All auxiliary variables that are related to both missingness and
+the missing data itself, conditional on the analysis model
+variables</p></li>
 <li><p>Auxiliary variables that are related to the missing data but not
-missingness of the partially observed variable, conditional on the
-variables selected in Steps 1 and 2 above - if there are a large number
-of such variables, only include the most predictive in the imputation
-model (using a suitable variable selection method to identify
-these)</p></li>
+missingness, conditional on the variables selected in Steps 1 and 2
+above - if there are a large number of such variables, only include the
+most predictive in the imputation model (using a suitable variable
+selection method to identify these)</p></li>
 </ol>
 </li>
 <li>
 <p>The imputation model for each partially observed variable should
 exclude:</p>
 <ul>
-<li><p>All auxiliary variables that are related to missingness of the
-partially observed variable but not the missing data, conditional on the
-variables selected in Steps 1, 2, and 3 above</p></li>
+<li><p>All auxiliary variables that are related to missingness but not
+the missing data, conditional on the variables selected in Steps 1, 2,
+and 3 above</p></li>
 <li><p>All auxiliary variables that are colliders of the partially
-observed variable and its missingness</p></li>
+observed variable and missingness</p></li>
 </ul>
 </li>
 </ul>

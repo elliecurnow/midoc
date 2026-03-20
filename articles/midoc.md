@@ -232,9 +232,9 @@ maternal education.
 ## Step 2 Check whether complete records analysis is likely to be a valid strategy
 
 Our next step is to determine whether complete records analysis (CRA) is
-a valid strategy, using our mDAG. Remember that, in general, CRA will be
-valid if the analysis model outcome is unrelated to the complete records
-indicator, conditional on the analysis model covariates
+a valid strategy, using our mDAG. In general, CRA will be valid if the
+analysis model outcome is unrelated to the complete records indicator,
+conditional on the analysis model covariates
 [5](https://doi.org/10.1093/ije/dyz032) (in special cases, depending on
 the type of analysis model and estimand of interest, this rule can be
 relaxed [6](https://doi.org/10.1093/aje/kwv114) - here, we will consider
@@ -358,24 +358,12 @@ checkCRA(y="bmi7",
 ## Step 3 Check whether multiple imputation is likely to be a valid strategy
 
 Although CRA is valid for our example, we may also wish to perform MI.
-Remember that MI is valid in principle if each partially observed
-variable is unrelated to its missingness, given its imputation model
-predictors. Furthermore, we should include all other analysis model
-variables in the imputation model for each partially observed variable,
-in the form implied by the analysis model, so that the analysis and
-imputation models are “compatible”. In theory, given multiple partially
-observed variables, validity of MI may imply different causes of
-missingness for each missing data pattern. For example, if both BMI at
-age 7 years and maternal education were partially observed, MI would
-only be valid if missingness of BMI at age 7 years was unrelated to
-maternal education among individuals missing both BMI at age 7 years and
-maternal education (given the other observed data). Missingness of BMI
-at age 7 years could be related to maternal education among individuals
-with observed maternal education. In practice, we recommend focusing on
-the most common missing data patterns and/or variables with the most
-missing data. Less common missing data patterns can often be assumed to
-be missing completely at random - it is unlikely to change your final
-conclusions if this assumption is incorrect.
+MI is valid in principle if all partially observed variables are
+unrelated to missingness (“R”), given the (fully observed) imputation
+model predictors. We should include all other analysis model variables
+in the imputation model for each partially observed variable, in the
+form implied by the analysis model, so that the analysis and imputation
+models are “compatible”.
 
 In our example, we only have a single partially observed variable (BMI
 at age 7 years), so it is relatively simple to check the validity of MI
@@ -414,9 +402,9 @@ descMissData(y="bmi7",
 We can see that our auxiliary variables are fully observed.
 
 We assume that pregnancy size is a cause of BMI at age 7 years, but not
-its missingness. We assume birth weight is related to both BMI at 7
-years (via pregnancy size) and its missingness (via SEP). We will now
-add these variables to our mDAG. Below, we have shown our updated mDAG.
+missingness. We assume birth weight is related to both BMI at 7 years
+(via pregnancy size) and missingness (via SEP). We will now add these
+variables to our mDAG. Below, we have shown our updated mDAG.
 
 ![](midoc_files/figure-html/unnamed-chunk-13-1.png)
 
@@ -928,26 +916,25 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
       correctly specified in the imputation model *e.g.* using
       fractional polynomial selection
 
-  2.  All auxiliary variables that are related to both missingness of
-      the partially observed variable and the missing data itself,
-      conditional on the analysis model variables
+  2.  All auxiliary variables that are related to both missingness and
+      the missing data itself, conditional on the analysis model
+      variables
 
   3.  Auxiliary variables that are related to the missing data but not
-      missingness of the partially observed variable, conditional on the
-      variables selected in Steps 1 and 2 above - if there are a large
-      number of such variables, only include the most predictive in the
-      imputation model (using a suitable variable selection method to
-      identify these)
+      missingness, conditional on the variables selected in Steps 1 and
+      2 above - if there are a large number of such variables, only
+      include the most predictive in the imputation model (using a
+      suitable variable selection method to identify these)
 
 - The imputation model for each partially observed variable should
   exclude:
 
-  - All auxiliary variables that are related to missingness of the
-    partially observed variable but not the missing data, conditional on
-    the variables selected in Steps 1, 2, and 3 above
+  - All auxiliary variables that are related to missingness but not the
+    missing data, conditional on the variables selected in Steps 1, 2,
+    and 3 above
 
   - All auxiliary variables that are colliders of the partially observed
-    variable and its missingness
+    variable and missingness
 
 ## Step 5 Perform MI using the proposed imputation model
 
