@@ -15,7 +15,7 @@ mean age of 30 years}
 not}
 \item{pregsize}{Mother's pregnancy size: singleton or twins}
 \item{bwt}{Child's birth weight in kilograms}
-\item{r}{Missingness indicator: whether bmi7 is reported or not}
+\item{r}{Missingness indicator: complete record (case) or not}
 }
 }
 }

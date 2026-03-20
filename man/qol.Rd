@@ -17,7 +17,7 @@ measured using the EuroQol Visual Analogue Scale (EQ-VAS)}
 measured using EQ-VAS}
 \item{qol12}{Participant's quality of life at 12 months post-randomisation,
 measured using EQ-VAS}
-\item{r_qol12}{Missingness indicator: whether qol12 is reported or not}
+\item{r}{Missingness indicator: complete record (case) or not}
 }
 }
 }

@@ -124,7 +124,7 @@ qol<-qol[order(qol$group),]
 #qol$group <- as.factor(qol$group)
 qol$r_qol12 <- as.factor(qol$r_qol12)
 #qol$r_cra <- as.factor(qol$r_cra)
-
+names(qol)[7] <- "r"
 summary(qol)
 
 # Check predictors of missingness are as expected

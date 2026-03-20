@@ -78,6 +78,7 @@ summary(glm(r_cra~gcse_score*log_income, family=poisson(log)))
 adr$mated <- as.factor(adr$mated)
 #adr$r_cra <- as.factor(adr$r_cra)
 adr$r_log_income <- as.factor(adr$r_log_income)
+names(adr)[5] <- "r_cra"
 
 summary(adr)
 
