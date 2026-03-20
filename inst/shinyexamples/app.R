@@ -1320,7 +1320,7 @@ proposeMI_server <- function(input, output, session) {
     req(mimod())
     tryCatch({
       testthat::evaluate_promise(
-        midoc::proposeMI(mimod(), data(), plot = FALSE)
+        midoc::proposeMI(mimodobj=mimod(), data=data(), plot = FALSE)
       )$messages
     }, error = function(e) {
       e$message
@@ -1350,8 +1350,8 @@ proposeMI_server <- function(input, output, session) {
     req(data())
 
     #Only print plot if no error
-    tryCatch(midoc::proposeMI(mimod(),
-                              data(),
+    tryCatch(midoc::proposeMI(mimodobj=mimod(),
+                              data=data(),
                               message = FALSE,
                               plot = TRUE,
                               plotprompt = FALSE
@@ -1576,7 +1576,7 @@ doMImice_server <- function(input, output, session) {
     req(uploaded_data$df)
     req(mimod_domi())
     tryCatch({
-    midoc::proposeMI(mimod_domi(), data(), plot = FALSE, message = FALSE)
+    midoc::proposeMI(mimodobj=mimod_domi(), data=data(), plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message
       })
@@ -1699,7 +1699,7 @@ doCRA_server <- function(input, output, session) {
 
     if (uploaded_data$data_source == "bmi") {
       updateTextAreaInput(session, "substmod_cra",
-                          value = "lm(bmi7 ~ matage + I(matage^2) + mated + pregsize)")
+                          value = "lm(bmi7 ~ matage + I(matage^2) + mated)")
     } else {
       updateTextAreaInput(session, "substmod_cra", value = "glm(y ~ x1 + x2)")
     }
@@ -1878,7 +1878,7 @@ ui <- fluidPage(
 
       tags$p(
         HTML('
-        Elinor Curnow, Jon Heron, Rosie Cornish, Holly Taylor, Kate Tilling, and James Carpenter
+        Elinor Curnow, Jon Heron, Rosie Cornish, Holly Sachdeva, Kate Tilling, and James Carpenter
         ')
       ),
 

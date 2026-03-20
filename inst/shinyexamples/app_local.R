@@ -149,8 +149,8 @@ drawDAG_server <- function(input, output, session) {
     "qol0 -> qol3",
     "qol0 -> qol12",
     "qol3 -> qol12",
-    "qol0 -> r_qol12",
-    "qol3 -> r_qol12",
+    "qol0 -> r",
+    "qol3 -> r",
     sep = "\n"
   )
 
@@ -162,8 +162,8 @@ drawDAG_server <- function(input, output, session) {
     "mated -> gcse_score",
     "mated -> ks2_score",
     "ks2_score -> gcse_score",
-    "mated -> r_log_income",
-    "ks2_score -> r_log_income",
+    "mated -> r_cra",
+    "ks2_score -> r_cra",
     sep = "\n"
   )
 
@@ -796,8 +796,8 @@ checkMI_ui <- fluidPage(tagList(
                 label = "Imputation model predictors, separated by a space",
                 value = ""),
 
-      textInput(inputId = "r_dep_checkMI",
-                label = "Partially observed variable's missingness indicator",
+      textInput(inputId = "r_cra_checkMI",
+                label = "Complete record indicator",
                 value = ""),
 
       textAreaInput(inputId = "mdag_checkMI",
@@ -839,19 +839,19 @@ checkMI_server <- function(input, output, session) {
     if (uploaded_data$data_source == "bmi") {
       updateTextInput(session, "dep_checkMI", value = "bmi7")
       updateTextInput(session, "preds_checkMI", value = "matage mated pregsize")
-      updateTextInput(session, "r_dep_checkMI", value = "r")
+      updateTextInput(session, "r_cra_checkMI", value = "r")
       updateTextAreaInput(session, "mdag_checkMI", value = uploaded_data$dag_text)
     } else {
       updateTextInput(session, "dep_checkMI", value = "y")
       updateTextInput(session, "preds_checkMI", value = "x1 x2")
-      updateTextInput(session, "r_dep_checkMI", value = "r_y")
+      updateTextInput(session, "r_cra_checkMI", value = "r_y")
       updateTextAreaInput(session, "mdag_checkMI", value = uploaded_data$dag_text)
     }
   })
 
   # check formula input. If it has changed, reset output and wait for button click.
   observeEvent(
-    list(input$dep_checkMI, input$preds_checkMI, input$r_dep_checkMI),
+    list(input$dep_checkMI, input$preds_checkMI, input$r_cra_checkMI),
     {
       data_changed(TRUE)  # Mark outputs should reset because inputs changed
     }
@@ -875,7 +875,7 @@ checkMI_server <- function(input, output, session) {
         midoc::checkMI(
           input$dep_checkMI,
           input$preds_checkMI,
-          input$r_dep_checkMI,
+          input$r_cra_checkMI,
           input$mdag_checkMI
         )
       )$messages
@@ -1320,7 +1320,7 @@ proposeMI_server <- function(input, output, session) {
     req(mimod())
     tryCatch({
       testthat::evaluate_promise(
-        midoc::proposeMI(mimod(), data(), plot = FALSE)
+        midoc::proposeMI(mimodobj=mimod(), data=data(), plot = FALSE)
       )$messages
     }, error = function(e) {
       e$message
@@ -1350,8 +1350,8 @@ proposeMI_server <- function(input, output, session) {
     req(data())
 
     #Only print plot if no error
-    tryCatch(midoc::proposeMI(mimod(),
-                              data(),
+    tryCatch(midoc::proposeMI(mimodobj=mimod(),
+                              data=data(),
                               message = FALSE,
                               plot = TRUE,
                               plotprompt = FALSE
@@ -1576,7 +1576,7 @@ doMImice_server <- function(input, output, session) {
     req(uploaded_data$df)
     req(mimod_domi())
     tryCatch({
-    midoc::proposeMI(mimod_domi(), data(), plot = FALSE, message = FALSE)
+    midoc::proposeMI(mimodobj=mimod_domi(), data=data(), plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message
       })
@@ -1699,7 +1699,7 @@ doCRA_server <- function(input, output, session) {
 
     if (uploaded_data$data_source == "bmi") {
       updateTextAreaInput(session, "substmod_cra",
-                          value = "lm(bmi7 ~ matage + I(matage^2) + mated + pregsize)")
+                          value = "lm(bmi7 ~ matage + I(matage^2) + mated)")
     } else {
       updateTextAreaInput(session, "substmod_cra", value = "glm(y ~ x1 + x2)")
     }
@@ -1878,7 +1878,7 @@ ui <- fluidPage(
 
       tags$p(
         HTML('
-        Elinor Curnow, Jon Heron, Rosie Cornish, Holly Taylor, Kate Tilling, and James Carpenter
+        Elinor Curnow, Jon Heron, Rosie Cornish, Holly Sachdeva, Kate Tilling, and James Carpenter
         ')
       ),
 
