@@ -39,4 +39,17 @@ test_that("checkMI correctly identifies imputation model is not valid when a dag
           }
 )
 
-
+# Check output when preds are omitted
+#Trim output for test purposes
+res4<-evaluate_promise(checkMI(dep="bmi7", r_cra="r",
+                               mdag="matage -> bmi7 mated -> matage mated -> bmi7 sep_unmeas -> mated
+        sep_unmeas -> r pregsize -> bmi7 pregsize -> bwt sep_unmeas -> bwt"))
+#There's a trailing blank, but only visible in testing, so just trim for test purposes
+test_that("checkMI correctly identifies imputation model is not valid, but could
+  be valid for a different set of predictors",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res4$messages), collapse=" "),"right"),1,125),
+                         "Based on the proposed directed acyclic graph (DAG), the partially observed variable(s) and complete record indicator are not ")
+            #given imputation model predictors. Hence, multiple imputation methods which assume data are missing at random are not valid.  Consider using a different imputation model and/or strategy (e.g. not-at-random fully conditional specification).  For example, the incomplete variable and its missingness indicator are independent if, in addition to the specified predictors, the following sets of variables are included as predictors in the imputation model (note that this list is not necessarily exhaustive, particularly if your DAG is complex):  pregsize  c(\"pregsize\", \"sep_unmeas\")")
+          }
+)

@@ -4,14 +4,14 @@
 \alias{checkCRA}
 \title{Inspect complete records analysis model}
 \usage{
-checkCRA(y, covs, r_cra, mdag)
+checkCRA(y, covs = NULL, r_cra, mdag)
 }
 \arguments{
 \item{y}{The analysis model outcome variable(s), specified as a string (space
 delimited) or a list}
 
-\item{covs}{The analysis model covariate(s), specified as a string (space
-delimited) or a list}
+\item{covs}{Optional analysis model covariate(s), specified as a string
+(space delimited) or a list}
 
 \item{r_cra}{The complete record indicator, specified as a string}
 

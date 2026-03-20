@@ -21,7 +21,7 @@
 #'
 #' @param dep The partially observed variable(s) to be imputed, specified as a
 #'   string (space delimited) or a list
-#' @param preds The (fully observed) imputation model predictor(s), specified as
+#' @param preds Optional fully observed imputation model predictor(s), specified as
 #'   a string (space delimited) or a list
 #' @param r_cra The complete record indicator, specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
@@ -48,7 +48,7 @@
 #' checkMI(dep="bmi7", preds="matage", r_cra="r",
 #'         mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                sep_unmeas -> mated sep_unmeas -> r")
-checkMI <- function(dep, preds, r_cra, mdag) {
+checkMI <- function(dep, preds=NULL, r_cra, mdag) {
 
   #Check whether input DAG is a dagitty object or not
   if(dagitty::is.dagitty(mdag)){
@@ -58,11 +58,17 @@ checkMI <- function(dep, preds, r_cra, mdag) {
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
-  predslist <- unlist(strsplit(preds," "))
   deplist <- unlist(strsplit(dep," "))
 
+  if(is.null(preds)){
+    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra)
+  } else {
+    predslist <- unlist(strsplit(preds," "))
+    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra, predslist)
+  }
+
   #If r_cra does not depend on dep conditional on predictors, then MI is valid
-  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra, predslist)){
+  if(dsep){
     result <- paste("Based on the proposed directed acyclic graph (DAG),
                     the partially observed variable(s) and complete record indicator
                     are independent given the fully observed imputation model predictor(s). Hence,

@@ -4,13 +4,13 @@
 \alias{checkMI}
 \title{Inspect multiple imputation model}
 \usage{
-checkMI(dep, preds, r_cra, mdag)
+checkMI(dep, preds = NULL, r_cra, mdag)
 }
 \arguments{
 \item{dep}{The partially observed variable(s) to be imputed, specified as a
 string (space delimited) or a list}
 
-\item{preds}{The (fully observed) imputation model predictor(s), specified as
+\item{preds}{Optional fully observed imputation model predictor(s), specified as
 a string (space delimited) or a list}
 
 \item{r_cra}{The complete record indicator, specified as a string}

@@ -17,8 +17,8 @@
 #'
 #' @param y The analysis model outcome variable(s), specified as a string (space
 #'   delimited) or a list
-#' @param covs The analysis model covariate(s), specified as a string (space
-#'   delimited) or a list
+#' @param covs Optional analysis model covariate(s), specified as a string
+#'   (space delimited) or a list
 #' @param r_cra The complete record indicator, specified as a string
 #' @param mdag The DAG, specified as a string using \link[dagitty]{dagitty}
 #'   syntax, or as a \link[dagitty]{dagitty} graph object
@@ -49,7 +49,7 @@
 #' checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 #'          mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                sep_unmeas -> mated sep_unmeas -> r bmi7 -> r")
-checkCRA <- function(y, covs, r_cra, mdag) {
+checkCRA <- function(y, covs=NULL, r_cra, mdag) {
 
   #Check whether input DAG is a dagitty object or not
   if(dagitty::is.dagitty(mdag)){
@@ -60,10 +60,16 @@ checkCRA <- function(y, covs, r_cra, mdag) {
   #mdagspec <- paste('dag {',mdag,'}')
 
   ylist <- unlist(strsplit(y," "))
-  covslist <- unlist(strsplit(covs," "))
+
+  if(is.null(covs)){
+    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra)
+  } else {
+    covslist <- unlist(strsplit(covs," "))
+    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra, covslist)
+  }
 
   #If r does not depend on y conditional on covariates, then CRA is valid
-  if(dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra, covslist)){
+  if(dsep){
     result <- paste("Based on the proposed directed acyclic graph (DAG),
                     the analysis model outcome(s) and complete record indicator
                     are independent given analysis model covariate(s). Hence,
