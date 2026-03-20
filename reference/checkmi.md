@@ -9,7 +9,7 @@ effects.
 ## Usage
 
 ``` r
-checkMI(dep, preds, r_cra, mdag)
+checkMI(dep, preds = NULL, r_cra, mdag)
 ```
 
 ## Arguments
@@ -21,7 +21,7 @@ checkMI(dep, preds, r_cra, mdag)
 
 - preds:
 
-  The (fully observed) imputation model predictor(s), specified as a
+  Optional fully observed imputation model predictor(s), specified as a
   string (space delimited) or a list
 
 - r_cra:

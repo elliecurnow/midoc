@@ -8,7 +8,7 @@ including regression parameters, associations, and causal effects.
 ## Usage
 
 ``` r
-checkCRA(y, covs, r_cra, mdag)
+checkCRA(y, covs = NULL, r_cra, mdag)
 ```
 
 ## Arguments
@@ -20,7 +20,7 @@ checkCRA(y, covs, r_cra, mdag)
 
 - covs:
 
-  The analysis model covariate(s), specified as a string (space
+  Optional analysis model covariate(s), specified as a string (space
   delimited) or a list
 
 - r_cra:
