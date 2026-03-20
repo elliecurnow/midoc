@@ -523,8 +523,8 @@ We will now use the `midoc` function `checkMI` applied to our DAG to
 check whether MI is valid when the imputation model predictors for BMI
 at age 7 years include pregnancy size or birth weight, as well as
 maternal age and maternal education. We will specify the partially
-observed variable (`dep`), predictors (`preds`), missingness indicator
-for the partially observed variable (`r_dep`), and mDAG (`mdag`).
+observed variable (`dep`), predictors (`preds`), complete record
+indicator (`r_cra`), and mDAG (`mdag`).
 
 We will first consider the imputation model including pregnancy size.
 The results are shown below. These suggest that MI would be valid in
