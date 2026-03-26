@@ -43,19 +43,19 @@ summary(asrds14)
 asrds17 <- rnorm(1000, 0.5*asrds14 - 3*mated - 6*log_income5 + 90, 6)
 summary(asrds17)
 
-# Missing mechanism for log_income: MAR | mated and asrds14
-# Generate missing values of log_income - depending on mated and asrds14
+# Missing mechanism for asrds17: MAR | mated and asrds14
+# Generate missing values of asrds17 - depending on mated and asrds14
 
-log_income_m1 <- log_income5
+asrds17_m1 <- asrds17
 for (i in 1:1000){
-  log_income_m1[i] <- ifelse(rbinom(1,1,exp(1.5*mated[i] - 0.8*asrds14[i] + 40)/
+  asrds17_m1[i] <- ifelse(rbinom(1,1,exp(1.5*mated[i] - 0.8*asrds14[i] + 40)/
                                 (1+exp(1.5*mated[i] - 0.8*asrds14[i] + 40)))==0,
-                              NA, log_income5[i])
+                              NA, asrds17[i])
 }
-summary(log_income_m1)
+summary(asrds17_m1)
 
 #Create data frame
-asrds<-data.frame(asrds17=asrds17, log_income5=log_income_m1,mated=mated,
+asrds<-data.frame(asrds17=asrds17_m1, log_income5=log_income5,mated=mated,
                 asrds14=asrds14)
 
 #Create missing indicator - note this is also the complete_record indicator
@@ -75,7 +75,7 @@ asrds$r_cra <- as.factor(asrds$r_cra)
 summary(asrds)
 
 # Check predictors of missingness are as expected
-summary(glm(r_cra~mated+asrds14+asrds17, family=binomial(logit),
+summary(glm(r_cra~mated+asrds14+log_income5, family=binomial(logit),
             data=asrds))
 # As expected
 
@@ -143,39 +143,31 @@ asrds_mdag <- 'dag {
   asrds17 [pos="1.7,0.7"]
   log_income5 [pos="-1.5,0.7"]
   mated [pos="-2,0"]
-  r_cra [pos="1.7,-1"]
-  sep_unmeas5 [pos="-1.5,-0.5"]
+  r_cra [pos="1.7,-0.5"]
+  sep_unmeas [pos="1.7,-1"]
   asrds14 -> asrds17
   log_income5 -> asrds14
   log_income5 -> asrds17
   mated -> asrds14
   mated -> asrds17
   mated -> log_income5
-  sep_unmeas5 -> r_cra
-  mated -> sep_unmeas5
-  sep_unmeas5 -> asrds14
+  sep_unmeas -> r_cra
+  mated -> sep_unmeas
+  asrds14 -> r_cra
 }'
 plot(dagitty::dagitty(asrds_mdag))
 
-checkCRA("asrds17","log_income","r_cra",asrds_mdag)
-checkCRA("asrds17","log_income mated asrds14","r_cra",asrds_mdag)
+checkCRA("asrds17","log_income5","r_cra",asrds_mdag)
+checkCRA("asrds17","log_income5 mated asrds14","r_cra",asrds_mdag)
 
-checkMI("log_income","asrds17 mated","r_cra", asrds_mdag)
-checkMI("log_income","asrds17 mated asrds14","r_cra", asrds_mdag)
+checkMI("asrds17","log_income5 mated","r_cra", asrds_mdag)
+checkMI("asrds17","log_income5 mated asrds14","r_cra", asrds_mdag)
 
-logincome_mod_aux <- checkModSpec("log_income5 ~ asrds17 + mated + asrds14","gaussian(identity)",asrds)
-# Random scatter though clearly bi-modal
-modfit_mated0 <- lm(log_income5~asrds17+asrds14, data=asrds, subset=(mated=="0"))
-plot(y=modfit_mated0[["residuals"]],x=modfit_mated0[["fitted.values"]],xlab="",ylab="",
-     main="Residuals versus fitted values")
-modfit_mated1 <- lm(log_income5~asrds17+asrds14, data=asrds, subset=(mated=="1"))
-plot(y=modfit_mated1[["residuals"]],x=modfit_mated1[["fitted.values"]],xlab="",ylab="",
-     main="Residuals versus fitted values")
-#Could be an argument for stratified MI although no of observations with mated==0
-# is quite small which could be an argument for a combined model
+logincome_mod_aux <- checkModSpec("asrds17 ~ log_income5 + mated + asrds14","gaussian(identity)",asrds)
+# Random scatter
 
-#Note that if we had imputed income instead, our model would be mis-specified
-income_mod_aux <- checkModSpec("I(exp(log_income5))~ asrds17 + mated + asrds14","gaussian(identity)",asrds)
+#Note that if we had used income instead, our model would be mis-specified
+income_mod_aux <- checkModSpec("asrds17 ~ I(exp(log_income5)) + mated + asrds14","gaussian(identity)",asrds)
 
 # Formulate best mice options
 propMI_aux <- proposeMI(mimodobj=logincome_mod_aux, data=asrds)
