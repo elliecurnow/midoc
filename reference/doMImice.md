@@ -4,8 +4,12 @@ Creates multiple imputations using
 [mice](https://amices.org/mice/reference/mice.html), based on the
 options and dataset specified by a call to
 [proposeMI](https://elliecurnow.github.io/midoc/reference/proposeMI.md).
-If a substantive model is specified, also calculates the pooled
-estimates using [pool](https://amices.org/mice/reference/pool.html).
+If stratification variable(s) are included in the 'miprop' object,
+multiple imputation will be performed for each subset of the data
+determined by the values of the stratification variable(s) and the
+resulting imputed datasets will be combined. If a substantive model is
+specified, the pooled estimates are calculated using
+[pool](https://amices.org/mice/reference/pool.html).
 
 ## Usage
 

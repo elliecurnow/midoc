@@ -5,8 +5,11 @@ Creates multiple imputations using
 based on the options and dataset specified by a call to
 [proposeMI](https://elliecurnow.github.io/midoc/reference/proposeMI.md),
 and additionally on the specified missing not at random (MNAR)
-mechanism. If a substantive model is specified, also calculates the
-pooled estimates using
+mechanism. If stratification variable(s) are included in the 'miprop'
+object, multiple imputation will be performed for each subset of the
+data determined by the values of the stratification variable(s) and the
+resulting imputed datasets will be combined. If a substantive model is
+specified, the pooled estimates are calculated using
 [pool](https://amices.org/mice/reference/pool.html).
 
 ## Usage
@@ -65,7 +68,7 @@ Imputation is performed using the NARFCS procedure (Tompsett et al,
 [mice.impute.mnar.logreg](https://amices.org/mice/reference/mice.impute.mnar.html)
 for further details. All other partially observed variables are assumed
 to be missing at random (MAR) and imputed using the method(s) specified
-for the 'miprop' object.
+as per the 'miprop' object.
 
 ## References
 

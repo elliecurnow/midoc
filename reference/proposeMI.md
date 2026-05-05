@@ -1,10 +1,11 @@
 # Suggests multiple imputation options
 
 Suggests the [mice](https://amices.org/mice/reference/mice.html) options
-to perform multiple imputation, based on the proposed set of imputation
-models (one for each partially observed variable) and proportion of
-complete records. Optionally, if a dataset is supplied, diagnostic plots
-are created based on the proposed 'mice' options.
+to perform multiple imputation, based on the set of imputation models
+(one for each partially observed variable) specified by calls to
+checkmodspec and the proportion of complete records. Optionally, if a
+dataset is supplied, diagnostic plots are created based on the proposed
+'mice' options.
 
 ## Usage
 
@@ -37,7 +38,11 @@ proposeMI(
 - data:
 
   Optionally, a data frame containing all the variables required for
-  imputation and the substantive analysis
+  imputation and the substantive analysis; if stratification variable(s)
+  are included in the 'mimod' object(s), these will be carried over to
+  'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation
+  will be performed for each subset of the data determined by the values
+  of the stratification variable(s)
 
 - plot:
 
@@ -85,12 +90,16 @@ mimod_pregsize <- checkModSpec(
 # Display the proposed 'mice' options
 ## When specifying a single imputation model
 proposeMI(mimodobj=mimod_bmi7,
-          data=bmi)
+                   data=bmi)
 #> Based on your proposed imputation model and dataset, your mice() call
 #> should be as follows:
 #> 
 #> mice(data = bmi , # You may need to specify a subset of the columns in
-#> your dataset
+#> your dataset; if you specified stratification variable(s) in your
+#> proposed imputation model(s), these will be carried over to 'midoc'
+#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> performed for each subset of the data determined by the values of the
+#> stratification factor(s):
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
@@ -129,13 +138,17 @@ proposeMI(mimodobj=mimod_bmi7,
 
 ## When specifying more than one imputation model (suppressing the plots)
 proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
-          data=bmi,
-          plot = FALSE)
+                    data=bmi,
+                    plot=FALSE)
 #> Based on your proposed imputation model and dataset, your mice() call
 #> should be as follows:
 #> 
 #> mice(data = bmi , # You may need to specify a subset of the columns in
-#> your dataset
+#> your dataset; if you specified stratification variable(s) in your
+#> proposed imputation model(s), these will be carried over to 'midoc'
+#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> performed for each subset of the data determined by the values of the
+#> stratification factor(s):
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset

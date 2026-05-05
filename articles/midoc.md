@@ -61,6 +61,7 @@ age and BMI at age 7 years. We can express these relationships using
 “dagitty” syntax, as follows:
 
 ``` r
+
 matage -> bmi7 
 mated -> matage 
 mated -> bmi7
@@ -79,6 +80,7 @@ variables in our dataset are partially observed, specifying our outcome
 dataset (`data`), as follows.
 
 ``` r
+
 descMissData(y="bmi7", 
              covs="matage mated", 
              data=bmi)
@@ -108,6 +110,7 @@ lower case names for variables in our code, so R becomes “r”, and so
 on):
 
 ``` r
+
 matage -> bmi7 
 mated -> matage 
 mated -> bmi7 
@@ -119,6 +122,7 @@ Note that if instead you believe maternal education is a direct cause of
 R, the mDAG would be as follows:
 
 ``` r
+
 matage -> bmi7 
 mated -> matage 
 mated -> bmi7 
@@ -141,6 +145,7 @@ consistent with the proposed mDAG, specifying both our mDAG (`mdag`) and
 dataset (`data`), as follows.
 
 ``` r
+
 exploreDAG(mdag="matage -> bmi7 
                   mated -> matage 
                   mated -> bmi7 
@@ -250,6 +255,7 @@ variables, (`covs`), complete records indicator (`r_cra`), and mDAG
 (`mdag`), as follows:
 
 ``` r
+
 checkCRA(y="bmi7", 
          covs="matage", 
          r_cra="r",
@@ -308,6 +314,7 @@ If we add `mated` to the model and re-run `checkCRA`, as below, we see
 that CRA is now valid.
 
 ``` r
+
 checkCRA(y="bmi7", 
          covs="matage mated", 
          r_cra="r",
@@ -329,6 +336,7 @@ below to see the results of `checkCRA` in this case (note, in the code,
 we have added a path from `bmi7` to `r` to the specified mDAG).
 
 ``` r
+
 checkCRA(y="bmi7", 
          covs="matage mated", 
          r_cra="r",
@@ -389,6 +397,7 @@ our dataset once again using `descMissData`, including our auxiliary
 variables.
 
 ``` r
+
 descMissData(y="bmi7", 
              covs="matage mated pregsize bwt", 
              data=bmi)
@@ -412,6 +421,7 @@ We will also once again explore whether relationships in the dataset are
 consistent with the updated mDAG using `exploreDAG`, as follows.
 
 ``` r
+
 exploreDAG(mdag="matage -> bmi7 
                   mated -> matage 
                   mated -> bmi7 
@@ -502,6 +512,7 @@ Note that CRA is still valid for our updated mDAG. We can check this
 using `checkCRA` once more:
 
 ``` r
+
 checkCRA(y="bmi7", 
          covs="matage mated", 
          r_cra="r",
@@ -532,6 +543,7 @@ principle if we included pregnancy size as well as the other analysis
 model variables in the imputation model for BMI at age 7 years.
 
 ``` r
+
 checkMI(dep="bmi7", 
         preds="matage mated pregsize", 
         r_cra="r",
@@ -560,6 +572,7 @@ and `r`, it is a “collider”, and hence conditioning on `bwt` opens a
 path from `bmi7` to `r` via `bwt`.
 
 ``` r
+
 checkMI(dep="bmi7", 
         preds="matage mated bwt", 
         r_cra="r",
@@ -680,13 +693,16 @@ mis-specification), suggests there may be a quadratic relationship
 between BMI at age 7 years and maternal age.
 
 ``` r
+
 checkModSpec(formula="bmi7~matage+mated+pregsize", 
              family="gaussian(identity)", 
              data=bmi)
 ```
 
     Method used to explore model specification: regression of model
-    residuals (y) on a fractional polynomial of the fitted values (fitvals)
+    residuals (y) on a fractional polynomial of the fitted values
+    (fitvals). If stratification variable(s) are specified, results are
+    subsetted by the values of the factor(s).
 
     Call:
 
@@ -740,13 +756,16 @@ The results below suggest there is no longer evidence of model
 mis-specification.
 
 ``` r
+
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize", 
              family="gaussian(identity)", 
              data=bmi)
 ```
 
     Method used to explore model specification: regression of model
-    residuals (y) on a fractional polynomial of the fitted values (fitvals)
+    residuals (y) on a fractional polynomial of the fitted values
+    (fitvals). If stratification variable(s) are specified, results are
+    subsetted by the values of the factor(s).
 
     Call:
 
@@ -795,6 +814,7 @@ we can still explore the specification that we would need using
 case using the `plot = FALSE` option):
 
 ``` r
+
 checkModSpec(formula="pregsize~matage+bmi7+mated", 
              family="binomial(logit)",
              data=bmi, 
@@ -807,7 +827,8 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
 
     Method used to explore model specification: Pregibon's link test, a
     regression of the model outcome (resp) on the fitted values (fit) and
-    the square of the fitted values (fit2)
+    the square of the fitted values (fit2).  If stratification variable(s)
+    are specified, results are subsetted by the values of the factor(s).
 
     Call:
 
@@ -855,6 +876,7 @@ Once we include a quadratic form of maternal age in our model for
 pregnancy size, there is little evidence of model mis-specification:
 
 ``` r
+
 checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated", 
              family="binomial(logit)", 
              data=bmi)
@@ -862,7 +884,8 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
 
     Method used to explore model specification: Pregibon's link test, a
     regression of the model outcome (resp) on the fitted values (fit) and
-    the square of the fitted values (fit2)
+    the square of the fitted values (fit2).  If stratification variable(s)
+    are specified, results are subsetted by the values of the factor(s).
 
     Call:
 
@@ -964,6 +987,7 @@ iterations when, as in our dataset, only one variable is partially
 observed.
 
 ``` r
+
 mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize", 
                            family="gaussian(identity)", 
                            data=bmi,
@@ -973,6 +997,7 @@ mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 ![](midoc_files/figure-html/unnamed-chunk-22-1.png)
 
 ``` r
+
 miprop <- proposeMI(mimodobj=mimod_bmi7, 
                     data=bmi,
                     plotprompt=FALSE)
@@ -982,7 +1007,11 @@ miprop <- proposeMI(mimodobj=mimod_bmi7,
     should be as follows:
 
     mice(data = bmi , # You may need to specify a subset of the columns in
-    your dataset
+    your dataset; if you specified stratification variable(s) in your
+    proposed imputation model(s), these will be carried over to 'midoc'
+    functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+    performed for each subset of the data determined by the values of the
+    stratification factor(s):
 
     m = 41 , # You should use at least this number of imputations based on
     the proportion of complete records in your dataset
@@ -1029,6 +1058,7 @@ missing completely at random. Then we could construct our proposed
 model checking messages.
 
 ``` r
+
 mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)",
                            data=bmi,
@@ -1055,6 +1085,7 @@ If the substantive model is not specified, only the imputation step will
 be performed.
 
 ``` r
+
 doMImice(miprop, seed=123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 ```
 
@@ -1115,13 +1146,13 @@ between BMI at age 7 years and maternal age is strong in this setting.
 Note that the collider bias could be relatively larger if the
 association was weak [9](https://doi.org/10.3389/fepid.2023.1237447).
 
-| Approach                                                |   Linear term    |  Quadratic term  |
-|:--------------------------------------------------------|:----------------:|:----------------:|
-| Full data                                               | 1.17 (1.09-1.26) | 0.86 (0.80-0.91) |
-| CRA                                                     | 1.16 (1.05-1.26) | 0.84 (0.77-0.90) |
+| Approach | Linear term | Quadratic term |
+|:---|:--:|:--:|
+| Full data | 1.17 (1.09-1.26) | 0.86 (0.80-0.91) |
+| CRA | 1.16 (1.05-1.26) | 0.84 (0.77-0.90) |
 | MI fitting quadratic relationship, using pregnancy size | 1.15 (1.05-1.25) | 0.84 (0.78-0.91) |
-| MI fitting quadratic relationship, using birth weight   | 1.16 (1.05-1.27) | 0.83 (0.77-0.90) |
-| MI fitting linear relationship, using pregnancy size    | 1.21 (1.07-1.34) | 0.54 (0.46-0.62) |
-| MI fitting linear relationship, using birth weight      | 1.20 (1.07-1.34) | 0.53 (0.45-0.61) |
+| MI fitting quadratic relationship, using birth weight | 1.16 (1.05-1.27) | 0.83 (0.77-0.90) |
+| MI fitting linear relationship, using pregnancy size | 1.21 (1.07-1.34) | 0.54 (0.46-0.62) |
+| MI fitting linear relationship, using birth weight | 1.20 (1.07-1.34) | 0.53 (0.45-0.61) |
 
-Parameter estimates for maternal age
+Parameter estimates for maternal age {.table}

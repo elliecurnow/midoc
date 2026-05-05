@@ -37,6 +37,7 @@ You can learn more about these commands in
 You can install the latest release of midoc from CRAN with:
 
 ``` r
+
 install.packages('midoc')
 ```
 
@@ -44,6 +45,7 @@ You can install the development version of midoc from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("elliecurnow/midoc")
 ```
@@ -51,6 +53,7 @@ remotes::install_github("elliecurnow/midoc")
 ## Usage
 
 ``` r
+
 library(midoc)
 
 head(bmi)
@@ -187,7 +190,9 @@ checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
 mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                            family="gaussian(identity)", data=bmi)
 #> Method used to explore model specification: regression of model
-#> residuals (y) on a fractional polynomial of the fitted values (fitvals)
+#> residuals (y) on a fractional polynomial of the fitted values
+#> (fitvals). If stratification variable(s) are specified, results are
+#> subsetted by the values of the factor(s).
 #> 
 #> Call:
 #> 
@@ -229,12 +234,17 @@ values.](reference/figures/README-unnamed-chunk-2-2.png)
 
 ``` r
 
+
 miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> Based on your proposed imputation model and dataset, your mice() call
 #> should be as follows:
 #> 
 #> mice(data = bmi , # You may need to specify a subset of the columns in
-#> your dataset
+#> your dataset; if you specified stratification variable(s) in your
+#> proposed imputation model(s), these will be carried over to 'midoc'
+#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> performed for each subset of the data determined by the values of the
+#> stratification factor(s):
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
@@ -278,6 +288,7 @@ plots across 20
 iterations.](reference/figures/README-unnamed-chunk-2-4.png)
 
 ``` r
+
 
 doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 #> Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,

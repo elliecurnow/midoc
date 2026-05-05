@@ -721,7 +721,9 @@ between BMI at age 7 years and maternal age.</p>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Method used to explore model specification: regression of model
-residuals (y) on a fractional polynomial of the fitted values (fitvals)
+residuals (y) on a fractional polynomial of the fitted values
+(fitvals). If stratification variable(s) are specified, results are
+subsetted by the values of the factor(s).
 
 Call:
 
@@ -775,7 +777,9 @@ mis-specification.</p>
 <span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, </span>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Method used to explore model specification: regression of model
-residuals (y) on a fractional polynomial of the fitted values (fitvals)
+residuals (y) on a fractional polynomial of the fitted values
+(fitvals). If stratification variable(s) are specified, results are
+subsetted by the values of the factor(s).
 
 Call:
 
@@ -830,7 +834,8 @@ plot in this case using the <code>plot = FALSE</code> option):</p>
   na.action.merMod lme4</code></pre>
 <pre><code>Method used to explore model specification: Pregibon's link test, a
 regression of the model outcome (resp) on the fitted values (fit) and
-the square of the fitted values (fit2)
+the square of the fitted values (fit2).  If stratification variable(s)
+are specified, results are subsetted by the values of the factor(s).
 
 Call:
 
@@ -880,7 +885,8 @@ pregnancy size, there is little evidence of model mis-specification:</p>
 <span>             data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Method used to explore model specification: Pregibon's link test, a
 regression of the model outcome (resp) on the fitted values (fit) and
-the square of the fitted values (fit2)
+the square of the fitted values (fit2).  If stratification variable(s)
+are specified, results are subsetted by the values of the factor(s).
 
 Call:
 
@@ -996,7 +1002,11 @@ observed.</p>
 should be as follows:
 
 mice(data = bmi , # You may need to specify a subset of the columns in
-your dataset
+your dataset; if you specified stratification variable(s) in your
+proposed imputation model(s), these will be carried over to 'midoc'
+functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+performed for each subset of the data determined by the values of the
+stratification factor(s):
 
 m = 41 , # You should use at least this number of imputations based on
 the proportion of complete records in your dataset

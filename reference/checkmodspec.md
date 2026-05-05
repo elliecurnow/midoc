@@ -8,7 +8,14 @@ the proposed parametric model.
 ## Usage
 
 ``` r
-checkModSpec(formula, family, data = NULL, plot = TRUE, message = TRUE)
+checkModSpec(
+  formula,
+  family,
+  by = NULL,
+  data = NULL,
+  plot = TRUE,
+  message = TRUE
+)
 ```
 
 ## Arguments
@@ -25,16 +32,24 @@ checkModSpec(formula, family, data = NULL, plot = TRUE, message = TRUE)
   in the model, specified as a string; family functions that are
   supported are "gaussian(identity)" and "binomial(logit)"
 
+- by:
+
+  Optional stratification variable(s), specified as a string (space
+  delimited) or a list of factors; if specified, the parametric model
+  will be fit for each subset of the data determined by the values of
+  the factor(s)
+
 - data:
 
   Optionally, a data frame containing all the variables stated in the
-  formula
+  formula and if specified, stratification variable(s)
 
 - plot:
 
   If TRUE (the default), and a dataset is supplied, displays a plot
-  which can be used to explore the functional form of each covariate in
-  the specified model; use plot = FALSE to disable the plot
+  which can be used to explore the form of the specified model; note
+  that stratification variables are ignored in the plot; use plot =
+  FALSE to disable the plot
 
 - message:
 
@@ -49,10 +64,7 @@ An object of type 'mimod' (a list containing the specified formula,
 family, and, if specified, dataset name). Optionally, if required and a
 dataset is supplied, a message indicating whether the relationships
 between the dependent variable and covariates are likely to be correctly
-specified or not. If there is evidence of model mis-specification,
-optionally returns a plot of the model residuals versus the fitted
-values which can be used to explore the appropriate functional form for
-the specified model.
+specified or not.
 
 ## References
 
@@ -68,7 +80,9 @@ Epidemiol. <doi:10.1016/j.jclinepi.2023.06.011>
 checkModSpec(formula="bmi7~matage+mated+pregsize",
              family="gaussian(identity)", data=bmi)
 #> Method used to explore model specification: regression of model
-#> residuals (y) on a fractional polynomial of the fitted values (fitvals)
+#> residuals (y) on a fractional polynomial of the fitted values
+#> (fitvals). If stratification variable(s) are specified, results are
+#> subsetted by the values of the factor(s).
 #> 
 #> Call:
 #> 
@@ -116,7 +130,9 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
 checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              family="gaussian(identity)", data=bmi)
 #> Method used to explore model specification: regression of model
-#> residuals (y) on a fractional polynomial of the fitted values (fitvals)
+#> residuals (y) on a fractional polynomial of the fitted values
+#> (fitvals). If stratification variable(s) are specified, results are
+#> subsetted by the values of the factor(s).
 #> 
 #> Call:
 #> 
