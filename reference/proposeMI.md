@@ -3,9 +3,10 @@
 Suggests the [mice](https://amices.org/mice/reference/mice.html) options
 to perform multiple imputation, based on the set of imputation models
 (one for each partially observed variable) specified by calls to
-checkmodspec and the proportion of complete records. Optionally, if a
-dataset is supplied, diagnostic plots are created based on the proposed
-'mice' options.
+[checkModSpec](https://elliecurnow.github.io/midoc/reference/checkmodspec.md)
+and the proportion of complete records. Optionally, if a dataset is
+supplied, diagnostic plots are created based on the proposed 'mice'
+options.
 
 ## Usage
 
