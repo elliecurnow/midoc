@@ -4,7 +4,14 @@
 \alias{checkModSpec}
 \title{Specify and inspect parametric model specification}
 \usage{
-checkModSpec(formula, family, data = NULL, plot = TRUE, message = TRUE)
+checkModSpec(
+  formula,
+  family,
+  by = NULL,
+  data = NULL,
+  plot = TRUE,
+  message = TRUE
+)
 }
 \arguments{
 \item{formula}{A symbolic description of the model to be fitted, with the
@@ -15,12 +22,17 @@ separated by + operators, on the right, specified as a string}
 used in the model, specified as a string; family functions that are
 supported are "gaussian(identity)" and "binomial(logit)"}
 
+\item{by}{Optional stratification variable(s), specified as a string (space
+delimited) or a list of factors; if specified, the parametric model will be
+fit for each subset of the data determined by the values of the factor(s)}
+
 \item{data}{Optionally, a data frame containing all the variables stated in
-the formula}
+the formula and if specified, stratification variable(s)}
 
 \item{plot}{If TRUE (the default), and a dataset is supplied, displays a plot
-which can be used to explore the functional form of each covariate in the
-specified model; use plot = FALSE to disable the plot}
+which can be used to explore the form of the specified model; note that
+stratification variables are ignored in the plot; use plot = FALSE to
+disable the plot}
 
 \item{message}{If TRUE (the default), and a dataset is supplied, displays a
 message indicating whether the relationships between the dependent variable
@@ -32,9 +44,7 @@ An object of type 'mimod' (a list containing the specified formula,
 family, and, if specified, dataset name). Optionally, if required and a
 dataset is supplied, a message indicating whether the relationships between
 the dependent variable and covariates are likely to be correctly specified
-or not. If there is evidence of model mis-specification, optionally returns
-a plot of the model residuals versus the fitted values which can be used to
-explore the appropriate functional form for the specified model.
+or not.
 }
 \description{
 Specify a parametric model (which may represent the analysis or imputation

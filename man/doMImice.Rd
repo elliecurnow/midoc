@@ -25,9 +25,12 @@ Optionally, a message summarising the analysis that has been performed.
 }
 \description{
 Creates multiple imputations using \link[mice]{mice}, based on the options
-and dataset specified by a call to \link[midoc]{proposeMI}. If a substantive
-model is specified, also calculates the pooled estimates using
-\link[mice]{pool}.
+and dataset specified by a call to \link[midoc]{proposeMI}. If stratification
+variable(s) are included in the 'miprop' object, multiple imputation will be
+performed for each subset of the data determined by the values of the
+stratification variable(s) and the resulting imputed datasets will be
+combined. If a substantive model is specified, the pooled estimates are
+calculated using \link[mice]{pool}.
 }
 \examples{
 # First specify the imputation model as a 'mimod' object

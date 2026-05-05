@@ -1,9 +1,12 @@
 #' Performs multiple imputation
 #'
 #' Creates multiple imputations using \link[mice]{mice}, based on the options
-#' and dataset specified by a call to \link[midoc]{proposeMI}. If a substantive
-#' model is specified, also calculates the pooled estimates using
-#' \link[mice]{pool}.
+#' and dataset specified by a call to \link[midoc]{proposeMI}. If stratification
+#' variable(s) are included in the 'miprop' object, multiple imputation will be
+#' performed for each subset of the data determined by the values of the
+#' stratification variable(s) and the resulting imputed datasets will be
+#' combined. If a substantive model is specified, the pooled estimates are
+#' calculated using \link[mice]{pool}.
 #'
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param seed An integer that is used to set the seed of the 'mice' call
@@ -40,14 +43,34 @@
 #' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 doMImice <- function(mipropobj, seed, substmod = " ", message = TRUE) {
 
-  mids <- mice::mice(
-        data = mipropobj$data,
-        m = mipropobj$m,
-        method = mipropobj$method,
-        formulas = mipropobj[["formulas"]],
-        maxit = 10,
-        printFlag = FALSE,
-        seed = seed)
+  if(is.null(mipropobj$by)){
+    mids <- mice::mice(
+          data = mipropobj$data,
+          m = mipropobj$m,
+          method = mipropobj$method,
+          formulas = mipropobj[["formulas"]],
+          maxit = 10,
+          printFlag = FALSE,
+          seed = seed)
+  } else {
+    bylist <- unlist(strsplit(mipropobj$by," "))
+    midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+               function(x)
+                 mice::mice(data = x,
+                            m = mipropobj$m,
+                            method = mipropobj$method,
+                            formulas = mipropobj[["formulas"]],
+                            maxit = 10,
+                            printFlag = FALSE,
+                            seed = seed))
+    # Combine the sets of imputations using `mice::rbind`
+    mids <- midstmp[[1]]
+    if (length(midstmp)>1){
+      for (i in 2:length(midstmp)){
+        mids <- mice::rbind(mids,midstmp[[i]])
+      }
+    }
+  }
 
   #If a substantive model is specified, calculate the pooled estimates
   if(substmod != " "){

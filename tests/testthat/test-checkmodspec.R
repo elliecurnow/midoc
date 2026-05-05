@@ -6,7 +6,7 @@ res1<-evaluate_promise(checkModSpec(formula="bmi7~matage+mated+pregsize",
 test_that("checkModSpec correctly runs for the proposed gaussian model",
   {
     expect_equal(substr(trimws(paste0(gsub("\n"," ",res1$messages), collapse=" "),"right"),1,157),
-"Method used to explore model specification: regression of model residuals (y) on a fractional polynomial of the fitted values (fitvals)  Call:  glm(formula =")
+"Method used to explore model specification: regression of model residuals (y) on a fractional polynomial of the fitted values (fitvals). If stratification va")
     expect_equal(res1$result$formula, "bmi7~matage+mated+pregsize")
     expect_equal(res1$result$family, "gaussian(identity)")
     expect_equal(res1$result$datalab, "bmi")
@@ -66,5 +66,22 @@ test_that("checkModSpec mimod object contains a formula and family",
                          "mated~matage+I(matage^2)+bmi7+pregsize")
             expect_equal(res5$family,
                          "binomial(logit)")
+          }
+)
+
+# Check output when by is specified
+res6<-evaluate_promise(checkModSpec(
+  formula="mated~matage+I(matage^2)+bmi7",
+  family="binomial(logit)",
+  by="pregsize",
+  data=bmi))
+test_that("checkModSpec correctly runs when by is specified",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res6$messages), collapse=" "),"right"),1,120),
+                         "Method used to explore model specification: Pregibon's link test, a regression of the model outcome (resp) on the fitted")
+            expect_equal(res6$result$formula, "mated~matage+I(matage^2)+bmi7")
+            expect_equal(res6$result$family, "binomial(logit)")
+            expect_equal(res6$result$datalab, "bmi")
+            expect_equal(res6$result$by, "pregsize")
           }
 )

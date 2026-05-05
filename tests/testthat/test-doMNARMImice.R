@@ -20,3 +20,25 @@ test_that("doMNARMImice creates both the correct output when a substantive model
     expect_equal(mice::is.mids(res1$result),TRUE)
   }
 )
+
+# Check output when 'by' is specified
+mimod_bmi7v2 <- checkModSpec(
+  formula="bmi7~matage+I(matage^2)+mated", by="pregsize",
+  family="gaussian(identity)", data=bmi, message=FALSE)
+# Save the proposed 'mice' options as a 'miprop' object, suppressing the
+## message and plots
+mipropv2 <- proposeMI(mimodobj=mimod_bmi7v2, data=bmi, plot=FALSE, message=FALSE)
+# Check both the output when a substantive model is specified and that a
+## mice object is created
+res2<-evaluate_promise(doMNARmice(mipropv2, mnardep="bmi7", mnardelta="-2", 123,
+                                substmod="lm(bmi7 ~ matage + I(matage^2) + mated)"))
+#Trim output for test purposes
+test_that("doMNARmice creates the correct output when 'by' is
+          specified",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res2$message), collapse=" "),
+                                       "right"),1,100),
+                         "Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) with missing not at random sensitivity")
+            #expect_equal(mice::is.mids(res1$result),TRUE)
+          }
+)

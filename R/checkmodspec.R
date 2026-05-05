@@ -11,11 +11,15 @@
 #' @param family A description of the error distribution and link function to be
 #'   used in the model, specified as a string; family functions that are
 #'   supported are "gaussian(identity)" and "binomial(logit)"
+#' @param by Optional stratification variable(s), specified as a string (space
+#'   delimited) or a list of factors; if specified, the parametric model will be
+#'   fit for each subset of the data determined by the values of the factor(s)
 #' @param data Optionally, a data frame containing all the variables stated in
-#'   the formula
+#'   the formula and if specified, stratification variable(s)
 #' @param plot If TRUE (the default), and a dataset is supplied, displays a plot
-#'   which can be used to explore the functional form of each covariate in the
-#'   specified model; use plot = FALSE to disable the plot
+#'   which can be used to explore the form of the specified model; note that
+#'   stratification variables are ignored in the plot; use plot = FALSE to
+#'   disable the plot
 #' @param message If TRUE (the default), and a dataset is supplied, displays a
 #'   message indicating whether the relationships between the dependent variable
 #'   and covariates are likely to be correctly specified or not; use message =
@@ -25,9 +29,7 @@
 #'   family, and, if specified, dataset name). Optionally, if required and a
 #'   dataset is supplied, a message indicating whether the relationships between
 #'   the dependent variable and covariates are likely to be correctly specified
-#'   or not. If there is evidence of model mis-specification, optionally returns
-#'   a plot of the model residuals versus the fitted values which can be used to
-#'   explore the appropriate functional form for the specified model.
+#'   or not.
 #'
 #' @export
 #'
@@ -43,33 +45,64 @@
 #'   ## For the example above, (correctly) assuming a quadratic relationship
 #' checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 #'              family="gaussian(identity)", data=bmi)
-checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
+checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message=TRUE) {
 
   if (!is.null(data)) {
     if(family == "gaussian(identity)"){
+
+      #Create modfit object for plotting purposes
       mod <- stats::glm(stats::as.formula(formula), data=data)
       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
-      modfittest <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
+
+      if(is.null(by)){
+        modfitres <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
+        modfittest <- summary(modfitres)
+      } else {
+        bylist <- unlist(strsplit(by," "))
+        modfittest <- by(data, data[,c(bylist)],
+                    function(x) {
+                      mod <- stats::glm(stats::as.formula(formula), data = x)
+                      modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
+                      modfitres <- mfp2::mfp2(r ~ fitvals, data=modfit, verbose = FALSE)
+                      summary(modfitres)
+                      })
+        names(dimnames(modfittest)) = bylist
+      }
       #pval <- round(1-stats::pchisq(modfittest$null.deviance-modfittest$deviance, modfittest$df.null-modfittest$df.residual),6)
 
       result1 <- paste("Method used to explore model specification: regression of model residuals (y) on a fractional
-                       polynomial of the fitted values (fitvals)",
+                       polynomial of the fitted values (fitvals). If stratification variable(s) are specified,
+                       results are subsetted by the values of the factor(s).\n",
                        #paste0(pval),
-                       "\n", paste0(gsub(" ", "@",utils::capture.output(summary(modfittest))),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
                        collapse = "\n")
         }
 
     else if(family == "binomial(logit)"){
+      #Create modfit object for plotting purposes
       mod <- stats::glm(formula=stats::as.formula(formula),family="binomial", data=data)
       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
-      modfittest <- blorr::blr_linktest(mod)
-      #pval <- round(stats::coef(modfittest)[3,4],6)
 
+      if(is.null(by)){
+        modfittest <- blorr::blr_linktest(mod)
+        #pval <- round(stats::coef(modfittest)[3,4],6)
+      } else {
+        bylist <- unlist(strsplit(by," "))
+        modfittest <- by(data, data[,c(bylist)],
+                         function(x) {
+                           mod <- stats::glm(stats::as.formula(formula),family="binomial", data = x)
+                           modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
+                           blorr::blr_linktest(mod)
+                         })
+        names(dimnames(modfittest)) = bylist
+      }
       result1 <- paste("Method used to explore model specification:
                        Pregibon's link test, a regression of the model outcome (resp)
-                       on the fitted values (fit) and the square of the fitted values (fit2)\n",
+                       on the fitted values (fit) and the square of the fitted values (fit2).
+                       If stratification variable(s) are specified,
+                       results are subsetted by the values of the factor(s).\n",
                        #paste0(pval)
-                       "\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
                        collapse = "\n")
       }
 
@@ -107,27 +140,37 @@ checkModSpec <- function(formula, family, data=NULL, plot=TRUE, message=TRUE) {
     if (plot){
       if (family == "gaussian(identity)"){
         plot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",
-             main="Residuals versus fitted values",
+             main="Residuals versus fitted values \nbased on all data (not stratified)",
              sub=list("This plot may suggest the appropriate functional form \nfor the specified model",cex=0.8))
         graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
       else if (family == "binomial(logit)"){
         arm::binnedplot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",col.int="white",
-                      main="Residuals versus (binned) fitted values",
+                      main="Residuals versus (binned) fitted values \nbased on all data (not stratified)",
                       sub=list("This plot may suggest the appropriate functional form \nfor the specified model", cex=0.8))
         graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
     }
-    mimod <- list(formula = formula,family = family,
+    mimod <- list(formula = formula,family = family,by = by,
                   datalab=deparse(substitute(data)))
   } else {
 
     #Return message with stated formula and reminder about data check
-    if(message) {message(paste("The proposed parametric model is:",
+    if(message) {
+      if(is.null(by)){
+        message(paste("The proposed parametric model is:",
                                sQuote(formula),
                                "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                               prefix="\n", collapse="\n"))}
-    mimod <- list(formula = formula,family = family)
+                               prefix="\n", collapse="\n"))
+        } else {
+          message(paste("The proposed parametric model is:",
+                        sQuote(formula),
+                        "\n\nstratified by:",
+                        paste(by),
+                        "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
+                        prefix="\n", collapse="\n"))}
+        }
+    mimod <- list(formula = formula,family = family,by=by)
   }
   #Return an object with formula and family
   invisible(mimod)

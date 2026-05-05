@@ -3,20 +3,23 @@
 #' Creates multiple imputations using \link[mice]{mice}. Imputations are based
 #' on the options and dataset specified by a call to \link[midoc]{proposeMI},
 #' and additionally on the specified missing not at random (MNAR) mechanism. If
-#' a substantive model is specified, also calculates the pooled estimates using
-#' \link[mice]{pool}.
+#' stratification variable(s) are included in the 'miprop' object, multiple
+#' imputation will be performed for each subset of the data determined by the
+#' values of the stratification variable(s) and the resulting imputed datasets
+#' will be combined. If a substantive model is specified, the pooled estimates
+#' are calculated using \link[mice]{pool}.
 #'
 #' Imputation is performed using the NARFCS procedure (Tompsett et al, 2018) for
 #' the specified variable. See \link[mice]{mice.impute.mnar.logreg} for further
 #' details. All other partially observed variables are assumed to be missing at
-#' random (MAR) and imputed using the method(s) specified for the 'miprop'
+#' random (MAR) and imputed using the method(s) specified as per the 'miprop'
 #' object.
 #'
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param mnardep The partially observed variable to be imputed under MNAR,
 #'   specified as a string
-#' @param mnardelta The desired sensitivity (delta) parameter as a function
-#'   of other variables and values, specified as a string
+#' @param mnardelta The desired sensitivity (delta) parameter as a function of
+#'   other variables and values, specified as a string
 #' @param seed An integer that is used to set the seed of the 'mice' call
 #' @param substmod Optionally, a symbolic description of the substantive model
 #'   to be fitted, specified as a string; if supplied, the model will be fitted
@@ -79,15 +82,36 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", me
   names(blots) <- mnardep
 
   #Perform NARFCS
-  mids <- mice::mice(
-        data = mipropobj$data,
-        m = mipropobj$m,
-        method = method,
-        blots=blots,
-        formulas = mipropobj[["formulas"]],
-        maxit = 10,
-        printFlag = FALSE,
-        seed = seed)
+  if(is.null(mipropobj$by)){
+    mids <- mice::mice(
+          data = mipropobj$data,
+          m = mipropobj$m,
+          method = method,
+          blots=blots,
+          formulas = mipropobj[["formulas"]],
+          maxit = 10,
+          printFlag = FALSE,
+          seed = seed)
+    } else {
+      bylist <- unlist(strsplit(mipropobj$by," "))
+      midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+                    function(x)
+                      mice::mice(data = x,
+                                 m = mipropobj$m,
+                                 method = method,
+                                 blots = blots,
+                                 formulas = mipropobj[["formulas"]],
+                                 maxit = 10,
+                                 printFlag = FALSE,
+                                 seed = seed))
+      # Combine the sets of imputations using `mice::rbind`
+      mids <- midstmp[[1]]
+      if (length(midstmp)>1){
+        for (i in 2:length(midstmp)){
+          mids <- mice::rbind(mids,midstmp[[i]])
+        }
+      }
+    }
 
   #If a substantive model is specified, calculate the pooled estimates
   if(substmod != " "){

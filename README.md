@@ -194,7 +194,9 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     mimod_bmi7 <- checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
                                family="gaussian(identity)", data=bmi)
     #> Method used to explore model specification: regression of model
-    #> residuals (y) on a fractional polynomial of the fitted values (fitvals)
+    #> residuals (y) on a fractional polynomial of the fitted values
+    #> (fitvals). If stratification variable(s) are specified, results are
+    #> subsetted by the values of the factor(s).
     #> 
     #> Call:
     #> 
@@ -239,7 +241,11 @@ miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> should be as follows:
 #> 
 #> mice(data = bmi , # You may need to specify a subset of the columns in
-#> your dataset
+#> your dataset; if you specified stratification variable(s) in your
+#> proposed imputation model(s), these will be carried over to 'midoc'
+#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> performed for each subset of the data determined by the values of the
+#> stratification factor(s):
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset

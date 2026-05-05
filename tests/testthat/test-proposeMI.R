@@ -9,7 +9,7 @@ mimod_pregsize <- checkModSpec(
 # Check the proposed 'mice' options when specifying more than one imputation
 ## model (suppressing the plot)
 res1<-evaluate_promise(proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
-                                 data=bmi, plot = FALSE))
+                                 data=bmi))
 #Trim output for test purposes
 test_that("proposeMI suggests correct mice options and creates expected object",
   {
@@ -41,7 +41,7 @@ test_that("proposeMI suggests correct mice options and creates expected object i
           {
             expect_equal(substr(trimws(paste0(gsub("\n"," ",res3$messages), collapse=" "),
                                        "right"),1,185),
-                         "Based on your proposed imputation model and dataset, your mice() call should be as follows:  mice(data = NULL , # You may need to specify a subset of the columns in your dataset  m = 50")
+                         "Based on your proposed imputation model and dataset, your mice() call should be as follows:  mice(data = NULL , # You may need to specify a subset of the columns in your dataset; if you")
           }
 )
 
@@ -51,5 +51,17 @@ test_that("proposeMI gives a warning if midmodobj dataset does not match specifi
           {
             expect_equal(trimws(res4$warnings),
                          "The names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.")
+          }
+)
+
+mimod_bmi7v2 <- checkModSpec(
+  formula="bmi7~matage+I(matage^2)+mated", by="pregsize",
+  family="gaussian(identity)", data=bmi, message=FALSE)
+res5<-evaluate_promise(proposeMI(mimodobj=list(mimod_bmi7v2,mimod_pregsize),
+                                 data=bmi, plot = FALSE, message=FALSE))
+test_that("proposeMI gives a warning if stratification variables do not match across imputation models",
+          {
+            expect_equal(trimws(res5$warnings),
+                         "The stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.")
           }
 )

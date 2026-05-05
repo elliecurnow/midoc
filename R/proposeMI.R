@@ -1,9 +1,10 @@
 #' Suggests multiple imputation options
 #'
 #' Suggests the \link[mice]{mice} options to perform multiple imputation, based
-#' on the proposed set of imputation models (one for each partially observed
-#' variable) and proportion of complete records. Optionally, if a dataset is
-#' supplied, diagnostic plots are created based on the proposed 'mice' options.
+#' on the set of imputation models (one for each partially observed variable)
+#' specified by calls to \link[midoc]{checkmodspec} and the proportion of
+#' complete records. Optionally, if a dataset is supplied, diagnostic plots are
+#' created based on the proposed 'mice' options.
 #'
 #' @param mimodobj An object, or list of objects, of type 'mimod', which stands
 #'   for 'multiple imputation model', created by a call to
@@ -13,7 +14,11 @@
 #'   is not specified. If a dataset is specified, the proportion of complete
 #'   records will be calculated based on all columns included in the dataset.
 #' @param data Optionally, a data frame containing all the variables required
-#'   for imputation and the substantive analysis
+#'   for imputation and the substantive analysis; if stratification variable(s)
+#'   are included in the 'mimod' object(s), these will be carried over to 'midoc'
+#'   functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#'   performed for each subset of the data determined by the values of the
+#'   stratification variable(s)
 #' @param plot If TRUE (the default), and a dataset is supplied, displays
 #'   diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
 #'   the plots
@@ -23,9 +28,9 @@
 #' @param message If TRUE (the default), displays a message describing the
 #'   proposed 'mice' options; use message=FALSE to suppress the message
 #'
-#' @return An object of type 'miprop', which can be used to run 'mice' using the
-#'   proposed options, plus optionally, a message and, if a dataset is supplied,
-#'   diagnostic plots describing the proposed 'mice' options
+#' @returns An object of type 'miprop', which can be used to run 'mice' using
+#'   the proposed options, plus optionally, a message and, if a dataset is
+#'   supplied, diagnostic plots describing the proposed 'mice' options
 #'
 #' @export
 #'
@@ -45,59 +50,74 @@
 #' # Display the proposed 'mice' options
 #' ## When specifying a single imputation model
 #' proposeMI(mimodobj=mimod_bmi7,
-#'           data=bmi)
+#'                    data=bmi)
 #' ## When specifying more than one imputation model (suppressing the plots)
 #' proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
-#'           data=bmi,
-#'           plot = FALSE)
+#'                     data=bmi,
+#'                     plot=FALSE)
 proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotprompt = TRUE, message = TRUE) {
 
   if (!is.null(data)) {
     m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
   } else {
-      if (is.na(prop_complete)){
-        stop("\n\n'prop_complete' must be specified, or else 'data' must be specified\n\n",
-                call.=TRUE)}
-      else if (!is.na(prop_complete) & (prop_complete <=0 | prop_complete >=1)){
+    if (is.na(prop_complete)){
+      stop("\n\n'prop_complete' must be specified, or else 'data' must be specified\n\n",
+           call.=TRUE)}
+    else if (!is.na(prop_complete) & (prop_complete <=0 | prop_complete >=1)){
       stop("\n\n'prop_complete' must be a number between 0 and 1\n\n",
            call.=TRUE)}
-      m_min <- ceiling((1-prop_complete)*100)
+    m_min <- ceiling((1-prop_complete)*100)
   }
 
   if(max(lengths(mimodobj))==1){
     mimod_count <- 1
   } else {
     mimod_count <- length(mimodobj)
-    }
+  }
 
   #Specify method, formula, and optionally dataset name for each variable to be imputed
   method <- vector("list", mimod_count)
   formulas_list <- vector("list", mimod_count)
 
   #Keep specified dataset name as ref value and check this is consistent for set of mimod objects
+  #If stratification variable is specified, check this is consistent for the set of mimod objects
   #if (!is.null(data)) {
-    datalab <- deparse(substitute(data))
+  datalab <- deparse(substitute(data))
   #} else datalab <- "dataset_name"
 
   for (i in 1:mimod_count){
-      if (mimod_count > 1){
-          family <- mimodobj[[i]][["family"]]
-          formula <- mimodobj[[i]][["formula"]]
-          if (!is.null(data)) {
-            datalab_check <- mimodobj[[i]][["datalab"]]
-          }
-      } else {
-          family <- mimodobj[["family"]]
-          formula <- mimodobj[["formula"]]
-          if (!is.null(data)) {
-            datalab_check <- mimodobj[["datalab"]]
-          }
+    if (mimod_count > 1){
+      if (i==1) by_check <- mimodobj[[1]][["by"]]
+      family <- mimodobj[[i]][["family"]]
+      formula <- mimodobj[[i]][["formula"]]
+      if (!is.null(data)) {
+        datalab_check <- mimodobj[[i]][["datalab"]]
       }
+      if (!is.null(by_check)|!is.null(mimodobj[[i]][["by"]])) {
+        if(!is.null(by_check) & !is.null(mimodobj[[i]][["by"]])){
+          if(mimodobj[[i]][["by"]] != by_check){
+            warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
+                    call.=FALSE, immediate.=TRUE)
+          }
+        } else {
+          warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
+                  call.=FALSE, immediate.=TRUE)
+        }
+      }
+      by_check <- mimodobj[[i]][["by"]]
+    } else {
+      family <- mimodobj[["family"]]
+      formula <- mimodobj[["formula"]]
+      if (!is.null(data)) {
+        datalab_check <- mimodobj[["datalab"]]
+      }
+      by_check <- mimodobj[["by"]]
+    }
 
     if (!is.null(data)){
       if(datalab_check != datalab){
-          warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
-                  call.=FALSE, immediate.=TRUE)
+        warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
+                call.=FALSE, immediate.=TRUE)
       }
     }
 
@@ -111,43 +131,47 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   }
 
 
-    result <- paste("Based on your proposed imputation model and dataset, your mice() call should be as follows: \n \nmice(data = ",
-                    datalab,
-", # You may need to specify a subset of the columns in your dataset \n \nm = ",
-                    m_min,
-", # You should use at least this number of imputations based on the proportion of complete records in your dataset \n \nmethod = c(",
-                    paste(sQuote(method), collapse=", "),
-") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random,    the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
-                    paste(sQuote(formulas_list), prefix="\n", collapse="\n"),
-"\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not    stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
+  result <- paste("Based on your proposed imputation model and dataset, your mice() call should be as follows: \n \nmice(data = ",
+                  datalab,
+                  ", # You may need to specify a subset of the columns in your dataset; if you specified stratification variable(s) in your
+proposed imputation model(s), these will be carried over to
+'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation will
+be performed for each subset of the data determined by the values of the
+stratification factor(s):\n \nm = ",
+                  m_min,
+                  ", # You should use at least this number of imputations based on the proportion of complete records in your dataset \n \nmethod = c(",
+                  paste(sQuote(method), collapse=", "),
+                  ") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random,    the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
+                  paste(sQuote(formulas_list), prefix="\n", collapse="\n"),
+                  "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not    stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
 
 
   #Return message with proposed settings
   if(message) {message(paste(strwrap(result),collapse="\n"))}
 
-    #Optionally create a plot of observed versus imputed values and a trace plot for five imputed datasets
-    if (!is.null(data) & plot){
-      imp <- mice::mice(data = data, method = method,
-                        formulas = formulas_list, maxit = 20, printFlag = FALSE)
+  #Optionally create a plot of observed versus imputed values and a trace plot for five imputed datasets
+  if (!is.null(data) & plot){
+    imp <- mice::mice(data = data, method = method,
+                      formulas = formulas_list, maxit = 20, printFlag = FALSE)
 
-      #Optionally prompt for second plot after first plot is displayed
-      if (plotprompt){
-        print(mice::bwplot(imp,
-                       main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
-        oask <- grDevices::devAskNewPage(TRUE)
-        print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
-        #Reset original settings
-        grDevices::devAskNewPage(oask)
-      } else {
-        gridExtra::grid.arrange(
-          mice::bwplot(imp,
-                       main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)),
-          plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+    #Optionally prompt for second plot after first plot is displayed
+    if (plotprompt){
+      print(mice::bwplot(imp,
+                         main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)))
+      oask <- grDevices::devAskNewPage(TRUE)
+      print(plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
+      #Reset original settings
+      grDevices::devAskNewPage(oask)
+    } else {
+      gridExtra::grid.arrange(
+        mice::bwplot(imp,
+                     main=list("Plot of imputed (red) values, with distribution of \nobserved (blue) values for comparison",cex=0.9)),
+        plot(imp,main=list("Trace plots across 20 iterations",cex=0.9)))
 
-      }
     }
+  }
 
   #Return an object with the proposed specification
-  miprop <- list(data=data,m=m_min,method=method,formulas = formulas_list)
+  miprop <- list(data=data,m=m_min,method=method,formulas = formulas_list,by=by_check)
   invisible(miprop)
 }

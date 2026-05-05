@@ -24,7 +24,11 @@ is not specified. If a dataset is specified, the proportion of complete
 records will be calculated based on all columns included in the dataset.}
 
 \item{data}{Optionally, a data frame containing all the variables required
-for imputation and the substantive analysis}
+for imputation and the substantive analysis; if stratification variable(s)
+are included in the 'mimod' object(s), these will be carried over to 'midoc'
+functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+performed for each subset of the data determined by the values of the
+stratification variable(s)}
 
 \item{plot}{If TRUE (the default), and a dataset is supplied, displays
 diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
@@ -38,15 +42,16 @@ remove the prompt and display all plots at the same time}
 proposed 'mice' options; use message=FALSE to suppress the message}
 }
 \value{
-An object of type 'miprop', which can be used to run 'mice' using the
-proposed options, plus optionally, a message and, if a dataset is supplied,
-diagnostic plots describing the proposed 'mice' options
+An object of type 'miprop', which can be used to run 'mice' using
+the proposed options, plus optionally, a message and, if a dataset is
+supplied, diagnostic plots describing the proposed 'mice' options
 }
 \description{
 Suggests the \link[mice]{mice} options to perform multiple imputation, based
-on the proposed set of imputation models (one for each partially observed
-variable) and proportion of complete records. Optionally, if a dataset is
-supplied, diagnostic plots are created based on the proposed 'mice' options.
+on the set of imputation models (one for each partially observed variable)
+specified by calls to \link[midoc]{checkmodspec} and the proportion of
+complete records. Optionally, if a dataset is supplied, diagnostic plots are
+created based on the proposed 'mice' options.
 }
 \examples{
 # First specify each imputation model as a 'mimod' object
@@ -64,9 +69,9 @@ mimod_pregsize <- checkModSpec(
 # Display the proposed 'mice' options
 ## When specifying a single imputation model
 proposeMI(mimodobj=mimod_bmi7,
-          data=bmi)
+                   data=bmi)
 ## When specifying more than one imputation model (suppressing the plots)
 proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
-          data=bmi,
-          plot = FALSE)
+                    data=bmi,
+                    plot=FALSE)
 }
