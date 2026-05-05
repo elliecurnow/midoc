@@ -49,7 +49,7 @@ supplied, diagnostic plots describing the proposed 'mice' options
 \description{
 Suggests the \link[mice]{mice} options to perform multiple imputation, based
 on the set of imputation models (one for each partially observed variable)
-specified by calls to \link[midoc]{checkmodspec} and the proportion of
+specified by calls to \link[midoc]{checkModSpec} and the proportion of
 complete records. Optionally, if a dataset is supplied, diagnostic plots are
 created based on the proposed 'mice' options.
 }

@@ -30,7 +30,7 @@ mimod_bmi7v2 <- checkModSpec(
 mipropv2 <- proposeMI(mimodobj=mimod_bmi7v2, data=bmi, plot=FALSE, message=FALSE)
 # Check both the output when a substantive model is specified and that a
 ## mice object is created
-res2<-evaluate_promise(doMNARmice(mipropv2, mnardep="bmi7", mnardelta="-2", 123,
+res2<-evaluate_promise(doMNARMImice(mipropv2, mnardep="bmi7", mnardelta="-2", 123,
                                 substmod="lm(bmi7 ~ matage + I(matage^2) + mated)"))
 #Trim output for test purposes
 test_that("doMNARmice creates the correct output when 'by' is
@@ -38,7 +38,7 @@ test_that("doMNARmice creates the correct output when 'by' is
           {
             expect_equal(substr(trimws(paste0(gsub("\n"," ",res2$message), collapse=" "),
                                        "right"),1,100),
-                         "Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) with missing not at random sensitivity")
+                         "Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) with missing not at random sens")
             #expect_equal(mice::is.mids(res1$result),TRUE)
           }
 )
