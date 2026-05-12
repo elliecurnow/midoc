@@ -100,7 +100,7 @@ proposeMI(mimodobj=mimod_bmi7,
 #> proposed imputation model(s), these will be carried over to 'midoc'
 #> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
-#> stratification factor(s):
+#> stratification factor(s)
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
@@ -149,7 +149,7 @@ proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
 #> proposed imputation model(s), these will be carried over to 'midoc'
 #> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
-#> stratification factor(s):
+#> stratification factor(s)
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
