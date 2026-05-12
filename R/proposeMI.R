@@ -137,7 +137,7 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
 proposed imputation model(s), these will be carried over to
 'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation will
 be performed for each subset of the data determined by the values of the
-stratification factor(s):\n \nm = ",
+stratification factor(s)\n \nm = ",
                   m_min,
                   ", # You should use at least this number of imputations based on the proportion of complete records in your dataset \n \nmethod = c(",
                   paste(sQuote(method), collapse=", "),
