@@ -18,7 +18,6 @@ Encoding: UTF-8
 Suggests: 
     knitr,
     testthat
-Config/testthat/edition: 3
 Imports: 
     arm,
     blorr,
@@ -42,3 +41,4 @@ LazyData: true
 URL: https://elliecurnow.github.io/midoc/
 Config/roxygen2/markdown: TRUE
 Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3
