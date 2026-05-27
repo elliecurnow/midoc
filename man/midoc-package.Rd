@@ -12,6 +12,9 @@ A guidance system for analysis with missing data. It incorporates expert, up-to-
 Useful links:
 \itemize{
   \item \url{https://elliecurnow.github.io/midoc/}
+  \item \url{https://github.com/elliecurnow/midoc/}
+  \item \url{https://mrcieu.r-universe.dev/midoc}
+  \item Report bugs at \url{https://github.com/elliecurnow/midoc/issues/}
 }
 
 }
@@ -20,6 +23,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Elinor Curnow \email{elinor.curnow@bristol.ac.uk} (\href{https://orcid.org/0000-0002-3109-3647}{ORCID}) [copyright holder]
   \item Jon Heron
   \item Rosie Cornish
   \item Kate Tilling
