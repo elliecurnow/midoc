@@ -10,7 +10,13 @@ urls:
   reference: https://elliecurnow.github.io/midoc/reference
   article: https://elliecurnow.github.io/midoc/articles
 navbar:
+  structure:
+    right: [search, cran, github, lightswitch]
   components:
+    cran:
+      icon: fab fa-r-project
+      href: https://cran.r-project.org/package=midoc
+      aria-label: View on CRAN
     articles:
       text: Articles
       menu:
