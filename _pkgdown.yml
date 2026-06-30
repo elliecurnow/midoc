@@ -1,6 +1,7 @@
 url: https://elliecurnow.github.io/midoc/
 template:
   bootstrap: 5
+  light-switch: true
 pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
@@ -9,39 +10,45 @@ urls:
   reference: https://elliecurnow.github.io/midoc/reference
   article: https://elliecurnow.github.io/midoc/articles
 navbar:
- components:
-   articles:
-    text: Articles
-    menu:
-    - text: Multiple Imputation DOCtor (midoc)
-      href: articles/midoc.html
+  structure:
+    right: [search, cran, github, lightswitch]
+  components:
+    cran:
+      icon: fab fa-r-project
+      href: https://cran.r-project.org/package=midoc
+      aria-label: View on CRAN
+    articles:
+      text: Articles
+      menu:
+      - text: Multiple Imputation DOCtor (midoc)
+        href: articles/midoc.html
 reference:
-      - title: Explore Data
-        desc: Explore missing data patterns and mechanisms
-      - contents:
-        - descMissData
-        - exploreDAG
-      - title: Check Validity
-        desc: Check whether complete records analysis and multiple imputation are valid
-      - contents:
-        - checkCRA
-        - checkMI
-      - title: Implement MI
-        desc: Implement a suitable multiple imputation strategy
-      - contents:
-        - checkModSpec
-        - proposeMI
-        - doMImice
-        - doMNARMImice
-        - doRefBasedMI
-      - title: Examples and Vignettes
-        desc: Example datasets and interactive versions
-      - contents:
-        - bmi
-        - qol
-        - adr
-        - asrds
-        - midocVignette
-        - midocShinyApp
-      - title: internal
+  - title: Explore Data
+    desc: Explore missing data patterns and mechanisms
+    contents:
+      - descMissData
+      - exploreDAG
+  - title: Check Validity
+    desc: Check whether complete records analysis and multiple imputation are valid
+    contents:
+      - checkCRA
+      - checkMI
+  - title: Implement MI
+    desc: Implement a suitable multiple imputation strategy
+    contents:
+      - checkModSpec
+      - proposeMI
+      - doMImice
+      - doMNARMImice
+      - doRefBasedMI
+  - title: Examples and Vignettes
+    desc: Example datasets and interactive versions
+    contents:
+      - bmi
+      - qol
+      - adr
+      - asrds
+      - midocVignette
+      - midocShinyApp
+  - title: internal
 
