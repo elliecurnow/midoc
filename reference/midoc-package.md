@@ -17,12 +17,21 @@ Useful links:
 
 - <https://elliecurnow.github.io/midoc/>
 
+- <https://github.com/elliecurnow/midoc/>
+
+- <https://mrcieu.r-universe.dev/midoc>
+
+- Report bugs at <https://github.com/elliecurnow/midoc/issues/>
+
 ## Author
 
 **Maintainer**: Elinor Curnow <elinor.curnow@bristol.ac.uk>
 ([ORCID](https://orcid.org/0000-0002-3109-3647)) \[copyright holder\]
 
 Authors:
+
+- Elinor Curnow <elinor.curnow@bristol.ac.uk>
+  ([ORCID](https://orcid.org/0000-0002-3109-3647)) \[copyright holder\]
 
 - Jon Heron
 

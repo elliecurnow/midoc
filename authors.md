@@ -21,6 +21,9 @@
 
 ## Citation
 
+Source:
+[`DESCRIPTION`](https://github.com/elliecurnow/midoc/blob/main/DESCRIPTION)
+
 Curnow E, Heron J, Cornish R, Tilling K, Carpenter J (2026). *midoc: A
 Decision-Making System for Multiple Imputation*. R package version
 1.0.0.9000, <https://elliecurnow.github.io/midoc/>.
