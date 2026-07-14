@@ -94,7 +94,7 @@ descMissData <- function(y, data, covs=NULL, by=NULL, plot=FALSE) {
     if (length(varlist)==1){
       mdtab[[i]] <- mdtmp3
     } else {
-      mdtab[[i]] <- mdtmp3[1:nrow(mdtmp)-1,]
+      mdtab[[i]] <- mdtmp3[1:(nrow(mdtmp)-1),]
     }
   }
 
