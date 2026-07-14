@@ -96,7 +96,7 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
         result2 <- paste("For example, the partially observed variable(s) and complete record indicator
                          are independent if each of the following sets of variables are used as predictors
                          in the imputation model(s):\n \n",
-                          paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
+                          paste0(adjsetsfull, "\n", collapse = "\n"),collapse = "\n")
 
         result <- paste(result1, "\n", result2, collapse = "\n")
       }

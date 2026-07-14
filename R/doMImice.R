@@ -78,7 +78,7 @@ doMImice <- function(mipropobj, seed, substmod = " ", message = TRUE) {
     result <- paste("Given the substantive model:",
                     substmod,
 "\n, multiple imputation estimates are as follows: \n \n",
-              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
+              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),"\n",collapse = "\n"),
               collapse = "\n")
   }
   else {

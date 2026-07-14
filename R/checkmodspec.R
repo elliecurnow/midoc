@@ -80,7 +80,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        polynomial of the fitted values (fitvals). If stratification variable(s) are specified,
                        results are subsetted by the values of the factor(s).\n",
                        #paste0(pval),
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
         }
 
@@ -108,7 +108,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        If stratification variable(s) are specified,
                        results are subsetted by the values of the factor(s).\n",
                        #paste0(pval)
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
       }
 
@@ -167,14 +167,14 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         message(paste("The proposed parametric model is:",
                                sQuote(formula),
                                "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                               prefix="\n", collapse="\n"))
+                               "\n", collapse="\n"))
         } else {
           message(paste("The proposed parametric model is:",
                         sQuote(formula),
                         "\n\nstratified by:",
                         paste(by),
                         "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                        prefix="\n", collapse="\n"))}
+                        "\n", collapse="\n"))}
         }
     mimod <- list(formula = formula,family = family,by=by)
   }
