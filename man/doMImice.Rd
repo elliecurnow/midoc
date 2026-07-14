@@ -4,7 +4,7 @@
 \alias{doMImice}
 \title{Performs multiple imputation}
 \usage{
-doMImice(mipropobj, seed, substmod = " ", message = TRUE)
+doMImice(mipropobj, seed, substmod = NULL, message = TRUE)
 }
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}

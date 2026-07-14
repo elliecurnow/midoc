@@ -54,7 +54,7 @@
 #'              idvar="id", method="J2R", reference=1, seed=123,
 #'              substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
 doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
-                         reference, seed, substmod = " ", message = TRUE) {
+                         reference, seed, substmod = NULL, message = TRUE) {
 
   # Vectorise variable strings
   covsvec <- unlist(strsplit(covs," "))
@@ -170,7 +170,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   refbasedmi_wide_mids <- mice::as.mids(refbasedmi_wide)
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(refbasedmi_wide_mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,

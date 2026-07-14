@@ -59,7 +59,7 @@
 #' ## the pooled results
 #' doMNARMImice(mipropobj=miprop, mnardep="bmi7", mnardelta="-2", seed=123,
 #'              substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", message = TRUE) {
+doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, message = TRUE) {
 
   # Update method for mnardep variable
   if(length(mipropobj[["formulas"]])==1){
@@ -114,7 +114,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", me
     }
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,
