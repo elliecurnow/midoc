@@ -45,7 +45,7 @@ descMissData_ui <- fluidPage(tagList(
            "the missing data patterns ",
            "in the dataset.")),
     hr(),
-    p(HTML('<strong>Example R code:</strong> <br>midoc::descMissData(y=“qol12", covs=“age0 qol0 qol3", data=qol)'))
+    p(HTML('<strong>Example R code:</strong> <br>midoc::descMissData(y="qol12", covs="age0 qol0 qol3", data=qol)'))
   #  p("Your analysis model outcome/variable of primary interest."),
   #  p(HTML("When listing covariates, separate them by a space. Example input:",
   #         "<code>covariate_1 covariate_2 covariate_3</code>.")),
@@ -423,7 +423,7 @@ div(
               'and copy the "Model code" on the right-hand side of the screen into the box below.',
               '<br>2. Write the assumed causal relationships between variables in the box',
               'below using "dagitty" syntax.',
-              '<br>Example input: the code for "(treatment) group causes qol12m" is  <code>group -> qol12m</code>.',
+              '<br>Example input: the code for "(treatment) group causes qol12" is  <code>group -> qol12</code>.',
               'You do not need to include positional (pos[ ]) statements, which control the layout of the mDAG.',
               'If omitted, a random layout will be used.',
 
@@ -1430,7 +1430,7 @@ proposeMI_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "formula_proposeMI", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "formula_proposeMI", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1465,13 +1465,11 @@ proposeMI_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1717,7 +1715,7 @@ doMImice_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "impformula", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "impformula", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1758,13 +1756,11 @@ doMImice_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1958,7 +1954,7 @@ doMNARMImice_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "mnarimpformula", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "mnarimpformula", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1999,13 +1995,11 @@ doMNARMImice_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -2220,7 +2214,7 @@ doRefBasedMI_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "refmiimpformula", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "refmiimpformula", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -2273,7 +2267,6 @@ doRefBasedMI_server <- function(input, output, session, uploaded_data) {
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -2393,7 +2386,7 @@ doCRA_ui <- fluidPage(tagList(
           "because complete records analysis is performed by default in most software.")),
   hr(),
   p(HTML('<strong>Example R code:</strong>',
-         '<br>lm(qol12 ~ factor(group) + age0 + qol0)'))
+         '<br>lm(qol12 ~ factor(group) + age0 + qol0, data=qol)'))
   ),
 
   #hr(), # line to divide text from output
@@ -2435,7 +2428,7 @@ doCRA_server <- function(input, output, session, uploaded_data) {
   # autofill substmod input from the doMImice app input
   observe({
     if (!is.null(uploaded_data$substmod)) {
-      updateSelectInput(session, "substmod_cra", selected = uploaded_data$substmod)
+      updateTextAreaInput(session, "substmod_cra", value = uploaded_data$substmod)
     }
   })
 
@@ -2460,7 +2453,6 @@ doCRA_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_doMImice, {
     uploaded_data$substmod <- input$substmod
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store substmod at button click

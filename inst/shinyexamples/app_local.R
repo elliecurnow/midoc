@@ -1232,7 +1232,7 @@ proposeMI_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "formula_proposeMI", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "formula_proposeMI", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1267,13 +1267,11 @@ proposeMI_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1485,7 +1483,7 @@ doMImice_server <- function(input, output, session, uploaded_data) {
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "impformula", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "impformula", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1524,13 +1522,11 @@ doMImice_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1684,7 +1680,7 @@ doCRA_server <- function(input, output, session, uploaded_data) {
   # autofill substmod input from the doMImice app input
   observe({
     if (!is.null(uploaded_data$substmod)) {
-      updateSelectInput(session, "substmod_cra", selected = uploaded_data$substmod)
+      updateTextAreaInput(session, "substmod_cra", value = uploaded_data$substmod)
     }
   })
 
@@ -1709,7 +1705,6 @@ doCRA_server <- function(input, output, session, uploaded_data) {
   # save formula input for auto input to later apps
   observeEvent(input$go_doMImice, {
     uploaded_data$substmod <- input$substmod
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store substmod at button click

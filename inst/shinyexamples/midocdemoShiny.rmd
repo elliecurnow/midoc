@@ -121,8 +121,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -302,8 +302,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -574,7 +574,7 @@ checkCRA(y="bmi7",
 
 
 
-We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), complete record indicator (`r_dep`), and mDAG (`mdag`). 
+We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), complete record indicator (`r_cra`), and mDAG (`mdag`). 
 
 We will first consider the imputation model including pregnancy size. The results are shown below. These suggest that MI would be valid in principle if we included pregnancy size as well as the other analysis model variables in the imputation model for BMI at age 7 years. 
 
@@ -767,8 +767,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -879,8 +879,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -994,8 +994,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -1061,7 +1061,7 @@ Finally, we illustrate how our choice of analysis approach affects the estimated
 
 The parameter estimates for the linear and quadratic terms of maternal age, and their 95% confidence intervals, are shown in the table below. Note that, because we have simulated the data and its missingness, we know the "true" association *i.e.* the association if there were no missing data - this is shown in the "Full data" row of the table. Further note that the results displayed in the third row ("MI fitting quadratic relationship, using pregnancy size") are exactly those generated above. To avoid repetition, we have not shown the code for fitting the other models. 
 
-From the table, we can see that both CRA and MI (fitting a quadratic relationship between BMI at age 7 years and maternal age in the imputation model) estimates are unbiased for both the linear and quadratic terms of maternal age. MI estimates are biased when fitting a linear relationship in the imputation model, particularly for the quadratic term of maternal age. MI estimates using the collider, birth weight, as an auxiliary variable are slightly more biased and slightly less precise than the estimates using pregnancy size as an auxiliary variable. The collider bias is relatively small because the association between BMI at age 7 years and maternal age is strong in this setting. Note that the collider bias could be relatively larger if the association was weak [8](https://doi.org/10.3389/fepid.2023.1237447). 
+From the table, we can see that both CRA and MI (fitting a quadratic relationship between BMI at age 7 years and maternal age in the imputation model) estimates are unbiased for both the linear and quadratic terms of maternal age. MI estimates are biased when fitting a linear relationship in the imputation model, particularly for the quadratic term of maternal age. MI estimates using the collider, birth weight, as an auxiliary variable are slightly more biased and slightly less precise than the estimates using pregnancy size as an auxiliary variable. The collider bias is relatively small because the association between BMI at age 7 years and maternal age is strong in this setting. Note that the collider bias could be relatively larger if the association was weak [7](https://doi.org/10.3389/fepid.2023.1237447). 
 
 ```{r, echo=FALSE, R.options=list(width=80)}
 results <- data.frame(approach="Full data",linest="1.17 (1.09-1.26)", quadest="0.86 (0.80-0.91)")
