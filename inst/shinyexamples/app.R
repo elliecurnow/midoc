@@ -1063,7 +1063,7 @@ checkModSpec_server <- function(input, output, session) {
           midoc::checkModSpec(
             input$formula_checkModSpec,
             input$family_checkModSpec,
-            uploaded_data$df,
+            data = uploaded_data$df,
             plot = FALSE
           )
         )$messages
@@ -1103,7 +1103,7 @@ checkModSpec_server <- function(input, output, session) {
     tryCatch(midoc::checkModSpec(
       input$formula_checkModSpec,
       input$family_checkModSpec,
-      uploaded_data$df,
+      data = uploaded_data$df,
       message = FALSE,
       plot = TRUE
     ),
@@ -1307,7 +1307,7 @@ proposeMI_server <- function(input, output, session) {
     req(stored_formula())
     req(stored_family())
     tryCatch({
-    midoc::checkModSpec(stored_formula(), stored_family(), data(),
+    midoc::checkModSpec(stored_formula(), stored_family(), data = data(),
                         plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message
@@ -1564,7 +1564,7 @@ doMImice_server <- function(input, output, session) {
     req(stored_impformula())
     req(stored_impfamily())
     tryCatch({
-    midoc::checkModSpec(stored_impformula(), stored_impfamily(), data(),
+    midoc::checkModSpec(stored_impformula(), stored_impfamily(), data = data(),
                         plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message

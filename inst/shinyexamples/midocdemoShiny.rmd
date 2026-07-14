@@ -154,7 +154,7 @@ server <- function(input, output) {
     
     output$descmissdata <- shiny::bindEvent(shiny::renderPrint({
       
-        midoc::descMissData(input$y,input$covs,data())
+        midoc::descMissData(y=input$y, covs=input$covs, data=data())
   
         }), input$go)
 }
@@ -801,7 +801,7 @@ server <- function(input, output) {
     
     checkmodspec <- shiny::reactive({
         testthat::evaluate_promise(
-          midoc::checkModSpec(input$formula,input$family,data(),plot=FALSE))$messages
+          midoc::checkModSpec(input$formula,input$family,data=data(),plot=FALSE))$messages
     })
     
     output$checkmodspec <- shiny::bindEvent(shiny::renderPrint({
@@ -912,12 +912,12 @@ server <- function(input, output) {
       })
     
     mimod <- shiny::reactive(
-                midoc::checkModSpec(input$formula,input$family,data(),
+                midoc::checkModSpec(input$formula,input$family,data=data(),
                                     plot=FALSE, message=FALSE))
     
     proposemi <- shiny::reactive({
         testthat::evaluate_promise(
-          midoc::proposeMI(mimod(),data(),plot=FALSE))$messages
+          midoc::proposeMI(mimodobj=mimod(), data=data(),plot=FALSE))$messages
     })
     
     output$proposemi <- shiny::bindEvent(shiny::renderPrint({
@@ -1027,11 +1027,11 @@ server <- function(input, output) {
       })
     
     mimod <- shiny::reactive(
-                midoc::checkModSpec(input$impformula,input$impfamily,data(),
+                midoc::checkModSpec(input$impformula,input$impfamily,data=data(),
                                       plot=FALSE, message=FALSE))
     
     miprop <- shiny::reactive(
-                midoc::proposeMI(mimod(),data(),plot=FALSE, message=FALSE))
+                midoc::proposeMI(mimodobj=mimod(), data=data(),plot=FALSE, message=FALSE))
     
     domimice <- shiny::reactive({
         testthat::evaluate_promise(
