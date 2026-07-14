@@ -41,10 +41,12 @@ Note that variable names are abbreviated. Consider whether these (conditional) i
   #Explore observed data if supplied
   if (!is.null(data)) {
     # Keep fully observed variables from dataset
+    # The final, unnamed element of the last md.pattern row is the total number
+    # of missing values, so exclude it from the list of fully observed variables
     mdlist <- mice::md.pattern(data,plot=FALSE)
     complist <- mdlist[nrow(mdlist),]
-    compvar <- names(complist[complist==0])
-    compdata <- data[,c(compvar)]
+    compvar <- setdiff(names(complist[complist==0]), "")
+    compdata <- data[,compvar, drop=FALSE]
 
     # Perform cond independence tests on fully observed variables only
     comptests <- Filter(function(x) all(x$X %in% compvar) & all(x$Y %in% compvar) & all(x$Z %in% compvar),
