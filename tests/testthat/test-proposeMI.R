@@ -65,3 +65,11 @@ test_that("proposeMI gives a warning if stratification variables do not match ac
                          "The stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.")
           }
 )
+
+res6<-evaluate_promise(proposeMI(mimodobj=mimod, data=bmi, plot=FALSE, message=FALSE))
+test_that("proposeMI gives a warning, not an error, if the imputation model was specified without a dataset",
+          {
+            expect_equal(trimws(res6$warnings),
+                         "The names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.")
+          }
+)

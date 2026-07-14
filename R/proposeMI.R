@@ -115,7 +115,8 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
     }
 
     if (!is.null(data)){
-      if(datalab_check != datalab){
+      #datalab_check is NULL if the imputation model was specified without a dataset
+      if(is.null(datalab_check) || datalab_check != datalab){
         warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
                 call.=FALSE, immediate.=TRUE)
       }
