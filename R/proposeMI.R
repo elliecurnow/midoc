@@ -69,11 +69,13 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
     m_min <- ceiling((1-prop_complete)*100)
   }
 
-  if(max(lengths(mimodobj))==1){
-    mimod_count <- 1
-  } else {
-    mimod_count <- length(mimodobj)
+  #A single 'mimod' object may be supplied directly, or in a list of 'mimod'
+  #objects; normalise to a list (the formula check covers 'mimod' objects
+  #created before the class was added)
+  if (inherits(mimodobj, "mimod") || !is.null(mimodobj[["formula"]])) {
+    mimodobj <- list(mimodobj)
   }
+  mimod_count <- length(mimodobj)
 
   #Specify method, formula, and optionally dataset name for each variable to be imputed
   method <- vector("list", mimod_count)
@@ -86,33 +88,24 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   #} else datalab <- "dataset_name"
 
   for (i in seq_len(mimod_count)){
-    if (mimod_count > 1){
-      if (i==1) by_check <- mimodobj[[1]][["by"]]
-      family <- mimodobj[[i]][["family"]]
-      formula <- mimodobj[[i]][["formula"]]
-      if (!is.null(data)) {
-        datalab_check <- mimodobj[[i]][["datalab"]]
-      }
-      if (!is.null(by_check)|!is.null(mimodobj[[i]][["by"]])) {
-        if(!is.null(by_check) & !is.null(mimodobj[[i]][["by"]])){
-          if(mimodobj[[i]][["by"]] != by_check){
-            warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
-                    call.=FALSE, immediate.=TRUE)
-          }
-        } else {
+    if (i==1) by_check <- mimodobj[[1]][["by"]]
+    family <- mimodobj[[i]][["family"]]
+    formula <- mimodobj[[i]][["formula"]]
+    if (!is.null(data)) {
+      datalab_check <- mimodobj[[i]][["datalab"]]
+    }
+    if (!is.null(by_check)|!is.null(mimodobj[[i]][["by"]])) {
+      if(!is.null(by_check) & !is.null(mimodobj[[i]][["by"]])){
+        if(mimodobj[[i]][["by"]] != by_check){
           warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
                   call.=FALSE, immediate.=TRUE)
         }
+      } else {
+        warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
+                call.=FALSE, immediate.=TRUE)
       }
-      by_check <- mimodobj[[i]][["by"]]
-    } else {
-      family <- mimodobj[["family"]]
-      formula <- mimodobj[["formula"]]
-      if (!is.null(data)) {
-        datalab_check <- mimodobj[["datalab"]]
-      }
-      by_check <- mimodobj[["by"]]
     }
+    by_check <- mimodobj[[i]][["by"]]
 
     if (!is.null(data)){
       #datalab_check is NULL if the imputation model was specified without a dataset

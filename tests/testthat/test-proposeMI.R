@@ -73,3 +73,12 @@ test_that("proposeMI gives a warning, not an error, if the imputation model was 
                          "The names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.")
           }
 )
+
+test_that("checkModSpec returns an object of class 'mimod' and proposeMI accepts a list of one",
+          {
+            expect_s3_class(mimod_bmi7, "mimod")
+            res7 <- evaluate_promise(proposeMI(mimodobj=list(mimod_bmi7), data=bmi, message=FALSE, plot=FALSE))
+            expect_equal(res7$result$method, list("norm"))
+            expect_equal(paste0(res7$result$formulas), "bmi7 ~ matage + I(matage^2) + mated + pregsize")
+          }
+)

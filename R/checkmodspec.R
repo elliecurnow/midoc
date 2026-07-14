@@ -179,6 +179,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
     mimod <- list(formula = formula,family = family,by=by)
   }
   #Return an object with formula and family
+  class(mimod) <- "mimod"
   invisible(mimod)
 }
 
