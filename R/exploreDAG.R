@@ -29,7 +29,7 @@ exploreDAG <- function(mdag, data=NULL) {
   if(dagitty::is.dagitty(mdag)){
     mod <- mdag
   } else {
-    mod <- dagitty::dagitty(mdag, layout=T)
+    mod <- dagitty::dagitty(mdag)
   }
 
   tests <- dagitty::impliedConditionalIndependencies(mod)

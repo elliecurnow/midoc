@@ -55,17 +55,17 @@ checkCRA <- function(y, covs=NULL, r_cra, mdag) {
   if(dagitty::is.dagitty(mdag)){
     mdagspec <- mdag
   } else {
-    mdagspec <- dagitty::dagitty(mdag, layout=T)
+    mdagspec <- dagitty::dagitty(mdag)
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
   ylist <- unlist(strsplit(y," "))
 
   if(is.null(covs)){
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra)
+    dsep <- dagitty::dseparated(mdagspec, ylist, r_cra)
   } else {
     covslist <- unlist(strsplit(covs," "))
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra, covslist)
+    dsep <- dagitty::dseparated(mdagspec, ylist, r_cra, covslist)
   }
 
   #If r does not depend on y conditional on covariates, then CRA is valid

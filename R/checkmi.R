@@ -54,17 +54,17 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
   if(dagitty::is.dagitty(mdag)){
     mdagspec <- mdag
   } else {
-    mdagspec <- dagitty::dagitty(mdag, layout=T)
+    mdagspec <- dagitty::dagitty(mdag)
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
   deplist <- unlist(strsplit(dep," "))
 
   if(is.null(preds)){
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra)
+    dsep <- dagitty::dseparated(mdagspec, deplist, r_cra)
   } else {
     predslist <- unlist(strsplit(preds," "))
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra, predslist)
+    dsep <- dagitty::dseparated(mdagspec, deplist, r_cra, predslist)
   }
 
   #If r_cra does not depend on dep conditional on predictors, then MI is valid
