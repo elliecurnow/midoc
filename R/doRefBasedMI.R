@@ -76,10 +76,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   }
 
   # Coerce reference group to value of 0
-  treatgrp <- vector()
-  for(i in 1:nrow(mipropobj$data)){
-    treatgrp[i] <- ifelse(mipropobj$data[,treatvar][i] == reference, 0, mipropobj$data[,treatvar][i])
-  }
+  treatgrp <- ifelse(mipropobj$data[,treatvar] == reference, 0, mipropobj$data[,treatvar])
 
   # Arrange dataset in 'long' format
   data_long <- data.frame()
