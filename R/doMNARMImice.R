@@ -62,15 +62,11 @@
 doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, message = TRUE) {
 
   # Update method for mnardep variable
-  if(length(mipropobj[["formulas"]])==1){
-    miprop_count <- 1
-  } else {
-    miprop_count <- length(mipropobj[["formulas"]])
-  }
+  miprop_count <- length(mipropobj[["formulas"]])
   method <- mipropobj$method
 
   for (i in 1:miprop_count){
-    if (substr(mipropobj[["formulas"]][[i]],1,1000)[2] == mnardep){
+    if (as.character(mipropobj[["formulas"]][[i]])[2] == mnardep){
       method[i] <- paste("mnar.",mipropobj$method[[i]],sep="")
     } else {
       method[i] <- mipropobj$method[[i]]
