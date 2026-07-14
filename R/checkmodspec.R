@@ -47,6 +47,12 @@
 #'              family="gaussian(identity)", data=bmi)
 checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message=TRUE) {
 
+  #Check the specified family is supported
+  if (length(family) != 1 || !family %in% c("gaussian(identity)", "binomial(logit)")) {
+    stop("\n\n'family' must be either \"gaussian(identity)\" or \"binomial(logit)\"\n\n",
+         call.=TRUE)
+  }
+
   if (!is.null(data)) {
     if(family == "gaussian(identity)"){
 
