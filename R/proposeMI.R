@@ -85,7 +85,7 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   datalab <- deparse(substitute(data))
   #} else datalab <- "dataset_name"
 
-  for (i in 1:mimod_count){
+  for (i in seq_len(mimod_count)){
     if (mimod_count > 1){
       if (i==1) by_check <- mimodobj[[1]][["by"]]
       family <- mimodobj[[i]][["family"]]

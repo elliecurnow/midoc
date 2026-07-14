@@ -54,7 +54,7 @@ doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
           seed = seed)
   } else {
     bylist <- unlist(strsplit(mipropobj$by," "))
-    midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+    midstmp <- by(mipropobj$data, mipropobj$data[,bylist],
                function(x)
                  mice::mice(data = x,
                             m = mipropobj$m,
@@ -64,12 +64,7 @@ doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
                             printFlag = FALSE,
                             seed = seed))
     # Combine the sets of imputations using `mice::rbind`
-    mids <- midstmp[[1]]
-    if (length(midstmp)>1){
-      for (i in 2:length(midstmp)){
-        mids <- mice::rbind(mids,midstmp[[i]])
-      }
-    }
+    mids <- Reduce(mice::rbind, midstmp)
   }
 
   #If a substantive model is specified, calculate the pooled estimates

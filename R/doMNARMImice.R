@@ -65,7 +65,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, m
   miprop_count <- length(mipropobj[["formulas"]])
   method <- mipropobj$method
 
-  for (i in 1:miprop_count){
+  for (i in seq_len(miprop_count)){
     if (as.character(mipropobj[["formulas"]][[i]])[2] == mnardep){
       method[i] <- paste("mnar.",mipropobj$method[[i]],sep="")
     } else {
@@ -90,7 +90,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, m
           seed = seed)
     } else {
       bylist <- unlist(strsplit(mipropobj$by," "))
-      midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+      midstmp <- by(mipropobj$data, mipropobj$data[,bylist],
                     function(x)
                       mice::mice(data = x,
                                  m = mipropobj$m,
@@ -101,12 +101,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, m
                                  printFlag = FALSE,
                                  seed = seed))
       # Combine the sets of imputations using `mice::rbind`
-      mids <- midstmp[[1]]
-      if (length(midstmp)>1){
-        for (i in 2:length(midstmp)){
-          mids <- mice::rbind(mids,midstmp[[i]])
-        }
-      }
+      mids <- Reduce(mice::rbind, midstmp)
     }
 
   #If a substantive model is specified, calculate the pooled estimates

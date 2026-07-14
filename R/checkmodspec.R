@@ -65,7 +65,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         modfittest <- summary(modfitres)
       } else {
         bylist <- unlist(strsplit(by," "))
-        modfittest <- by(data, data[,c(bylist)],
+        modfittest <- by(data, data[,bylist],
                     function(x) {
                       mod <- stats::glm(stats::as.formula(formula), data = x)
                       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
@@ -94,7 +94,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         #pval <- round(stats::coef(modfittest)[3,4],6)
       } else {
         bylist <- unlist(strsplit(by," "))
-        modfittest <- by(data, data[,c(bylist)],
+        modfittest <- by(data, data[,bylist],
                          function(x) {
                            mod <- stats::glm(stats::as.formula(formula),family="binomial", data = x)
                            modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])

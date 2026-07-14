@@ -42,20 +42,20 @@ descMissData <- function(y, data, covs=NULL, by=NULL, plot=FALSE) {
   if(is.null(by)){
     #md.pattern requires >1 variable so manually run md.pattern if only 1 variable is specified
     if (length(varlist)==1){
-      if (all(!is.na(data[,c(varlist)]))) {
+      if (all(!is.na(data[,varlist]))) {
         cat(" /\\     /\\\n{  `---'  }\n{  O   O  }\n==>  V <==")
         cat("  No need for mice. This data set is completely observed.\n")
         cat(" \\  \\|/  /\n  `-----'\n\n")
       }
-      pat <- as.numeric(!is.na(data[,c(varlist)]))
-      sortpat <- pat[order(pat)]
+      pat <- as.numeric(!is.na(data[,varlist]))
+      sortpat <- sort(pat)
       mpat <- sortpat[!duplicated(sortpat)]
       mpat2 <- matrix(mpat, ncol=1)
       rownames(mpat2) <- table(sortpat)
-      colnames(mpat2) <- c(varlist)
+      colnames(mpat2) <- varlist
       mdtab <- list(mpat2)
     } else {
-      mdtab <- list(mice::md.pattern(data[,c(varlist)],plot=plot))
+      mdtab <- list(mice::md.pattern(data[,varlist],plot=plot))
     }
   } else {
     if (length(varlist)==1){
@@ -63,13 +63,13 @@ descMissData <- function(y, data, covs=NULL, by=NULL, plot=FALSE) {
            call.=TRUE)
       } else {
       bylist <- unlist(strsplit(by," "))
-      mdtab <- by(data[,c(varlist)],data[,c(bylist)],
+      mdtab <- by(data[,varlist],data[,bylist],
                   function(x) mice::md.pattern(x,plot=plot))
       names(dimnames(mdtab)) = bylist
       }
   }
 
-  for (i in 1:length(mdtab)){
+  for (i in seq_along(mdtab)){
 
     #Removed next condition because summary is useful even if no missing data
     #if (mdtab[[i]][nrow(mdtab[[i]]),ncol(mdtab[[i]])] != 0){
@@ -84,7 +84,7 @@ descMissData <- function(y, data, covs=NULL, by=NULL, plot=FALSE) {
     if (length(varlist)==1){
       mdtmp2 <- mdtmp
     } else {
-      mdtmp2 <- mdtmp[,c(varlist)]
+      mdtmp2 <- mdtmp[,varlist]
     }
 
     #Combine with summary variables

@@ -66,7 +66,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   #Define variables required for RefBasedMI within fn to avoid global variable error
   id <- mipropobj$data[,idvar]
-  time <- c(1:length(depsvec))
+  time <- seq_along(depsvec)
 
   y <- mipropobj$data[,depsvec, drop=FALSE]
 
@@ -80,16 +80,16 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   # Arrange dataset in 'long' format
   data_long <- data.frame()
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
     data_long <- base::rbind(data_long,
                              base::cbind(mipropobj$data[,covsvec],
                                          id=id,
                                          treatgrp=treatgrp,
                                          y=y[,i],
-                                         time=c(rep(time[i],nrow(mipropobj$data)))))
+                                         time=rep(time[i],nrow(mipropobj$data))))
   }
   # Rename baseline covariates in data_long
-  for(i in 1:length(covsvec)){
+  for(i in seq_along(covsvec)){
     names(data_long)[i]=paste("covar",i,sep="")
   }
 
@@ -122,7 +122,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   refbasedmi_wide <- data.frame()
 
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
 
     #Add depvar_name to the dataset
     tmp <- subset(refbasedmi, time==i, c(covsvec, "y", treatvar, idvar, ".imp"))
