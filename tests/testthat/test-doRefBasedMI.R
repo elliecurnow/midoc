@@ -25,3 +25,13 @@ miprop <- proposeMI(mimodobj=mimod_qol12, data=qol, plot=FALSE, message=FALSE)
 #)
 
 
+# Check a single outcome variable is rejected with an informative error
+test_that("doRefBasedMI gives an informative error for a single outcome variable",
+          {
+            expect_error(doRefBasedMI(miprop, covs="age0 qol0",
+                                      depvar="qol12", treatvar="group",
+                                      idvar="id", method="J2R", reference=1,
+                                      seed=123),
+                         "At least two longitudinal outcome variables")
+          }
+)

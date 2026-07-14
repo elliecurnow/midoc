@@ -12,8 +12,8 @@
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param covs The analysis model covariate(s), specified as a string
 #'   (space delimited)
-#' @param depvar The longitudinal outcome variable(s), specified as a string
-#'   (space delimited)
+#' @param depvar The longitudinal outcome variables (at least two are
+#'   required), specified as a string (space delimited)
 #' @param treatvar Numeric treatment group variable; values must be positive
 #'   integers
 #' @param idvar Participant identifier variable
@@ -60,14 +60,15 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   covsvec <- unlist(strsplit(covs," "))
   depsvec <- unlist(strsplit(depvar," "))
 
+  if (length(depsvec) < 2) {
+    stop("At least two longitudinal outcome variables must be specified in 'depvar'")
+  }
+
   #Define variables required for RefBasedMI within fn to avoid global variable error
   id <- mipropobj$data[,idvar]
   time <- c(1:length(depsvec))
 
-  y <- data.frame(mipropobj$data[,depsvec[1]])
-  for (i in 2:length(depsvec)){
-    y <- base::cbind(y, mipropobj$data[,depsvec[i]])
-  }
+  y <- mipropobj$data[,depsvec, drop=FALSE]
 
   covar1 <- mipropobj$data[,covsvec[1]]
   if(length(covsvec)>1){
