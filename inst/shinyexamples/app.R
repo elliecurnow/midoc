@@ -553,7 +553,9 @@ exploreDAG_server <- function(input, output, session) {
   # exploreDAG() function
   exploredag_result <- eventReactive(input$go_exploreDAG, {
     req(data())
-    req(dag_text())
+    validate(
+      need(nzchar(trimws(input$mdag_exploreDAG)), "Please specify mDAG")
+    )
     tryCatch({
       testthat::evaluate_promise(midoc::exploreDAG(input$mdag_exploreDAG, data()))$messages
     }, error = function(e) {

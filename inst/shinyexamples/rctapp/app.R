@@ -689,7 +689,9 @@ exploreDAG_server <- function(input, output, session) {
   # exploreDAG() function
   exploredag_result <- eventReactive(input$go_exploreDAG, {
     #req(data())
-    req(dag_text())
+    validate(
+      need(nzchar(trimws(input$mdag_exploreDAG)), "Please specify mDAG")
+    )
 
     if (input$data_exploreDAG=="TRUE"){
       tryCatch({
@@ -1285,7 +1287,7 @@ checkModSpec_server <- function(input, output, session) {
     if (data_changed()) {
       return(invisible())
     }
-    req(data())
+    req(uploaded_data$df)
 
     #Only print plot if no error and data=TRUE
     if (input$data_checkModSpec=="TRUE"){
