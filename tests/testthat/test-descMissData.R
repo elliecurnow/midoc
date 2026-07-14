@@ -30,3 +30,21 @@ test_that("descMissData output is as expected when 'by' is specified",
                          "c(1, 2, 0, 1, 408, 592, 41, 59)")
           }
 )
+
+# Check output when only 'y' is specified and it is fully observed
+res4<-evaluate_promise(descMissData(y="matage",data=bmi))
+test_that("descMissData output is as expected for a single fully observed variable",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res4$result), collapse=" "),"right"),
+                         "c(1, 1, 1000, 100)")
+          }
+)
+
+# Check output when only 'y' is specified and it is missing for all records
+res5<-evaluate_promise(descMissData(y="x",data=data.frame(x=rep(NA_real_,10))))
+test_that("descMissData output is as expected for a single fully missing variable",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res5$result), collapse=" "),"right"),
+                         "c(1, 0, 10, 100)")
+          }
+)
