@@ -16,7 +16,7 @@
 #' @param data Optionally, a data frame containing all the variables required
 #'   for imputation and the substantive analysis; if stratification variable(s)
 #'   are included in the 'mimod' object(s), these will be carried over to 'midoc'
-#'   functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#'   functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #'   performed for each subset of the data determined by the values of the
 #'   stratification variable(s)
 #' @param plot If TRUE (the default), and a dataset is supplied, displays
@@ -136,15 +136,15 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
                   datalab,
                   ", # You may need to specify a subset of the columns in your dataset; if you specified stratification variable(s) in your
 proposed imputation model(s), these will be carried over to
-'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation will
+'midoc' functions 'doMImice' and 'doMNARMImice' and multiple imputation will
 be performed for each subset of the data determined by the values of the
 stratification factor(s)\n \nm = ",
                   m_min,
                   ", # You should use at least this number of imputations based on the proportion of complete records in your dataset \n \nmethod = c(",
                   paste(sQuote(method), collapse=", "),
-                  ") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random,    the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
+                  ") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random, the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
                   paste(sQuote(formulas_list), "\n", collapse="\n"),
-                  "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not    stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
+                  "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
 
 
   #Return message with proposed settings

@@ -291,7 +291,7 @@ descMissData_ui <- fluidPage(tagList(
            "the missing data patterns ",
            "in the dataset"))
   #  p("Your analysis model outcome/variable of primary interest."),
-  #  p(HTML("When listing covariates, seperate them by a space. Example input:",
+  #  p(HTML("When listing covariates, separate them by a space. Example input:",
   #         "<code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("Make sure variables entered are spelt the same as in the dataset.")
   ),
@@ -609,7 +609,7 @@ checkCRA_ui <- fluidPage(tagList(
     style = "margin-bottom: 20px; font-size: 14px; color: #333;",
     p(HTML("Use the <strong>midoc</strong> function <strong>checkCRA</strong> to explore whether",
            "a complete records analysis is valid")),
-  #  p("Enter covariates seperated by a space. Ensure variable names match column headings."),
+  #  p("Enter covariates separated by a space. Ensure variable names match column headings."),
   #  p(HTML("Example input: <code>covariate_1 covariate_2 covariate_3</code>."))
   ),
   #hr(), # line to divide text from output
@@ -774,7 +774,7 @@ checkMI_ui <- fluidPage(tagList(
     style = "margin-bottom: 20px; font-size: 14px; color: #333;",
     p(HTML("Use the <strong>midoc</strong> function <strong>checkMI</strong> to explore",
            "whether multiple imputation is valid "))
-  #  p(HTML("Enter covariates, seperated by a space. Ensure variables match column headings.",
+  #  p(HTML("Enter covariates, separated by a space. Ensure variables match column headings.",
   #         "Example input: <code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("The DAG is carried over from the draw DAG app.")
   ),

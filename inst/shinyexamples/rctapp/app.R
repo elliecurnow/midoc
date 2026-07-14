@@ -60,7 +60,7 @@ descMissData_ui <- fluidPage(tagList(
     hr(),
     p(HTML('<strong>Example R code:</strong> <br>midoc::descMissData(y=“qol12", covs=“age0 qol0 qol3", data=qol)'))
   #  p("Your analysis model outcome/variable of primary interest."),
-  #  p(HTML("When listing covariates, seperate them by a space. Example input:",
+  #  p(HTML("When listing covariates, separate them by a space. Example input:",
   #         "<code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("Make sure variables entered are spelt the same as in the dataset.")
   ),
@@ -760,7 +760,7 @@ checkCRA_ui <- fluidPage(tagList(
            'qol0 -> qol12 qol3 -> qol12 qol0 -> r qol3 -> r"',
            '<br>midoc::checkCRA(y="qol12", covs="group age0 qol0", r_cra="r", mdag=qoldag)'))
 
-  #  p("Enter covariates seperated by a space. Ensure variable names match column headings."),
+  #  p("Enter covariates separated by a space. Ensure variable names match column headings."),
   #  p(HTML("Example input: <code>covariate_1 covariate_2 covariate_3</code>."))
   ),
   #hr(), # line to divide text from output
@@ -936,7 +936,7 @@ checkMI_ui <- fluidPage(tagList(
            'qol0 -> qol12 qol3 -> qol12 qol0 -> r qol3 -> r"',
            '<br>midoc::checkMI(dep="qol12", preds="group age0 qol0 qol3", r_cra="r", mdag=qoldag)'))
 
-  #  p(HTML("Enter covariates, seperated by a space. Ensure variables match column headings.",
+  #  p(HTML("Enter covariates, separated by a space. Ensure variables match column headings.",
   #         "Example input: <code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("The DAG is carried over from the draw DAG app.")
   ),

@@ -79,7 +79,7 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
                        the partially observed variable(s) and complete record indicator
                        are not independent given the fully observed imputation model predictor(s). Hence,
                        multiple imputation methods which assume data are missing at random
-                       may not be not valid.
+                       may not be valid.
                        \n \nConsider using a different imputation model and/or strategy
                        (e.g. not-at-random fully conditional specification).",
         collapse="\n")
