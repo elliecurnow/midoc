@@ -9,19 +9,6 @@
 library(midoc)
 library(shiny) # makes embedded apps
 
-# Reactive values
-uploaded_data <- reactiveValues(
-  #uploaded_data$
-    df = NULL,
-  #uploaded_data$
-  data_source = NULL,
-  #uploaded_data$
-  dag_text = NULL
-)
-
-uploaded_data$df <- midoc::qol  # store qol dataframe
-uploaded_data$data_source <- "qol" # record source as qol
-
 #uploaded_data$dag_text <- # RCT autofill dag input
   dag_text <- paste(
     "dag {",
@@ -110,7 +97,7 @@ descMissData_ui <- fluidPage(tagList(
 
 # SERVER - descMissData() function app
 
-descMissData_server <- function(input, output, session) {
+descMissData_server <- function(input, output, session, uploaded_data) {
 
     #reactive({
   #  validate(
@@ -363,7 +350,7 @@ summMissData_ui <- fluidPage(tagList(
 
 # SERVER - summMissData() function app
 
-summMissData_server <- function(input, output, session) {
+summMissData_server <- function(input, output, session, uploaded_data) {
 
   #reactive({
   #  validate(
@@ -472,7 +459,7 @@ div(
 )
 
 # SERVER - Draw DAG app
-drawDAG_server <- function(input, output, session) {
+drawDAG_server <- function(input, output, session, uploaded_data) {
 
 # Reactive flag to track data changes and reset plot
  data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
@@ -634,7 +621,7 @@ exploreDAG_ui <- fluidPage(tagList(
 ))
 
 # SERVER exploreDAG() function app
-exploreDAG_server <- function(input, output, session) {
+exploreDAG_server <- function(input, output, session, uploaded_data) {
 
   # Reactive flag to track data changes and reset output
   data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
@@ -809,7 +796,7 @@ checkCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkCRA() function app
-checkCRA_server <- function(input, output, session) {
+checkCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)
 
@@ -986,7 +973,7 @@ checkMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkMI() function app
-checkMI_server <- function(input, output, session) {
+checkMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Tracks if data has changed and output should reset
 
@@ -1185,7 +1172,7 @@ checkModSpec_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkModSpec function app
-checkModSpec_server <- function(input, output, session) {
+checkModSpec_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)
 
@@ -1436,7 +1423,7 @@ proposeMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - proposeMI() function app
-proposeMI_server <- function(input, output, session) {
+proposeMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output hidden initially
 
@@ -1723,7 +1710,7 @@ doMImice_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doMImice function app
-doMImice_server <- function(input, output, session) {
+doMImice_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -1964,7 +1951,7 @@ doMNARMImice_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doMNARMImice function app
-doMNARMImice_server <- function(input, output, session) {
+doMNARMImice_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -2226,7 +2213,7 @@ doRefBasedMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doRefBasedMI function app
-doRefBasedMI_server <- function(input, output, session) {
+doRefBasedMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -2441,7 +2428,7 @@ doCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doCRA function app
-doCRA_server <- function(input, output, session) {
+doCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -2817,44 +2804,52 @@ ui <- fluidPage(
 # master server -----------------------------------------------------------
 server <- function(input, output, session) {
 
+  # Per-session reactive values (created here so state is not shared across sessions)
+  uploaded_data <- reactiveValues(
+    df = midoc::qol,       # store qol dataframe
+    data_source = "qol",   # record source as qol
+    dag_text = NULL
+  )
+
+
   # data upload app server
   #data_server(input, output, session)
 
   # DAG app server
-  drawDAG_server(input, output, session)
+  drawDAG_server(input, output, session, uploaded_data)
 
   #descMissData() function app
-  descMissData_server(input, output, session)
+  descMissData_server(input, output, session, uploaded_data)
 
   #summMissData() function app
-  summMissData_server(input, output, session)
+  summMissData_server(input, output, session, uploaded_data)
 
   # exploreDAG() function app
-  exploreDAG_server(input, output, session)
+  exploreDAG_server(input, output, session, uploaded_data)
 
   # checkCRA() function app
-  checkCRA_server(input, output, session)
+  checkCRA_server(input, output, session, uploaded_data)
 
   # checkMI() function app
-  checkMI_server(input, output, session)
+  checkMI_server(input, output, session, uploaded_data)
 
   # checkModSpec() function app
-  checkModSpec_server(input, output, session)
+  checkModSpec_server(input, output, session, uploaded_data)
 
   # proposeMI() function app
-  proposeMI_server(input, output, session)
+  proposeMI_server(input, output, session, uploaded_data)
 
   # doMImice() function app
-  doMImice_server(input,output, session)
+  doMImice_server(input, output, session, uploaded_data)
 
   # doMNARMImice() function app
-  doMNARMImice_server(input,output, session)
+  doMNARMImice_server(input, output, session, uploaded_data)
 
   # doMNARMImice() function app
-  doRefBasedMI_server(input,output, session)
+  doRefBasedMI_server(input, output, session, uploaded_data)
 
   # doCRA() function app
-  doCRA_server(input,output, session)
+  doCRA_server(input, output, session, uploaded_data)
 
 }
 

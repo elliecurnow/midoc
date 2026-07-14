@@ -10,12 +10,6 @@ library(midoc)
 library(shiny) # makes embedded apps
 
 # Reactive values
-uploaded_data <- reactiveValues(
-  df = NULL,
-  data_source = NULL,
-  dag_text = NULL
-)
-
 # data upload app ---------------------------------------------------------
 
 # USER INTERFACE - data upload app
@@ -46,7 +40,7 @@ data_ui <- fluidPage(
 )
 
 # SERVER - data upload app
-data_server <- function(input, output, session) {
+data_server <- function(input, output, session, uploaded_data) {
 
     observeEvent(input$file, {
     #req(input$file)
@@ -126,7 +120,7 @@ drawDAG_ui <- fluidPage(
 )
 
 # SERVER - Draw DAG app
-drawDAG_server <- function(input, output, session) {
+drawDAG_server <- function(input, output, session, uploaded_data) {
 
   # bmi autofill dag input
   bmi_dag_text <- paste(
@@ -332,7 +326,7 @@ descMissData_ui <- fluidPage(tagList(
 
 # SERVER - descMissData() function app
 
-descMissData_server <- function(input, output, session) {
+descMissData_server <- function(input, output, session, uploaded_data) {
 
   data <- reactive({
     validate(
@@ -502,7 +496,7 @@ exploreDAG_ui <- fluidPage(tagList(
 ))
 
 # SERVER explorDAG() function app
-exploreDAG_server <- function(input, output, session) {
+exploreDAG_server <- function(input, output, session, uploaded_data) {
 
   # Reactive flag to track data changes and reset output
   data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
@@ -658,7 +652,7 @@ checkCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkCRA() function app
-checkCRA_server <- function(input, output, session) {
+checkCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)
 
@@ -824,7 +818,7 @@ checkMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkMI() function app
-checkMI_server <- function(input, output, session) {
+checkMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Tracks if data has changed and output should reset
 
@@ -1012,7 +1006,7 @@ checkModSpec_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkModSpec function app
-checkModSpec_server <- function(input, output, session) {
+checkModSpec_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output is hidden initially
 
@@ -1231,7 +1225,7 @@ proposeMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - proposeMI() function app
-proposeMI_server <- function(input, output, session) {
+proposeMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output hidden initially
 
@@ -1484,7 +1478,7 @@ doMImice_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doMImice function app
-doMImice_server <- function(input, output, session) {
+doMImice_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -1683,7 +1677,7 @@ doCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doCRA function app
-doCRA_server <- function(input, output, session) {
+doCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
@@ -1958,35 +1952,43 @@ ui <- fluidPage(
 # master server -----------------------------------------------------------
 server <- function(input, output, session) {
 
+  # Per-session reactive values (created here so state is not shared across sessions)
+  uploaded_data <- reactiveValues(
+    df = NULL,
+    data_source = NULL,
+    dag_text = NULL
+  )
+
+
   # data upload app server
-  data_server(input, output, session)
+  data_server(input, output, session, uploaded_data)
 
   # DAG app server
-  drawDAG_server(input, output, session)
+  drawDAG_server(input, output, session, uploaded_data)
 
   #descMissData() function app
-  descMissData_server(input, output, session)
+  descMissData_server(input, output, session, uploaded_data)
 
   # exploreDAG() function app
-  exploreDAG_server(input, output, session)
+  exploreDAG_server(input, output, session, uploaded_data)
 
   # checkCRA() function app
-  checkCRA_server(input, output, session)
+  checkCRA_server(input, output, session, uploaded_data)
 
   # checkMI() function app
-  checkMI_server(input, output, session)
+  checkMI_server(input, output, session, uploaded_data)
 
   # checkModSpec() function app
-  checkModSpec_server(input, output, session)
+  checkModSpec_server(input, output, session, uploaded_data)
 
   # proposeMI() function app
-  proposeMI_server(input, output, session)
+  proposeMI_server(input, output, session, uploaded_data)
 
   # doMImice() function app
-  doMImice_server(input,output, session)
+  doMImice_server(input, output, session, uploaded_data)
 
   # doCRA() function app
-  doCRA_server(input,output, session)
+  doCRA_server(input, output, session, uploaded_data)
 
 }
 
