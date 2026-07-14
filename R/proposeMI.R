@@ -58,7 +58,7 @@
 proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotprompt = TRUE, message = TRUE) {
 
   if (!is.null(data)) {
-    m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
+    m_min <- ceiling((1-mean(stats::complete.cases(data)))*100)
   } else {
     if (is.na(prop_complete)){
       stop("\n\n'prop_complete' must be specified, or else 'data' must be specified\n\n",
