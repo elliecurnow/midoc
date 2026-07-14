@@ -100,50 +100,21 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   data_long <- data_long[order(data_long$id),]
 
   # Run RefBasedMI
-  # Using if statements to overcome problem with specifying method and covars in terms of fn parameters
-  if (method=="J2R"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                              treatvar=treatgrp, idvar=id,
-                              timevar=time, method="J2R", reference=0,
-                              M=mipropobj$m,
-                              seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                             treatvar=treatgrp, idvar=id,
-                                             timevar=time, method="J2R", reference=0,
-                                             M=mipropobj$m,
-                                             seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else if (method=="CR"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else if (method=="CIR"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CIR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CIR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else {stop('Method must be one of "J2R", "CR", or "CIR"')}
+  if (!method %in% c("J2R", "CR", "CIR")) {
+    stop('Method must be one of "J2R", "CR", or "CIR"')
+  }
+  if (length(covsvec) > 2) {
+    stop('A maximum of two baseline covariates are allowed')
+  }
+  # RefBasedMI deparses its method and covar arguments, so splice their values
+  # into the call as literals rather than passing them as variables
+  covarexpr <- if (length(covsvec)==1) quote(covar1) else quote(c(covar1,covar2))
+  refbasedmi <- suppressMessages(eval(bquote(
+    RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=.(covarexpr),
+                           treatvar=treatgrp, idvar=id,
+                           timevar=time, method=.(method), reference=0,
+                           M=mipropobj$m,
+                           seed=seed))))
 
 
   # Return names to original names and re-format in original 'wide' form
