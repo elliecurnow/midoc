@@ -362,22 +362,26 @@ descMissData_server <- function(input, output, session, uploaded_data) {
     data_changed(FALSE)  # Clear the data changed flag so plot can render
   })
 
+  # Run descMissData once and cache the result (or error message) for the
+  # print and post-output renderers
+  descmissdata_result <- reactive({
+    req(data())
+    tryCatch(list(ok = TRUE,
+                  value = midoc::descMissData(
+                    y = input$y_descMissData,
+                    covs = input$covs_descMissData,
+                    data = data(),
+                    plot = FALSE)),
+             error = function(e) list(ok = FALSE, value = e$message))
+  })
+
   # descMissData() function for text output
   output$descmissdata_print <- renderPrint({
     req(input$go_descMissData)
     if (data_changed()) {
       return(invisible())
     }
-    req(data())
-    tryCatch({
-      midoc::descMissData(
-        y = input$y_descMissData,
-        covs = input$covs_descMissData,
-        data = data(),
-        plot = FALSE)
-    }, error = function(e) {
-      e$message
-    })
+    descmissdata_result()$value
   })
 
   # descMissData() function for plot output
@@ -408,13 +412,9 @@ descMissData_server <- function(input, output, session, uploaded_data) {
     req(input$go_descMissData)
     req(uploaded_data$data_source)  # Make sure data_source exists
 
-    #Only print plot and postscript if no error
-    tryCatch({midoc::descMissData(
-      y = input$y_descMissData,
-      covs = input$covs_descMissData,
-      data = data(),
-      plot = FALSE
-    )
+    #Only show the postscript if descMissData ran without error
+    res <- tryCatch(descmissdata_result(), error = function(e) NULL)
+    if (is.null(res) || !res$ok) return(NULL)
 
     if (uploaded_data$data_source == "bmi") {
       tagList(
@@ -437,9 +437,7 @@ descMissData_server <- function(input, output, session, uploaded_data) {
           p("1 = observed and 0 = missing")
         )
       )
-    }},
-    error = function(e) {""}
-    )
+    }
   })
 }
 
@@ -561,7 +559,7 @@ exploreDAG_server <- function(input, output, session, uploaded_data) {
   output$exploredag <- renderPrint({
     if (data_changed()) return(invisible())  # prevent output if data changed but button not clicked
     req(exploredag_result())  # only run after button click
-    cat(strwrap(paste(cat(exploredag_result(),"\n",fill=TRUE), collapse = "\n")))
+    cat(exploredag_result(),"\n",fill=TRUE)
   })
 
   # conditional text below output
@@ -723,7 +721,7 @@ checkCRA_server <- function(input, output, session, uploaded_data) {
       return(invisible())
     }
     req(input$go_checkCRA)
-    cat(strwrap(paste(cat(checkcra(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkcra(), "\n", fill = TRUE)
   })
 
   #output$post_output_text_checkCRA <- renderUI({
@@ -886,7 +884,7 @@ checkMI_server <- function(input, output, session, uploaded_data) {
       return(invisible())  # clear output if data has changed but button not clicked yet
     }
     req(input$go_checkMI)  # Wait for button click to show output
-    cat(strwrap(paste(cat(checkmi(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkmi(), "\n", fill = TRUE)
   })
 
   #output$post_output_text_checkMI <- renderUI({
@@ -1084,7 +1082,7 @@ checkModSpec_server <- function(input, output, session, uploaded_data) {
 
     req(input$go_checkModSpec) # And button must be clicked
 
-    cat(strwrap(paste(cat(checkmodspec(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkmodspec(), "\n", fill = TRUE)
   })
 
   # checkModSpec() function for plot output
@@ -1331,7 +1329,7 @@ proposeMI_server <- function(input, output, session, uploaded_data) {
     #if (is.null(msgs) || length(msgs) == 0) {
     #  cat("No messages to display.")
     #} else {
-      cat(strwrap(paste(cat(proposemi(), "\n", fill = TRUE), collapse = "\n")))
+      cat(proposemi(), "\n", fill = TRUE)
     #}
   })
 
@@ -1592,7 +1590,7 @@ doMImice_server <- function(input, output, session, uploaded_data) {
       return(invisible())  # clear output if data changed but button not clicked
     }
     req(input$go_doMImice)
-    cat(strwrap(paste(cat(domimice(), "\n", fill = TRUE), collapse = "\n")))
+    cat(domimice(), "\n", fill = TRUE)
   })
 
   # conditional text under the output

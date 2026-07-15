@@ -340,7 +340,7 @@ server <- function(input, output) {
     
     output$exploredag <- shiny::bindEvent(shiny::renderPrint({ 
 
-         cat(strwrap(paste(cat(exploredag(),"\n",fill=TRUE), collapse="\n")))
+         cat(exploredag(),"\n",fill=TRUE)
   
     }), input$go)
     
@@ -487,7 +487,7 @@ server <- function(input, output) {
     
   output$checkcra <- shiny::bindEvent(shiny::renderPrint({
 
-    cat(strwrap(paste(cat(checkcra(),"\n",fill=TRUE), collapse="\n")))
+    cat(checkcra(),"\n",fill=TRUE)
   
   }), input$go)
 
@@ -673,7 +673,7 @@ server <- function(input, output) {
     
   output$checkmi <- shiny::bindEvent(shiny::renderPrint({
 
-    cat(strwrap(paste(cat(checkmi(),"\n",fill=TRUE), collapse="\n")))
+    cat(checkmi(),"\n",fill=TRUE)
   
   }), input$go)
 
@@ -806,7 +806,7 @@ server <- function(input, output) {
     
     output$checkmodspec <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(checkmodspec(),"\n",fill=TRUE), collapse="\n")))
+      cat(checkmodspec(),"\n",fill=TRUE)
   
     }), input$go)
      
@@ -922,7 +922,7 @@ server <- function(input, output) {
     
     output$proposemi <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(proposemi(),"\n",fill=TRUE), collapse="\n")))
+      cat(proposemi(),"\n",fill=TRUE)
   
     }), input$go)
     
@@ -1040,7 +1040,7 @@ server <- function(input, output) {
     
     output$domimice <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(domimice(),"\n",fill=TRUE), collapse="\n")))
+      cat(domimice(),"\n",fill=TRUE)
   
     }), input$go)
     
