@@ -40,7 +40,7 @@ summary(bmi7_m1)
 #Add bmi_full for investigation purposes?
 bmi<-data.frame(bmi7=bmi7_m1,matage=matage_sc,mated,pregsize,bwt=bwt_sc)
 #Create complete_record indicator - this should be a separate function
-bmi$r <- ifelse(apply(bmi,1,anyNA)==F,1,0)
+bmi$r <- as.numeric(complete.cases(bmi))
 summary(bmi$r)
 
 #Define binary variables

@@ -22,12 +22,12 @@
 # ASRDS at 14 years (asrds14), calculated as a % of the maximum possible
 # square-root value of ASRDS, such that asrds14 depends on
 # mated and log_income:
-# asrds14 = -4 * mated - 7 * log_income + 110 + ε , where ε ~ N(0,8^2)
+# asrds14 = -4 * mated - 7 * log_income + 115 + ε , where ε ~ N(0,8^2)
 
 # ASRDS at 17 years (asrds17), calculated as a % of the maximum possible
 # square-root value of ASRDS, such that asrds17 depends on mated, log_income and
 # asrds14:
-# asrds17 = 0.5 * asrds14 - 3 * mated - 7 * log_income - 30 + ε ,
+# asrds17 = 0.5 * asrds14 - 3 * mated - 6 * log_income + 90 + ε ,
 # where ε ~ N(0,6^2)
 
 set.seed(5668)
@@ -59,9 +59,9 @@ asrds<-data.frame(asrds17=asrds17_m1, log_income5=log_income5,mated=mated,
                 asrds14=asrds14)
 
 #Create missing indicator - note this is also the complete_record indicator
-asrds$r_cra <- ifelse(apply(asrds,1,anyNA)==F,1,0)
+asrds$r_cra <- as.numeric(complete.cases(asrds))
 
-# Check if there is an interaction between gcse_score and log_income in the
+# Check if there is an interaction between asrds17 and log_income5 in the
 # log-additive model for selection under the chosen missingness mechanism
 r_cra <- asrds$r_cra
 summary(glm(r_cra~asrds17*log_income5, family=poisson(log)))
