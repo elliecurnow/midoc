@@ -34,7 +34,7 @@ data_ui <- fluidPage(
 
     mainPanel(
       tableOutput("preview"),
-      uiOutput("post_ouput_text_upload_data")
+      uiOutput("post_output_text_upload_data")
     )
   )
 )
@@ -79,7 +79,7 @@ data_server <- function(input, output, session, uploaded_data) {
   })
 
   # generic post output text for data upload
-  output$post_ouput_text_upload_data <- renderUI({
+  output$post_output_text_upload_data <- renderUI({
     if (uploaded_data$data_source == "upload" && is.null(input$file)) return(NULL)
     req(uploaded_data$df)  # Make sure data are loaded before showing the text
     tags$p("This table shows a preview of the selected dataset")
@@ -555,7 +555,7 @@ exploreDAG_server <- function(input, output, session, uploaded_data) {
     })
   })
 
-  # exploreDAG function ouput
+  # exploreDAG function output
   output$exploredag <- renderPrint({
     if (data_changed()) return(invisible())  # prevent output if data changed but button not clicked
     req(exploredag_result())  # only run after button click
@@ -642,7 +642,7 @@ checkCRA_ui <- fluidPage(tagList(
       width = 12,
 
       # Output: Print result
-      verbatimTextOutput(outputId = "checkcra"), # CRA ouput
+      verbatimTextOutput(outputId = "checkcra"), # CRA output
       #uiOutput("post_output_text_checkCRA") # post output text
 
     )
@@ -1467,7 +1467,7 @@ doMImice_ui <- fluidPage(tagList(
 
       width=12,
 
-      verbatimTextOutput(outputId = "domimice"), # domomice output
+      verbatimTextOutput(outputId = "domimice"), # doMImice output
       #uiOutput("post_output_text_doMImice") # post output text
     )
   )

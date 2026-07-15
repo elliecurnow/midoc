@@ -269,7 +269,7 @@ output$descmissdata_print <- renderPrint({
 
 # summMissData() function app tab 2 ---------------------------------------------
 
-# USER INTERFACE - descMissData() function app
+# USER INTERFACE - summMissData() function app
 summMissData_ui <- fluidPage(tagList(
 
   # App title
@@ -389,7 +389,7 @@ summMissData_server <- function(input, output, session, uploaded_data) {
   })
 }
 
-# drawDAG() function app tab 4 ---------------------------------------------------
+# drawDAG() function app tab 3 ---------------------------------------------------
 
 # USER INTERFACE  - Draw DAG app
 drawDAG_ui <- fluidPage(
@@ -771,7 +771,7 @@ checkCRA_ui <- fluidPage(tagList(
       width = 12,
 
       # Output: Print result
-      verbatimTextOutput(outputId = "checkcra"), # CRA ouput
+      verbatimTextOutput(outputId = "checkcra"), # CRA output
       #uiOutput("post_output_text_checkCRA") # post output text
 
     )
@@ -1684,7 +1684,7 @@ doMImice_ui <- fluidPage(tagList(
 
       width=12,
 
-      verbatimTextOutput(outputId = "domimice"), # domomice output
+      verbatimTextOutput(outputId = "domimice"), # doMImice output
       #uiOutput("post_output_text_doMImice") # post output text
     )
   )
@@ -1845,7 +1845,7 @@ doMImice_server <- function(input, output, session, uploaded_data) {
   #})
 }
 
-# doMNARMImice() function app tab 8 -------------------------------------------------
+# doMNARMImice() function app tab 10 -------------------------------------------------
 
 # USER INTERFACE - doMNARMImice() function app
 doMNARMImice_ui <- fluidPage(tagList(
@@ -1923,7 +1923,7 @@ doMNARMImice_ui <- fluidPage(tagList(
 
       width=12,
 
-      verbatimTextOutput(outputId = "domnarmimice"), # domomice output
+      verbatimTextOutput(outputId = "domnarmimice"), # doMNARMImice output
       #uiOutput("post_output_text_doMImice") # post output text
     )
   )
@@ -2083,7 +2083,7 @@ doMNARMImice_server <- function(input, output, session, uploaded_data) {
   #})
 }
 
-# doRefBasedMI() function app tab 9 -------------------------------------------------
+# doRefBasedMI() function app tab 11 -------------------------------------------------
 
 # USER INTERFACE - doRefBasedMI() function app
 doRefBasedMI_ui <- fluidPage(tagList(
@@ -2354,7 +2354,7 @@ doRefBasedMI_server <- function(input, output, session, uploaded_data) {
 
 
 
-# doCRA() function app tab 10 -------------------------------------------------
+# doCRA() function app tab 12 -------------------------------------------------
 
 # USER INTERFACE - doCRA() function app
 doCRA_ui <- fluidPage(tagList(
@@ -2820,7 +2820,7 @@ server <- function(input, output, session) {
   # doMNARMImice() function app
   doMNARMImice_server(input, output, session, uploaded_data)
 
-  # doMNARMImice() function app
+  # doRefBasedMI() function app
   doRefBasedMI_server(input, output, session, uploaded_data)
 
   # doCRA() function app
