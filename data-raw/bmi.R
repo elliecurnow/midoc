@@ -5,9 +5,7 @@ set.seed(567433)
 pregsize <- rbinom(1000,1,0.1)
 U <- rnorm(1000,0.4,1)
 # mated is only caused by U
-for (i in 1:1000){
-  mated <- rbinom(1000,1,exp(1+2*U[i])/(1+exp(1+2*U[i])))
-}
+mated <- rbinom(1000,1,exp(1+2*U)/(1+exp(1+2*U)))
 #Specify DGM for matage: matage = mated + ε , where ε ~ N(0,1).
 matage <- rnorm(1000,mated,1)
 # bmi = α + γ1pregsize + β1matage + γ2mated + β2matage^2 + ε
@@ -23,12 +21,12 @@ summary(bmi7_sc)
 
 mean(bwt)
 sd(bwt)
-bwt_sc=((bwt-5.42)/10.5)*.5 + 3.4
+bwt_sc=((bwt-5.5)/10.5)*.5 + 3.4
 summary(bwt_sc)
 
 mean(matage)
 sd(matage)
-matage_sc=(matage - 0.44)/1.15
+matage_sc=(matage - 0.8)/1.03
 
 #Generate missing values of bmi7_sc
 bmi7_m1 <- bmi7_sc

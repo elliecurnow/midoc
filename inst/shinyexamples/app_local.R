@@ -425,7 +425,7 @@ descMissData_server <- function(input, output, session, uploaded_data) {
           p("1 = observed and 0 = missing"),
           p("Here there are two missing data patterns: either all variables are observed,",
             "or BMI at age 7 years is missing and all other variables are observed. There are",
-            "592 (59%) individuals with no missing data.")
+            "593 (59%) individuals with no missing data.")
         )
       )
     } else {

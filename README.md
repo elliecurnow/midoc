@@ -64,12 +64,12 @@ library(midoc)
 
 head(bmi)
 #>       bmi7      matage mated pregsize      bwt r
-#> 1 15.16444 -1.30048035     0        0 3.287754 1
-#> 2 18.00250 -0.33689915     0        0 3.770346 1
-#> 3       NA -0.22673432     0        1 3.022161 0
-#> 4       NA  0.81459107     1        0 3.103251 0
-#> 5 17.97791 -0.55260086     0        0 3.830381 1
-#> 6       NA -0.03829346     1        0 2.775282 0
+#> 1 19.66831  1.44983969     1        0 3.343531 1
+#> 2 17.29852  0.64876278     1        0 3.779987 1
+#> 3       NA -1.17814075     0        1 3.070305 0
+#> 4       NA -0.93278538     1        0 3.100346 0
+#> 5 17.94447 -0.02145515     1        0 3.738823 1
+#> 6       NA -0.50127096     0        0 2.769860 0
 
 descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 ```
@@ -78,8 +78,8 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 
     #> [[1]]
     #>      pattern bmi7 matage mated   n pct
-    #> [1,]       1    1      1     1 592  59
-    #> [2,]       2    0      1     1 408  41
+    #> [1,]       1    1      1     1 593  59
+    #> [2,]       2    0      1     1 407  41
 
     exploreDAG(mdag=" matage -> bmi7 
                       mated -> matage 
@@ -138,17 +138,17 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> hypothesis is that the stated variables are (conditionally)
     #> independent.
     #> 
-    #>                           estimate   p.value        2.5%      97.5%
+    #>                            estimate   p.value        2.5%      97.5%
     #> 
-    #> bwt _||_ matage | mated 0.05018898 0.1127099 -0.01184095 0.11183410
+    #> bwt _||_ matage | mated 0.005349423 0.8658334 -0.05666245 0.06732018
     #> 
-    #> matage _||_ pregsize    0.03029139 0.3386080 -0.03176134 0.09211150
+    #> matage _||_ pregsize    0.023995431 0.4484736 -0.03805426 0.08586079
     #> 
-    #> matage _||_ r | mated   0.02998323 0.3435470 -0.03206946 0.09180567
+    #> matage _||_ r | mated   0.042457854 0.1797384 -0.01958678 0.10417673
     #> 
-    #> mated _||_ pregsize     0.01594976 0.6144181 -0.04608889 0.07786585
+    #> mated _||_ pregsize     0.007432760 0.8143998 -0.05458547 0.06939387
     #> 
-    #> pregsize _||_ r         0.01482015 0.6397174 -0.04721631 0.07674273
+    #> pregsize _||_ r         0.027066217 0.3925539 -0.03498557 0.08891012
     #> 
     #> Interpretation: A strong correlation means the stated variables may not
     #> be (conditionally) independent in the specified dataset: your data may
@@ -206,17 +206,17 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> 
     #> Coefficients:
     #> 
-    #>              Estimate Std. Error t value Pr(>|t|)
+    #>               Estimate Std. Error t value Pr(>|t|)
     #> 
-    #> (Intercept) -3.65e-16   4.56e-02       0        1
+    #> (Intercept) -7.289e-16  4.497e-02       0        1
     #> 
-    #> (Dispersion parameter for gaussian family taken to be 1.230712)
+    #> (Dispersion parameter for gaussian family taken to be 1.199459)
     #> 
-    #>     Null deviance: 727.35  on 591  degrees of freedom
+    #>     Null deviance: 710.08  on 592  degrees of freedom
     #> 
-    #> Residual deviance: 727.35  on 591  degrees of freedom
+    #> Residual deviance: 710.08  on 592  degrees of freedom
     #> 
-    #> AIC: 1805.9
+    #> AIC: 1793.7
     #> 
     #> Number of Fisher Scoring iterations: 2
     #> 
@@ -245,7 +245,7 @@ miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> proposed imputation model(s), these will be carried over to 'midoc'
 #> functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
-#> stratification factor(s):
+#> stratification factor(s)
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
@@ -290,23 +290,23 @@ doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 #> Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,
 #> multiple imputation estimates are as follows:
 #> 
-#>          term   estimate  std.error  statistic       df       p.value
+#>          term   estimate  std.error statistic        df      p.value      2.5 %
 #> 
-#> 1 (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284
+#> 1 (Intercept) 18.0709809 0.21925037 82.421667  43.48574 2.104896e-49 17.6289632
 #> 
-#> 2      matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53
+#> 2      matage  1.4906413 0.05117177 29.130149 188.69072 9.511094e-72  1.3896991
 #> 
-#> 3 I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74
+#> 3 I(matage^2)  0.6775504 0.03462396 19.568832 156.04456 7.520147e-44  0.6091583
 #> 
-#> 4      mated1 -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16
+#> 4      mated1 -0.9350729 0.21724494 -4.304233  47.72426 8.271582e-05 -1.3719383
 #> 
-#>        2.5 %     97.5 %   conf.low  conf.high
+#>       97.5 %   conf.low  conf.high
 #> 
-#> 1 17.5203258 17.8011389 17.5203258 17.8011389
+#> 1 18.5129986 17.6289632 18.5129986
 #> 
-#> 2  1.0472648  1.2536442  1.0472648  1.2536442
+#> 2  1.5915836  1.3896991  1.5915836
 #> 
-#> 3  0.7778567  0.9051382  0.7778567  0.9051382
+#> 3  0.7459425  0.6091583  0.7459425
 #> 
-#> 4 -1.2156760 -0.7895629 -1.2156760 -0.7895629
+#> 4 -0.4982075 -1.3719383 -0.4982075
 ```
