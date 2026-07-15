@@ -3,7 +3,7 @@ Title: A Decision-Making System for Multiple Imputation
 Version: 1.0.0.9000
 Authors@R: c(
     person("Elinor", "Curnow", , "elinor.curnow@bristol.ac.uk", role = c("aut", "cre", "cph"),
-            comment = c(ORCID = "0000-0002-3109-3647")),
+           comment = c(ORCID = "0000-0002-3109-3647")),
     person("Jon", "Heron", role = "aut"),
     person("Rosie", "Cornish", role = "aut"),
     person("Kate", "Tilling", role = "aut"),
@@ -11,37 +11,43 @@ Authors@R: c(
     person("Holly", "Sachdeva", role = "ctb"),
     person("Imogen", "Joseph", role = "ctb"),
     person("Eddie", "Heath", role = "ctb")
-           )
-Description: A guidance system for analysis with missing data. It incorporates expert, up-to-date methodology to help researchers choose the most appropriate analysis approach when some data are missing. You provide the available data and the assumed causal structure, including the likely causes of missing data. 'midoc' will advise which analysis approaches can be used, and how best to perform them. 'midoc' follows the framework for the treatment and reporting of missing data in observational studies (TARMOS). Lee et al (2021). <doi:10.1016/j.jclinepi.2021.01.008>. 
+  )
+Description: A guidance system for analysis with missing data. It
+    incorporates expert, up-to-date methodology to help researchers choose
+    the most appropriate analysis approach when some data are missing. You
+    provide the available data and the assumed causal structure, including
+    the likely causes of missing data. 'midoc' will advise which analysis
+    approaches can be used, and how best to perform them. 'midoc' follows
+    the framework for the treatment and reporting of missing data in
+    observational studies (TARMOS). Lee et al (2021).
+    <doi:10.1016/j.jclinepi.2021.01.008>.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Suggests: 
-    knitr,
-    testthat
+URL: https://elliecurnow.github.io/midoc/,
+    https://github.com/elliecurnow/midoc/,
+    https://mrcieu.r-universe.dev/midoc
+BugReports: https://github.com/elliecurnow/midoc/issues/
+Depends: 
+    R (>= 3.6)
 Imports: 
     arm,
     blorr,
     dagitty,
-    glue,
     grDevices,
     gridExtra,
-    lifecycle,
     mfp2,
     mice (>= 3.16.0),
     RefBasedMI,
-    rlang,
     rmarkdown,
     shiny,
     stats,
     utils
-VignetteBuilder: knitr
-Depends: 
-    R (>= 3.6)
-LazyData: true
-URL: https://elliecurnow.github.io/midoc/, 
-    https://github.com/elliecurnow/midoc/,
-    https://mrcieu.r-universe.dev/midoc
-BugReports: https://github.com/elliecurnow/midoc/issues/
+Suggests: 
+    knitr,
+    testthat
+VignetteBuilder: 
+    knitr
 Config/roxygen2/markdown: TRUE
 Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true

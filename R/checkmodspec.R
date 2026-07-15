@@ -47,6 +47,12 @@
 #'              family="gaussian(identity)", data=bmi)
 checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message=TRUE) {
 
+  #Check the specified family is supported
+  if (length(family) != 1 || !family %in% c("gaussian(identity)", "binomial(logit)")) {
+    stop("\n\n'family' must be either \"gaussian(identity)\" or \"binomial(logit)\"\n\n",
+         call.=TRUE)
+  }
+
   if (!is.null(data)) {
     if(family == "gaussian(identity)"){
 
@@ -59,7 +65,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         modfittest <- summary(modfitres)
       } else {
         bylist <- unlist(strsplit(by," "))
-        modfittest <- by(data, data[,c(bylist)],
+        modfittest <- by(data, data[,bylist],
                     function(x) {
                       mod <- stats::glm(stats::as.formula(formula), data = x)
                       modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
@@ -74,7 +80,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        polynomial of the fitted values (fitvals). If stratification variable(s) are specified,
                        results are subsetted by the values of the factor(s).\n",
                        #paste0(pval),
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
         }
 
@@ -88,7 +94,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         #pval <- round(stats::coef(modfittest)[3,4],6)
       } else {
         bylist <- unlist(strsplit(by," "))
-        modfittest <- by(data, data[,c(bylist)],
+        modfittest <- by(data, data[,bylist],
                          function(x) {
                            mod <- stats::glm(stats::as.formula(formula),family="binomial", data = x)
                            modfit <- data.frame(r=mod[["residuals"]],fitvals=mod[["fitted.values"]])
@@ -102,7 +108,7 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        If stratification variable(s) are specified,
                        results are subsetted by the values of the factor(s).\n",
                        #paste0(pval)
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
       }
 
@@ -161,18 +167,19 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         message(paste("The proposed parametric model is:",
                                sQuote(formula),
                                "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                               prefix="\n", collapse="\n"))
+                               "\n", collapse="\n"))
         } else {
           message(paste("The proposed parametric model is:",
                         sQuote(formula),
                         "\n\nstratified by:",
                         paste(by),
                         "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                        prefix="\n", collapse="\n"))}
+                        "\n", collapse="\n"))}
         }
     mimod <- list(formula = formula,family = family,by=by)
   }
   #Return an object with formula and family
+  class(mimod) <- "mimod"
   invisible(mimod)
 }
 

@@ -29,22 +29,24 @@ exploreDAG <- function(mdag, data=NULL) {
   if(dagitty::is.dagitty(mdag)){
     mod <- mdag
   } else {
-    mod <- dagitty::dagitty(mdag, layout=T)
+    mod <- dagitty::dagitty(mdag)
   }
 
   tests <- dagitty::impliedConditionalIndependencies(mod)
   result1 <- paste("The proposed directed acyclic graph (DAG) implies the following pairs of variables are (conditionally) independent
 (where, for example, 'X _||_ Y | Z' should be read as 'X is independent of Y conditional on Z').
 Note that variable names are abbreviated. Consider whether these (conditional) independencies are plausible for your study, and update your DAG accordingly: \n \n",
-                   paste0(utils::capture.output(tests), prefix="\n",collapse = "\n"),collapse = "\n")
+                   paste0(utils::capture.output(tests), "\n",collapse = "\n"),collapse = "\n")
 
   #Explore observed data if supplied
   if (!is.null(data)) {
     # Keep fully observed variables from dataset
+    # The final, unnamed element of the last md.pattern row is the total number
+    # of missing values, so exclude it from the list of fully observed variables
     mdlist <- mice::md.pattern(data,plot=FALSE)
     complist <- mdlist[nrow(mdlist),]
-    compvar <- names(complist[complist==0])
-    compdata <- data[,c(compvar)]
+    compvar <- setdiff(names(complist[complist==0]), "")
+    compdata <- data[,compvar, drop=FALSE]
 
     # Perform cond independence tests on fully observed variables only
     comptests <- Filter(function(x) all(x$X %in% compvar) & all(x$Y %in% compvar) & all(x$Z %in% compvar),
@@ -56,7 +58,7 @@ Note that variable names are abbreviated. Consider whether these (conditional) i
       result2 <- paste("None of the fully observed variables are conditionally independent.\nHence, no consistency checks will be performed. \nConsider whether it is valid and possible to explore relationships between partially observed variables using the observed data, e.g. avoiding perfect prediction.",collapse = "\n")
     }else{
       result2 <- paste("These (conditional) independence statements are explored below using the canonical correlations approach for mixed data. See ??dagitty::localTests for further details. \nResults are shown for variables that are fully observed in the specified dataset.\nThe null hypothesis is that the stated variables are (conditionally) independent. \n \n",
-                       paste0(gsub(" ", "@",utils::capture.output(comptestsres)),prefix="\n",collapse = "\n"),
+                       paste0(gsub(" ", "@",utils::capture.output(comptestsres)),"\n",collapse = "\n"),
   "\n \nInterpretation: A strong correlation means the stated variables may not be (conditionally) independent in the specified dataset: your data may not be consistent with the proposed DAG. A weak correlation means there is little evidence of inconsistency between your data and the proposed DAG. \n \nNote that there may also be other DAGs which your data are consistent with. Also note that these results assume that relationships between variables are linear. Consider exploring the specification of each relationship in your model. \nAlso consider whether it is valid and possible to explore relationships between partially observed variables using the observed data, e.g. avoiding perfect prediction.",collapse = "\n")
     }
 

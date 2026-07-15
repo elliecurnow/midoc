@@ -121,8 +121,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -154,7 +154,7 @@ server <- function(input, output) {
     
     output$descmissdata <- shiny::bindEvent(shiny::renderPrint({
       
-        midoc::descMissData(input$y,input$covs,data())
+        midoc::descMissData(y=input$y, covs=input$covs, data=data())
   
         }), input$go)
 }
@@ -302,8 +302,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -340,7 +340,7 @@ server <- function(input, output) {
     
     output$exploredag <- shiny::bindEvent(shiny::renderPrint({ 
 
-         cat(strwrap(paste(cat(exploredag(),"\n",fill=TRUE), collapse="\n")))
+         cat(exploredag(),"\n",fill=TRUE)
   
     }), input$go)
     
@@ -487,7 +487,7 @@ server <- function(input, output) {
     
   output$checkcra <- shiny::bindEvent(shiny::renderPrint({
 
-    cat(strwrap(paste(cat(checkcra(),"\n",fill=TRUE), collapse="\n")))
+    cat(checkcra(),"\n",fill=TRUE)
   
   }), input$go)
 
@@ -574,7 +574,7 @@ checkCRA(y="bmi7",
 
 
 
-We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), complete record indicator (`r_dep`), and mDAG (`mdag`). 
+We will now use the `midoc` function `checkMI` applied to our DAG to check whether MI is valid when the imputation model predictors for BMI at age 7 years include pregnancy size or birth weight, as well as maternal age and maternal education. We will specify the partially observed variable (`dep`), predictors (`preds`), complete record indicator (`r_cra`), and mDAG (`mdag`). 
 
 We will first consider the imputation model including pregnancy size. The results are shown below. These suggest that MI would be valid in principle if we included pregnancy size as well as the other analysis model variables in the imputation model for BMI at age 7 years. 
 
@@ -673,7 +673,7 @@ server <- function(input, output) {
     
   output$checkmi <- shiny::bindEvent(shiny::renderPrint({
 
-    cat(strwrap(paste(cat(checkmi(),"\n",fill=TRUE), collapse="\n")))
+    cat(checkmi(),"\n",fill=TRUE)
   
   }), input$go)
 
@@ -728,9 +728,9 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
              plot=FALSE)
 ```
 
-There is some evidence of model mis-specification. 
+In this case, there is little evidence of model mis-specification, even though we know a quadratic form of maternal age is required for compatibility with the imputation model for BMI at age 7 years: Pregibon's link test may have limited power to detect the induced non-linearity. 
 
-Once we include a quadratic form of maternal age in our model for pregnancy size, there is little evidence of model mis-specification:
+We should nevertheless include the quadratic form of maternal age in our model for pregnancy size, as follows:
 
 ```{r, R.options=list(width=80)}
 checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated", 
@@ -767,8 +767,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -801,12 +801,12 @@ server <- function(input, output) {
     
     checkmodspec <- shiny::reactive({
         testthat::evaluate_promise(
-          midoc::checkModSpec(input$formula,input$family,data(),plot=FALSE))$messages
+          midoc::checkModSpec(input$formula,input$family,data=data(),plot=FALSE))$messages
     })
     
     output$checkmodspec <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(checkmodspec(),"\n",fill=TRUE), collapse="\n")))
+      cat(checkmodspec(),"\n",fill=TRUE)
   
     }), input$go)
      
@@ -879,8 +879,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -912,17 +912,17 @@ server <- function(input, output) {
       })
     
     mimod <- shiny::reactive(
-                midoc::checkModSpec(input$formula,input$family,data(),
+                midoc::checkModSpec(input$formula,input$family,data=data(),
                                     plot=FALSE, message=FALSE))
     
     proposemi <- shiny::reactive({
         testthat::evaluate_promise(
-          midoc::proposeMI(mimod(),data(),plot=FALSE))$messages
+          midoc::proposeMI(mimodobj=mimod(), data=data(),plot=FALSE))$messages
     })
     
     output$proposemi <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(proposemi(),"\n",fill=TRUE), collapse="\n")))
+      cat(proposemi(),"\n",fill=TRUE)
   
     }), input$go)
     
@@ -994,8 +994,8 @@ ui <- shiny::fluidPage(
           shiny::fileInput(inputId = "datafile", 
                            label = "Upload CSV file",
                            accept = c("text/csv",
-                            "text/comma-separated-values,
-                            .csv")),
+                            "text/comma-separated-values",
+                            ".csv")),
           
           shiny::actionButton(inputId = "go",
                               label = "Create output")
@@ -1027,11 +1027,11 @@ server <- function(input, output) {
       })
     
     mimod <- shiny::reactive(
-                midoc::checkModSpec(input$impformula,input$impfamily,data(),
+                midoc::checkModSpec(input$impformula,input$impfamily,data=data(),
                                       plot=FALSE, message=FALSE))
     
     miprop <- shiny::reactive(
-                midoc::proposeMI(mimod(),data(),plot=FALSE, message=FALSE))
+                midoc::proposeMI(mimodobj=mimod(), data=data(),plot=FALSE, message=FALSE))
     
     domimice <- shiny::reactive({
         testthat::evaluate_promise(
@@ -1040,7 +1040,7 @@ server <- function(input, output) {
     
     output$domimice <- shiny::bindEvent(shiny::renderPrint({
 
-      cat(strwrap(paste(cat(domimice(),"\n",fill=TRUE), collapse="\n")))
+      cat(domimice(),"\n",fill=TRUE)
   
     }), input$go)
     
@@ -1061,15 +1061,15 @@ Finally, we illustrate how our choice of analysis approach affects the estimated
 
 The parameter estimates for the linear and quadratic terms of maternal age, and their 95% confidence intervals, are shown in the table below. Note that, because we have simulated the data and its missingness, we know the "true" association *i.e.* the association if there were no missing data - this is shown in the "Full data" row of the table. Further note that the results displayed in the third row ("MI fitting quadratic relationship, using pregnancy size") are exactly those generated above. To avoid repetition, we have not shown the code for fitting the other models. 
 
-From the table, we can see that both CRA and MI (fitting a quadratic relationship between BMI at age 7 years and maternal age in the imputation model) estimates are unbiased for both the linear and quadratic terms of maternal age. MI estimates are biased when fitting a linear relationship in the imputation model, particularly for the quadratic term of maternal age. MI estimates using the collider, birth weight, as an auxiliary variable are slightly more biased and slightly less precise than the estimates using pregnancy size as an auxiliary variable. The collider bias is relatively small because the association between BMI at age 7 years and maternal age is strong in this setting. Note that the collider bias could be relatively larger if the association was weak [8](https://doi.org/10.3389/fepid.2023.1237447). 
+From the table, we can see that both CRA and MI (fitting a quadratic relationship between BMI at age 7 years and maternal age in the imputation model) estimates are unbiased for both the linear and quadratic terms of maternal age. MI estimates are biased when fitting a linear relationship in the imputation model, particularly for the quadratic term of maternal age. MI estimates using the collider, birth weight, as an auxiliary variable are slightly more biased and slightly less precise than the estimates using pregnancy size as an auxiliary variable. The collider bias is relatively small because the association between BMI at age 7 years and maternal age is strong in this setting. Note that the collider bias could be relatively larger if the association was weak [7](https://doi.org/10.3389/fepid.2023.1237447). 
 
 ```{r, echo=FALSE, R.options=list(width=80)}
-results <- data.frame(approach="Full data",linest="1.17 (1.09-1.26)", quadest="0.86 (0.80-0.91)")
-results[2,] <- c("CRA","1.16 (1.05-1.26)","0.84 (0.77-0.90)")
-results[3,] <- c("MI fitting quadratic relationship, using pregnancy size","1.15 (1.05-1.25)","0.84 (0.78-0.91)")
-results[4,] <- c("MI fitting quadratic relationship, using birth weight","1.16 (1.05-1.27)","0.83 (0.77-0.90)")
-results[5,] <- c("MI fitting linear relationship, using pregnancy size","1.21 (1.07-1.34)","0.54 (0.46-0.62)")
-results[6,] <- c("MI fitting linear relationship, using birth weight","1.20 (1.07-1.34)","0.53 (0.45-0.61)")
+results <- data.frame(approach="Full data",linest="1.50 (1.42-1.58)", quadest="0.66 (0.61-0.71)")
+results[2,] <- c("CRA","1.50 (1.39-1.61)","0.68 (0.60-0.76)")
+results[3,] <- c("MI fitting quadratic relationship, using pregnancy size","1.49 (1.39-1.59)","0.68 (0.61-0.75)")
+results[4,] <- c("MI fitting quadratic relationship, using birth weight","1.47 (1.37-1.58)","0.69 (0.61-0.77)")
+results[5,] <- c("MI fitting linear relationship, using pregnancy size","1.82 (1.70-1.94)","0.29 (0.21-0.36)")
+results[6,] <- c("MI fitting linear relationship, using birth weight","1.81 (1.69-1.93)","0.29 (0.21-0.36)")
 
 knitr::kable(results, caption = "Parameter estimates for maternal age",
              col.names=c("Approach","Linear term","Quadratic term"),

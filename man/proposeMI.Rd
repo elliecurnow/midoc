@@ -26,7 +26,7 @@ records will be calculated based on all columns included in the dataset.}
 \item{data}{Optionally, a data frame containing all the variables required
 for imputation and the substantive analysis; if stratification variable(s)
 are included in the 'mimod' object(s), these will be carried over to 'midoc'
-functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 performed for each subset of the data determined by the values of the
 stratification variable(s)}
 

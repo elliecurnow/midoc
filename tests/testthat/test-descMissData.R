@@ -5,7 +5,7 @@ res1<-evaluate_promise(descMissData(y="bmi7", covs="matage mated", data=bmi))
 test_that("descMissData output is as expected when data are missing",
   {
     expect_equal(trimws(paste0(gsub("\n","",res1$result), collapse=" "),"right"),
-"c(1, 2, 1, 0, 1, 1, 1, 1, 592, 408, 59, 41)")
+"c(1, 2, 1, 0, 1, 1, 1, 1, 593, 407, 59, 41)")
   }
 )
 
@@ -16,7 +16,7 @@ res2<-evaluate_promise(descMissData(y="bmi7", covs="matage mated", by="pregsize"
 test_that("descMissData output is as expected when 'by' is specified",
           {
             expect_equal(trimws(paste0(gsub("\n","",res2$result), collapse=" "),"right"),
-"c(1, 2, 1, 0, 1, 1, 1, 1, 524, 365, 59, 41) c(1, 2, 1, 0, 1, 1, 1, 1, 68, 43, 61, 39)")
+"c(1, 2, 1, 0, 1, 1, 1, 1, 523, 366, 59, 41) c(1, 2, 1, 0, 1, 1, 1, 1, 70, 41, 63, 37)")
           }
 )
 
@@ -27,6 +27,24 @@ res3<-evaluate_promise(descMissData(y="bmi7",data=bmi))
 test_that("descMissData output is as expected when 'by' is specified",
           {
             expect_equal(trimws(paste0(gsub("\n","",res3$result), collapse=" "),"right"),
-                         "c(1, 2, 0, 1, 408, 592, 41, 59)")
+                         "c(1, 2, 0, 1, 407, 593, 41, 59)")
+          }
+)
+
+# Check output when only 'y' is specified and it is fully observed
+res4<-evaluate_promise(descMissData(y="matage",data=bmi))
+test_that("descMissData output is as expected for a single fully observed variable",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res4$result), collapse=" "),"right"),
+                         "c(1, 1, 1000, 100)")
+          }
+)
+
+# Check output when only 'y' is specified and it is missing for all records
+res5<-evaluate_promise(descMissData(y="x",data=data.frame(x=rep(NA_real_,10))))
+test_that("descMissData output is as expected for a single fully missing variable",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res5$result), collapse=" "),"right"),
+                         "c(1, 0, 10, 100)")
           }
 )

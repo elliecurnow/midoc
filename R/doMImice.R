@@ -41,7 +41,7 @@
 #' # Additionally, fit the substantive model to each imputed dataset and display
 #' ## the pooled results
 #' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-doMImice <- function(mipropobj, seed, substmod = " ", message = TRUE) {
+doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
 
   if(is.null(mipropobj$by)){
     mids <- mice::mice(
@@ -54,7 +54,7 @@ doMImice <- function(mipropobj, seed, substmod = " ", message = TRUE) {
           seed = seed)
   } else {
     bylist <- unlist(strsplit(mipropobj$by," "))
-    midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+    midstmp <- by(mipropobj$data, mipropobj$data[,bylist],
                function(x)
                  mice::mice(data = x,
                             m = mipropobj$m,
@@ -64,21 +64,16 @@ doMImice <- function(mipropobj, seed, substmod = " ", message = TRUE) {
                             printFlag = FALSE,
                             seed = seed))
     # Combine the sets of imputations using `mice::rbind`
-    mids <- midstmp[[1]]
-    if (length(midstmp)>1){
-      for (i in 2:length(midstmp)){
-        mids <- mice::rbind(mids,midstmp[[i]])
-      }
-    }
+    mids <- Reduce(mice::rbind, midstmp)
   }
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,
 "\n, multiple imputation estimates are as follows: \n \n",
-              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
+              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),"\n",collapse = "\n"),
               collapse = "\n")
   }
   else {

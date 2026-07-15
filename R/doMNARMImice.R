@@ -59,18 +59,14 @@
 #' ## the pooled results
 #' doMNARMImice(mipropobj=miprop, mnardep="bmi7", mnardelta="-2", seed=123,
 #'              substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", message = TRUE) {
+doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, message = TRUE) {
 
   # Update method for mnardep variable
-  if(length(mipropobj[["formulas"]])==1){
-    miprop_count <- 1
-  } else {
-    miprop_count <- length(mipropobj[["formulas"]])
-  }
+  miprop_count <- length(mipropobj[["formulas"]])
   method <- mipropobj$method
 
-  for (i in 1:miprop_count){
-    if (substr(mipropobj[["formulas"]][[i]],1,1000)[2] == mnardep){
+  for (i in seq_len(miprop_count)){
+    if (as.character(mipropobj[["formulas"]][[i]])[2] == mnardep){
       method[i] <- paste("mnar.",mipropobj$method[[i]],sep="")
     } else {
       method[i] <- mipropobj$method[[i]]
@@ -94,7 +90,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", me
           seed = seed)
     } else {
       bylist <- unlist(strsplit(mipropobj$by," "))
-      midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
+      midstmp <- by(mipropobj$data, mipropobj$data[,bylist],
                     function(x)
                       mice::mice(data = x,
                                  m = mipropobj$m,
@@ -105,16 +101,11 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", me
                                  printFlag = FALSE,
                                  seed = seed))
       # Combine the sets of imputations using `mice::rbind`
-      mids <- midstmp[[1]]
-      if (length(midstmp)>1){
-        for (i in 2:length(midstmp)){
-          mids <- mice::rbind(mids,midstmp[[i]])
-        }
-      }
+      mids <- Reduce(mice::rbind, midstmp)
     }
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,
@@ -123,7 +114,7 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = " ", me
                     "for",
                     mnardep,
               "\n, multiple imputation estimates are as follows: \n \n",
-              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
+              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),"\n",collapse = "\n"),
               collapse = "\n")
   }
   else {

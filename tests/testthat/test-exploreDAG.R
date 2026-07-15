@@ -48,3 +48,13 @@ test_that("exploreDAG correctly identifies the implied independencies when a dag
                          "The proposed directed acyclic graph (DAG) implies the following pairs of variables are (conditionally) independent (where, for example, 'X _||_ Y | Z' should be read as 'X is independent of Y conditional on Z'). Note that variable names are abbreviated. Consider whether these (conditional) independencies are plausible for your study")
           }
 )
+
+# Check output when the dataset is fully observed
+res_full<-evaluate_promise(exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7",
+                                      data=bmi[stats::complete.cases(bmi), c("matage","mated","bmi7")]))
+test_that("exploreDAG runs when all variables in the dataset are fully observed",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res_full$messages), collapse=" "),"right"),1,69),
+                         "The proposed directed acyclic graph (DAG) implies the following pairs")
+          }
+)

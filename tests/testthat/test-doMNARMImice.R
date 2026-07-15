@@ -33,7 +33,7 @@ mipropv2 <- proposeMI(mimodobj=mimod_bmi7v2, data=bmi, plot=FALSE, message=FALSE
 res2<-evaluate_promise(doMNARMImice(mipropv2, mnardep="bmi7", mnardelta="-2", 123,
                                 substmod="lm(bmi7 ~ matage + I(matage^2) + mated)"))
 #Trim output for test purposes
-test_that("doMNARmice creates the correct output when 'by' is
+test_that("doMNARMImice creates the correct output when 'by' is
           specified",
           {
             expect_equal(substr(trimws(paste0(gsub("\n"," ",res2$message), collapse=" "),

@@ -61,7 +61,7 @@ adr<-data.frame(gcse_score=gcse_score, log_income=log_income_m1,mated=mated,
                 ks2_score=ks2_score)
 
 #Create missing indicator - note this is also the complete_record indicator
-adr$r_log_income <- ifelse(apply(adr,1,anyNA)==F,1,0)
+adr$r_log_income <- as.numeric(complete.cases(adr))
 
 #Removed indiv variable missingness indicator for log_income
 #Multiple missingness indicators currently no supported by midoc
@@ -83,7 +83,7 @@ names(adr)[5] <- "r_cra"
 summary(adr)
 
 # Check predictors of missingness are as expected
-summary(glm(r_log_income~mated+ks2_score+gcse_score, family=binomial(logit),
+summary(glm(r_cra~mated+ks2_score+gcse_score, family=binomial(logit),
             data=adr))
 # As expected
 

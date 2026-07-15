@@ -56,6 +56,9 @@ midoc::checkModSpec(qol0~age0,family="gaussian(identity)",
 # qol3 (at 3 months) caused by group, and (linearly) by qol0
 # Coeffs and res variance chosen so that mean & SD of qol3 were realistic values
 # Variance of QOL has been allowed to increase slightly over time
+# Note the loop below is redundant (the draw is fully vectorised and does not
+# use i) but is retained so the published dataset can be reproduced: removing
+# it would change the random number stream
 for (i in 1:1000){
   qol3 <- round(rnorm(1000,5*group+0.8*qol0+10,3))
 }
@@ -71,6 +74,7 @@ summary(lm(qol3~age0+I(age0^2)))
 #both qol0 and qol3 (no interactions)
 # Coeffs and res variance chosen so that mean & SD of qol12 were realistic and
 # (direct) treatment effect was 7 points at 12m
+# Note the loop below is redundant but retained for reproducibility, as above
 for (i in 1:1000){
   qol12 <- round(rnorm(1000,7*group+0.3*qol0+0.6*qol3+10,3))
 }
@@ -108,7 +112,7 @@ qol<-data.frame(id=id,group=group,age0=age0,qol0=qol0,qol3=qol3,qol12=qol12_m1)
 qol$group <- qol$group + 1
 
 #Create complete_record indicator/missing qol12 indicator
-qol$r_qol12 <- ifelse(apply(qol,1,anyNA)==F,1,0)
+qol$r_qol12 <- as.numeric(complete.cases(qol))
 #qol$r_cra <- ifelse(apply(qol,1,anyNA)==F,1,0)
 
 # Check there is an interaction between group and qol12 in the log-additive
@@ -128,7 +132,7 @@ names(qol)[7] <- "r"
 summary(qol)
 
 # Check predictors of missingness are as expected
-summary(glm(as.factor(r_qol12)~group+age0+qol0+qol3, family=binomial(logit),
+summary(glm(r~group+age0+qol0+qol3, family=binomial(logit),
             data=qol))
 # As expected
 

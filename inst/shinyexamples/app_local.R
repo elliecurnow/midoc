@@ -10,12 +10,6 @@ library(midoc)
 library(shiny) # makes embedded apps
 
 # Reactive values
-uploaded_data <- reactiveValues(
-  df = NULL,
-  data_source = NULL,
-  dag_text = NULL
-)
-
 # data upload app ---------------------------------------------------------
 
 # USER INTERFACE - data upload app
@@ -40,13 +34,13 @@ data_ui <- fluidPage(
 
     mainPanel(
       tableOutput("preview"),
-      uiOutput("post_ouput_text_upload_data")
+      uiOutput("post_output_text_upload_data")
     )
   )
 )
 
 # SERVER - data upload app
-data_server <- function(input, output, session) {
+data_server <- function(input, output, session, uploaded_data) {
 
     observeEvent(input$file, {
     #req(input$file)
@@ -85,7 +79,7 @@ data_server <- function(input, output, session) {
   })
 
   # generic post output text for data upload
-  output$post_ouput_text_upload_data <- renderUI({
+  output$post_output_text_upload_data <- renderUI({
     if (uploaded_data$data_source == "upload" && is.null(input$file)) return(NULL)
     req(uploaded_data$df)  # Make sure data are loaded before showing the text
     tags$p("This table shows a preview of the selected dataset")
@@ -126,7 +120,7 @@ drawDAG_ui <- fluidPage(
 )
 
 # SERVER - Draw DAG app
-drawDAG_server <- function(input, output, session) {
+drawDAG_server <- function(input, output, session, uploaded_data) {
 
   # bmi autofill dag input
   bmi_dag_text <- paste(
@@ -291,7 +285,7 @@ descMissData_ui <- fluidPage(tagList(
            "the missing data patterns ",
            "in the dataset"))
   #  p("Your analysis model outcome/variable of primary interest."),
-  #  p(HTML("When listing covariates, seperate them by a space. Example input:",
+  #  p(HTML("When listing covariates, separate them by a space. Example input:",
   #         "<code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("Make sure variables entered are spelt the same as in the dataset.")
   ),
@@ -332,7 +326,7 @@ descMissData_ui <- fluidPage(tagList(
 
 # SERVER - descMissData() function app
 
-descMissData_server <- function(input, output, session) {
+descMissData_server <- function(input, output, session, uploaded_data) {
 
   data <- reactive({
     validate(
@@ -368,22 +362,26 @@ descMissData_server <- function(input, output, session) {
     data_changed(FALSE)  # Clear the data changed flag so plot can render
   })
 
+  # Run descMissData once and cache the result (or error message) for the
+  # print and post-output renderers
+  descmissdata_result <- reactive({
+    req(data())
+    tryCatch(list(ok = TRUE,
+                  value = midoc::descMissData(
+                    y = input$y_descMissData,
+                    covs = input$covs_descMissData,
+                    data = data(),
+                    plot = FALSE)),
+             error = function(e) list(ok = FALSE, value = e$message))
+  })
+
   # descMissData() function for text output
   output$descmissdata_print <- renderPrint({
     req(input$go_descMissData)
     if (data_changed()) {
       return(invisible())
     }
-    req(data())
-    tryCatch({
-      midoc::descMissData(
-        y = input$y_descMissData,
-        covs = input$covs_descMissData,
-        data = data(),
-        plot = FALSE)
-    }, error = function(e) {
-      e$message
-    })
+    descmissdata_result()$value
   })
 
   # descMissData() function for plot output
@@ -414,13 +412,9 @@ descMissData_server <- function(input, output, session) {
     req(input$go_descMissData)
     req(uploaded_data$data_source)  # Make sure data_source exists
 
-    #Only print plot and postscript if no error
-    tryCatch({midoc::descMissData(
-      y = input$y_descMissData,
-      covs = input$covs_descMissData,
-      data = data(),
-      plot = FALSE
-    )
+    #Only show the postscript if descMissData ran without error
+    res <- tryCatch(descmissdata_result(), error = function(e) NULL)
+    if (is.null(res) || !res$ok) return(NULL)
 
     if (uploaded_data$data_source == "bmi") {
       tagList(
@@ -431,7 +425,7 @@ descMissData_server <- function(input, output, session) {
           p("1 = observed and 0 = missing"),
           p("Here there are two missing data patterns: either all variables are observed,",
             "or BMI at age 7 years is missing and all other variables are observed. There are",
-            "592 (59%) individuals with no missing data.")
+            "593 (59%) individuals with no missing data.")
         )
       )
     } else {
@@ -443,9 +437,7 @@ descMissData_server <- function(input, output, session) {
           p("1 = observed and 0 = missing")
         )
       )
-    }},
-    error = function(e) {""}
-    )
+    }
   })
 }
 
@@ -502,7 +494,7 @@ exploreDAG_ui <- fluidPage(tagList(
 ))
 
 # SERVER explorDAG() function app
-exploreDAG_server <- function(input, output, session) {
+exploreDAG_server <- function(input, output, session, uploaded_data) {
 
   # Reactive flag to track data changes and reset output
   data_changed <- reactiveVal(FALSE)  # tracks whether new data/DAG was uploaded
@@ -553,7 +545,9 @@ exploreDAG_server <- function(input, output, session) {
   # exploreDAG() function
   exploredag_result <- eventReactive(input$go_exploreDAG, {
     req(data())
-    req(dag_text())
+    validate(
+      need(nzchar(trimws(input$mdag_exploreDAG)), "Please specify mDAG")
+    )
     tryCatch({
       testthat::evaluate_promise(midoc::exploreDAG(input$mdag_exploreDAG, data()))$messages
     }, error = function(e) {
@@ -561,11 +555,11 @@ exploreDAG_server <- function(input, output, session) {
     })
   })
 
-  # exploreDAG function ouput
+  # exploreDAG function output
   output$exploredag <- renderPrint({
     if (data_changed()) return(invisible())  # prevent output if data changed but button not clicked
     req(exploredag_result())  # only run after button click
-    cat(strwrap(paste(cat(exploredag_result(),"\n",fill=TRUE), collapse = "\n")))
+    cat(exploredag_result(),"\n",fill=TRUE)
   })
 
   # conditional text below output
@@ -609,7 +603,7 @@ checkCRA_ui <- fluidPage(tagList(
     style = "margin-bottom: 20px; font-size: 14px; color: #333;",
     p(HTML("Use the <strong>midoc</strong> function <strong>checkCRA</strong> to explore whether",
            "a complete records analysis is valid")),
-  #  p("Enter covariates seperated by a space. Ensure variable names match column headings."),
+  #  p("Enter covariates separated by a space. Ensure variable names match column headings."),
   #  p(HTML("Example input: <code>covariate_1 covariate_2 covariate_3</code>."))
   ),
   #hr(), # line to divide text from output
@@ -648,7 +642,7 @@ checkCRA_ui <- fluidPage(tagList(
       width = 12,
 
       # Output: Print result
-      verbatimTextOutput(outputId = "checkcra"), # CRA ouput
+      verbatimTextOutput(outputId = "checkcra"), # CRA output
       #uiOutput("post_output_text_checkCRA") # post output text
 
     )
@@ -656,7 +650,7 @@ checkCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkCRA() function app
-checkCRA_server <- function(input, output, session) {
+checkCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)
 
@@ -727,7 +721,7 @@ checkCRA_server <- function(input, output, session) {
       return(invisible())
     }
     req(input$go_checkCRA)
-    cat(strwrap(paste(cat(checkcra(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkcra(), "\n", fill = TRUE)
   })
 
   #output$post_output_text_checkCRA <- renderUI({
@@ -774,7 +768,7 @@ checkMI_ui <- fluidPage(tagList(
     style = "margin-bottom: 20px; font-size: 14px; color: #333;",
     p(HTML("Use the <strong>midoc</strong> function <strong>checkMI</strong> to explore",
            "whether multiple imputation is valid "))
-  #  p(HTML("Enter covariates, seperated by a space. Ensure variables match column headings.",
+  #  p(HTML("Enter covariates, separated by a space. Ensure variables match column headings.",
   #         "Example input: <code>covariate_1 covariate_2 covariate_3</code>.")),
   #  p("The DAG is carried over from the draw DAG app.")
   ),
@@ -822,7 +816,7 @@ checkMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkMI() function app
-checkMI_server <- function(input, output, session) {
+checkMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Tracks if data has changed and output should reset
 
@@ -890,7 +884,7 @@ checkMI_server <- function(input, output, session) {
       return(invisible())  # clear output if data has changed but button not clicked yet
     }
     req(input$go_checkMI)  # Wait for button click to show output
-    cat(strwrap(paste(cat(checkmi(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkmi(), "\n", fill = TRUE)
   })
 
   #output$post_output_text_checkMI <- renderUI({
@@ -1010,7 +1004,7 @@ checkModSpec_ui <- fluidPage(tagList(
 ))
 
 # SERVER - checkModSpec function app
-checkModSpec_server <- function(input, output, session) {
+checkModSpec_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output is hidden initially
 
@@ -1063,7 +1057,7 @@ checkModSpec_server <- function(input, output, session) {
           midoc::checkModSpec(
             input$formula_checkModSpec,
             input$family_checkModSpec,
-            uploaded_data$df,
+            data = uploaded_data$df,
             plot = FALSE
           )
         )$messages
@@ -1088,7 +1082,7 @@ checkModSpec_server <- function(input, output, session) {
 
     req(input$go_checkModSpec) # And button must be clicked
 
-    cat(strwrap(paste(cat(checkmodspec(), "\n", fill = TRUE), collapse = "\n")))
+    cat(checkmodspec(), "\n", fill = TRUE)
   })
 
   # checkModSpec() function for plot output
@@ -1103,7 +1097,7 @@ checkModSpec_server <- function(input, output, session) {
     tryCatch(midoc::checkModSpec(
       input$formula_checkModSpec,
       input$family_checkModSpec,
-      uploaded_data$df,
+      data = uploaded_data$df,
       message = FALSE,
       plot = TRUE
     ),
@@ -1229,14 +1223,14 @@ proposeMI_ui <- fluidPage(tagList(
 ))
 
 # SERVER - proposeMI() function app
-proposeMI_server <- function(input, output, session) {
+proposeMI_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(TRUE)  # Start TRUE, so output hidden initially
 
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "formula_proposeMI", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "formula_proposeMI", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1271,13 +1265,11 @@ proposeMI_server <- function(input, output, session) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1307,7 +1299,7 @@ proposeMI_server <- function(input, output, session) {
     req(stored_formula())
     req(stored_family())
     tryCatch({
-    midoc::checkModSpec(stored_formula(), stored_family(), data(),
+    midoc::checkModSpec(stored_formula(), stored_family(), data = data(),
                         plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message
@@ -1337,7 +1329,7 @@ proposeMI_server <- function(input, output, session) {
     #if (is.null(msgs) || length(msgs) == 0) {
     #  cat("No messages to display.")
     #} else {
-      cat(strwrap(paste(cat(proposemi(), "\n", fill = TRUE), collapse = "\n")))
+      cat(proposemi(), "\n", fill = TRUE)
     #}
   })
 
@@ -1475,21 +1467,21 @@ doMImice_ui <- fluidPage(tagList(
 
       width=12,
 
-      verbatimTextOutput(outputId = "domimice"), # domomice output
+      verbatimTextOutput(outputId = "domimice"), # doMImice output
       #uiOutput("post_output_text_doMImice") # post output text
     )
   )
 ))
 
 # SERVER - doMImice function app
-doMImice_server <- function(input, output, session) {
+doMImice_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
   # autofill formula input from the checkmodspec app input
   observe({
     if (!is.null(uploaded_data$formula_checkModSpec)) {
-      updateSelectInput(session, "impformula", selected = uploaded_data$formula_checkModSpec)
+      updateTextAreaInput(session, "impformula", value = uploaded_data$formula_checkModSpec)
     }
   })
 
@@ -1511,7 +1503,7 @@ doMImice_server <- function(input, output, session) {
       updateSelectInput(session, "impfamily",
                         selected = "gaussian(identity)")
       updateTextAreaInput(session, "substmod",
-                        value = "lm(bmi7 ~ matage + I(matage^2) + mated + pregsize)")
+                        value = "lm(bmi7 ~ matage + I(matage^2) + mated)")
     } else {
       updateTextAreaInput(session, "impformula", value = "")
       updateSelectInput(session, "impfamily", selected = "")
@@ -1528,13 +1520,11 @@ doMImice_server <- function(input, output, session) {
   # save formula input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$formula_checkModSpec <- input$formula_checkModSpec
-    data_changed(FALSE)
   })
 
   # save family input for auto input to later apps
   observeEvent(input$go_checkModSpec, {
     uploaded_data$family_checkModSpec <- input$family_checkModSpec
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store formula and family at button click
@@ -1564,7 +1554,7 @@ doMImice_server <- function(input, output, session) {
     req(stored_impformula())
     req(stored_impfamily())
     tryCatch({
-    midoc::checkModSpec(stored_impformula(), stored_impfamily(), data(),
+    midoc::checkModSpec(stored_impformula(), stored_impfamily(), data = data(),
                         plot = FALSE, message = FALSE)
     }, error = function(e) {
       e$message
@@ -1600,7 +1590,7 @@ doMImice_server <- function(input, output, session) {
       return(invisible())  # clear output if data changed but button not clicked
     }
     req(input$go_doMImice)
-    cat(strwrap(paste(cat(domimice(), "\n", fill = TRUE), collapse = "\n")))
+    cat(domimice(), "\n", fill = TRUE)
   })
 
   # conditional text under the output
@@ -1681,14 +1671,14 @@ doCRA_ui <- fluidPage(tagList(
 ))
 
 # SERVER - doCRA function app
-doCRA_server <- function(input, output, session) {
+doCRA_server <- function(input, output, session, uploaded_data) {
 
   data_changed <- reactiveVal(FALSE)  # Track data changes to reset outputs
 
   # autofill substmod input from the doMImice app input
   observe({
     if (!is.null(uploaded_data$substmod)) {
-      updateSelectInput(session, "substmod_cra", selected = uploaded_data$substmod)
+      updateTextAreaInput(session, "substmod_cra", value = uploaded_data$substmod)
     }
   })
 
@@ -1713,7 +1703,6 @@ doCRA_server <- function(input, output, session) {
   # save formula input for auto input to later apps
   observeEvent(input$go_doMImice, {
     uploaded_data$substmod <- input$substmod
-    data_changed(FALSE)
   })
 
   # ReactiveVal to store substmod at button click
@@ -1956,35 +1945,43 @@ ui <- fluidPage(
 # master server -----------------------------------------------------------
 server <- function(input, output, session) {
 
+  # Per-session reactive values (created here so state is not shared across sessions)
+  uploaded_data <- reactiveValues(
+    df = NULL,
+    data_source = NULL,
+    dag_text = NULL
+  )
+
+
   # data upload app server
-  data_server(input, output, session)
+  data_server(input, output, session, uploaded_data)
 
   # DAG app server
-  drawDAG_server(input, output, session)
+  drawDAG_server(input, output, session, uploaded_data)
 
   #descMissData() function app
-  descMissData_server(input, output, session)
+  descMissData_server(input, output, session, uploaded_data)
 
   # exploreDAG() function app
-  exploreDAG_server(input, output, session)
+  exploreDAG_server(input, output, session, uploaded_data)
 
   # checkCRA() function app
-  checkCRA_server(input, output, session)
+  checkCRA_server(input, output, session, uploaded_data)
 
   # checkMI() function app
-  checkMI_server(input, output, session)
+  checkMI_server(input, output, session, uploaded_data)
 
   # checkModSpec() function app
-  checkModSpec_server(input, output, session)
+  checkModSpec_server(input, output, session, uploaded_data)
 
   # proposeMI() function app
-  proposeMI_server(input, output, session)
+  proposeMI_server(input, output, session, uploaded_data)
 
   # doMImice() function app
-  doMImice_server(input,output, session)
+  doMImice_server(input, output, session, uploaded_data)
 
   # doCRA() function app
-  doCRA_server(input,output, session)
+  doCRA_server(input, output, session, uploaded_data)
 
 }
 

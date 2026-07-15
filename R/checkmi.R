@@ -54,17 +54,17 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
   if(dagitty::is.dagitty(mdag)){
     mdagspec <- mdag
   } else {
-    mdagspec <- dagitty::dagitty(mdag, layout=T)
+    mdagspec <- dagitty::dagitty(mdag)
   }
   #mdagspec <- paste('dag {',mdag,'}')
 
   deplist <- unlist(strsplit(dep," "))
 
   if(is.null(preds)){
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra)
+    dsep <- dagitty::dseparated(mdagspec, deplist, r_cra)
   } else {
     predslist <- unlist(strsplit(preds," "))
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), deplist, r_cra, predslist)
+    dsep <- dagitty::dseparated(mdagspec, deplist, r_cra, predslist)
   }
 
   #If r_cra does not depend on dep conditional on predictors, then MI is valid
@@ -79,7 +79,7 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
                        the partially observed variable(s) and complete record indicator
                        are not independent given the fully observed imputation model predictor(s). Hence,
                        multiple imputation methods which assume data are missing at random
-                       may not be not valid.
+                       may not be valid.
                        \n \nConsider using a different imputation model and/or strategy
                        (e.g. not-at-random fully conditional specification).",
         collapse="\n")
@@ -96,7 +96,7 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
         result2 <- paste("For example, the partially observed variable(s) and complete record indicator
                          are independent if each of the following sets of variables are used as predictors
                          in the imputation model(s):\n \n",
-                          paste0(adjsetsfull, prefix="\n", collapse = "\n"),collapse = "\n")
+                          paste0(adjsetsfull, "\n", collapse = "\n"),collapse = "\n")
 
         result <- paste(result1, "\n", result2, collapse = "\n")
       }

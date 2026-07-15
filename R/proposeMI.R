@@ -16,7 +16,7 @@
 #' @param data Optionally, a data frame containing all the variables required
 #'   for imputation and the substantive analysis; if stratification variable(s)
 #'   are included in the 'mimod' object(s), these will be carried over to 'midoc'
-#'   functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#'   functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #'   performed for each subset of the data determined by the values of the
 #'   stratification variable(s)
 #' @param plot If TRUE (the default), and a dataset is supplied, displays
@@ -58,7 +58,7 @@
 proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotprompt = TRUE, message = TRUE) {
 
   if (!is.null(data)) {
-    m_min <- ceiling((1-mean(ifelse(apply(data,1,anyNA)==F,1,0)))*100)
+    m_min <- ceiling((1-mean(stats::complete.cases(data)))*100)
   } else {
     if (is.na(prop_complete)){
       stop("\n\n'prop_complete' must be specified, or else 'data' must be specified\n\n",
@@ -69,11 +69,13 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
     m_min <- ceiling((1-prop_complete)*100)
   }
 
-  if(max(lengths(mimodobj))==1){
-    mimod_count <- 1
-  } else {
-    mimod_count <- length(mimodobj)
+  #A single 'mimod' object may be supplied directly, or in a list of 'mimod'
+  #objects; normalise to a list (the formula check covers 'mimod' objects
+  #created before the class was added)
+  if (inherits(mimodobj, "mimod") || !is.null(mimodobj[["formula"]])) {
+    mimodobj <- list(mimodobj)
   }
+  mimod_count <- length(mimodobj)
 
   #Specify method, formula, and optionally dataset name for each variable to be imputed
   method <- vector("list", mimod_count)
@@ -85,37 +87,29 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   datalab <- deparse(substitute(data))
   #} else datalab <- "dataset_name"
 
-  for (i in 1:mimod_count){
-    if (mimod_count > 1){
-      if (i==1) by_check <- mimodobj[[1]][["by"]]
-      family <- mimodobj[[i]][["family"]]
-      formula <- mimodobj[[i]][["formula"]]
-      if (!is.null(data)) {
-        datalab_check <- mimodobj[[i]][["datalab"]]
-      }
-      if (!is.null(by_check)|!is.null(mimodobj[[i]][["by"]])) {
-        if(!is.null(by_check) & !is.null(mimodobj[[i]][["by"]])){
-          if(mimodobj[[i]][["by"]] != by_check){
-            warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
-                    call.=FALSE, immediate.=TRUE)
-          }
-        } else {
+  for (i in seq_len(mimod_count)){
+    if (i==1) by_check <- mimodobj[[1]][["by"]]
+    family <- mimodobj[[i]][["family"]]
+    formula <- mimodobj[[i]][["formula"]]
+    if (!is.null(data)) {
+      datalab_check <- mimodobj[[i]][["datalab"]]
+    }
+    if (!is.null(by_check)|!is.null(mimodobj[[i]][["by"]])) {
+      if(!is.null(by_check) & !is.null(mimodobj[[i]][["by"]])){
+        if(mimodobj[[i]][["by"]] != by_check){
           warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
                   call.=FALSE, immediate.=TRUE)
         }
+      } else {
+        warning("\n\nThe stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.\n\n",
+                call.=FALSE, immediate.=TRUE)
       }
-      by_check <- mimodobj[[i]][["by"]]
-    } else {
-      family <- mimodobj[["family"]]
-      formula <- mimodobj[["formula"]]
-      if (!is.null(data)) {
-        datalab_check <- mimodobj[["datalab"]]
-      }
-      by_check <- mimodobj[["by"]]
     }
+    by_check <- mimodobj[[i]][["by"]]
 
     if (!is.null(data)){
-      if(datalab_check != datalab){
+      #datalab_check is NULL if the imputation model was specified without a dataset
+      if(is.null(datalab_check) || datalab_check != datalab){
         warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
                 call.=FALSE, immediate.=TRUE)
       }
@@ -135,15 +129,15 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
                   datalab,
                   ", # You may need to specify a subset of the columns in your dataset; if you specified stratification variable(s) in your
 proposed imputation model(s), these will be carried over to
-'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation will
+'midoc' functions 'doMImice' and 'doMNARMImice' and multiple imputation will
 be performed for each subset of the data determined by the values of the
 stratification factor(s)\n \nm = ",
                   m_min,
                   ", # You should use at least this number of imputations based on the proportion of complete records in your dataset \n \nmethod = c(",
                   paste(sQuote(method), collapse=", "),
-                  ") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random,    the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
-                  paste(sQuote(formulas_list), prefix="\n", collapse="\n"),
-                  "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not    stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
+                  ") # Specify a method for each incomplete variable. \nIf displayed, the box-and-whisker plots can be used to inform your choice of method(s): for example, if the imputation model does not predict extreme values appropriately, consider a different imputation model/method e.g. PMM. Note the distribution of imputed and observed values is displayed for numeric variables only. The distribution may differ if data are missing at random or missing not at random. If you suspect data are missing not at random, the plots can also inform your choice of sensitivity parameter. \n \nformulas = formulas_list , # Note that you do not additionally need to specify a 'predmatrix' \n \n# The formulas_list specifies the conditional imputation models, which are as follows: \n \n",
+                  paste(sQuote(formulas_list), "\n", collapse="\n"),
+                  "\n \nmaxit = 10 , \n# If you have more than one incomplete variable, you should check this number of iterations is sufficient by inspecting the trace plots, if displayed. Consider increasing the number of iterations if there is a trend that does not stabilise by the 10th iteration. Note that iteration is not performed when only one variable is partially observed. \n \nprintFlag = FALSE , # Change to printFlag=TRUE to display the history as imputation is performed \n\nseed = NA) # It is good practice to choose a seed so your results are reproducible", collapse = "\n")
 
 
   #Return message with proposed settings

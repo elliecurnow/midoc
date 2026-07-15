@@ -42,3 +42,14 @@ test_that("doMImice creates the correct output when 'by' is
             #expect_equal(mice::is.mids(res1$result),TRUE)
           }
 )
+
+# Check output when no substantive model is specified
+res3<-evaluate_promise(doMImice(miprop, 123))
+test_that("doMImice creates the correct output when no substantive model is specified",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res3$message), collapse=" "),
+                                       "right"),1,82),
+                         "Now you have created your multiply imputed datasets, you can perform your analysis")
+            expect_equal(mice::is.mids(res3$result),TRUE)
+          }
+)

@@ -12,8 +12,8 @@
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param covs The analysis model covariate(s), specified as a string
 #'   (space delimited)
-#' @param depvar The longitudinal outcome variable(s), specified as a string
-#'   (space delimited)
+#' @param depvar The longitudinal outcome variables (at least two are
+#'   required), specified as a string (space delimited)
 #' @param treatvar Numeric treatment group variable; values must be positive
 #'   integers
 #' @param idvar Participant identifier variable
@@ -54,20 +54,21 @@
 #'              idvar="id", method="J2R", reference=1, seed=123,
 #'              substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
 doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
-                         reference, seed, substmod = " ", message = TRUE) {
+                         reference, seed, substmod = NULL, message = TRUE) {
 
   # Vectorise variable strings
   covsvec <- unlist(strsplit(covs," "))
   depsvec <- unlist(strsplit(depvar," "))
 
+  if (length(depsvec) < 2) {
+    stop("At least two longitudinal outcome variables must be specified in 'depvar'")
+  }
+
   #Define variables required for RefBasedMI within fn to avoid global variable error
   id <- mipropobj$data[,idvar]
-  time <- c(1:length(depsvec))
+  time <- seq_along(depsvec)
 
-  y <- data.frame(mipropobj$data[,depsvec[1]])
-  for (i in 2:length(depsvec)){
-    y <- base::cbind(y, mipropobj$data[,depsvec[i]])
-  }
+  y <- mipropobj$data[,depsvec, drop=FALSE]
 
   covar1 <- mipropobj$data[,covsvec[1]]
   if(length(covsvec)>1){
@@ -75,23 +76,20 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   }
 
   # Coerce reference group to value of 0
-  treatgrp <- vector()
-  for(i in 1:nrow(mipropobj$data)){
-    treatgrp[i] <- ifelse(mipropobj$data[,treatvar][i] == reference, 0, mipropobj$data[,treatvar][i])
-  }
+  treatgrp <- ifelse(mipropobj$data[,treatvar] == reference, 0, mipropobj$data[,treatvar])
 
   # Arrange dataset in 'long' format
   data_long <- data.frame()
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
     data_long <- base::rbind(data_long,
                              base::cbind(mipropobj$data[,covsvec],
                                          id=id,
                                          treatgrp=treatgrp,
                                          y=y[,i],
-                                         time=c(rep(time[i],nrow(mipropobj$data)))))
+                                         time=rep(time[i],nrow(mipropobj$data))))
   }
   # Rename baseline covariates in data_long
-  for(i in 1:length(covsvec)){
+  for(i in seq_along(covsvec)){
     names(data_long)[i]=paste("covar",i,sep="")
   }
 
@@ -99,50 +97,21 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   data_long <- data_long[order(data_long$id),]
 
   # Run RefBasedMI
-  # Using if statements to overcome problem with specifying method and covars in terms of fn parameters
-  if (method=="J2R"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                              treatvar=treatgrp, idvar=id,
-                              timevar=time, method="J2R", reference=0,
-                              M=mipropobj$m,
-                              seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                             treatvar=treatgrp, idvar=id,
-                                             timevar=time, method="J2R", reference=0,
-                                             M=mipropobj$m,
-                                             seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else if (method=="CR"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else if (method=="CIR"){
-    if (length(covsvec)==1){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=covar1,
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CIR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else if (length(covsvec)==2){
-      refbasedmi <- suppressMessages(RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=c(covar1,covar2),
-                                           treatvar=treatgrp, idvar=id,
-                                           timevar=time, method="CIR", reference=0,
-                                           M=mipropobj$m,
-                                           seed=seed))
-    } else {stop('A maximum of two baseline covariates are allowed')}
-  } else {stop('Method must be one of "J2R", "CR", or "CIR"')}
+  if (!method %in% c("J2R", "CR", "CIR")) {
+    stop('Method must be one of "J2R", "CR", or "CIR"')
+  }
+  if (length(covsvec) > 2) {
+    stop('A maximum of two baseline covariates are allowed')
+  }
+  # RefBasedMI deparses its method and covar arguments, so splice their values
+  # into the call as literals rather than passing them as variables
+  covarexpr <- if (length(covsvec)==1) quote(covar1) else quote(c(covar1,covar2))
+  refbasedmi <- suppressMessages(eval(bquote(
+    RefBasedMI::RefBasedMI(data=data_long, depvar=y, covar=.(covarexpr),
+                           treatvar=treatgrp, idvar=id,
+                           timevar=time, method=.(method), reference=0,
+                           M=mipropobj$m,
+                           seed=seed))))
 
 
   # Return names to original names and re-format in original 'wide' form
@@ -153,7 +122,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   refbasedmi_wide <- data.frame()
 
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
 
     #Add depvar_name to the dataset
     tmp <- subset(refbasedmi, time==i, c(covsvec, "y", treatvar, idvar, ".imp"))
@@ -169,7 +138,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   refbasedmi_wide_mids <- mice::as.mids(refbasedmi_wide)
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(refbasedmi_wide_mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,
@@ -178,7 +147,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
                     "with reference = ",
                     reference,
 "\n, multiple imputation estimates are as follows: \n \n",
-              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
+              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),"\n",collapse = "\n"),
               collapse = "\n")
   }
   else {

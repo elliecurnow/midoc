@@ -13,7 +13,7 @@ doRefBasedMI(
   method,
   reference,
   seed,
-  substmod = " ",
+  substmod = NULL,
   message = TRUE
 )
 }
@@ -23,8 +23,8 @@ doRefBasedMI(
 \item{covs}{The analysis model covariate(s), specified as a string
 (space delimited)}
 
-\item{depvar}{The longitudinal outcome variable(s), specified as a string
-(space delimited)}
+\item{depvar}{The longitudinal outcome variables (at least two are
+required), specified as a string (space delimited)}
 
 \item{treatvar}{Numeric treatment group variable; values must be positive
 integers}
