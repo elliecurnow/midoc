@@ -65,3 +65,26 @@ test_that("proposeMI gives a warning if stratification variables do not match ac
                          "The stratification variable(s) specified using the 'by' option do not match across the set of imputation models. Check that the same stratification variable(s) are specified for all imputation models.")
           }
 )
+
+# Check the proposed 'mice' options when no data set is specified for mimod but is specified in proposeMI
+res6<-evaluate_promise(proposeMI(mimodobj=mimod,
+                                 data=bmi, plot = FALSE, message=FALSE))
+#Trim output for test purposes
+test_that("proposeMI gives a warning if no set is specified for mimod but is specified in proposeMI",
+          {
+            expect_equal(trimws(res6$warnings),
+                         "Datasets were not specified for the set of imputation models. Check the specification of each imputation model using the dataset provided.")
+          }
+)
+
+# Check output is produced when mimodobj is a list of one mimod object
+res7<-evaluate_promise(proposeMI(mimodobj=list(mimod_bmi7),
+                                 data=bmi, plot=FALSE))
+#Trim output for test purposes
+test_that("proposeMI suggests correct mice options when mimodobj is a list of one mimod object",
+          {
+            expect_equal(substr(trimws(paste0(gsub("\n"," ",res7$messages), collapse=" "),
+                                       "right"),1,185),
+                         "Based on your proposed imputation model and dataset, your mice() call should be as follows:  mice(data = bmi , # You may need to specify a subset of the columns in your dataset; if you ")
+          }
+)

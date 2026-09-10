@@ -24,9 +24,32 @@ test_that("descMissData output is as expected when 'by' is specified",
 res3<-evaluate_promise(descMissData(y="bmi7",data=bmi))
 ## Plot is not tested
 #There's a trailing blank, but only visible in testing, so just trim for test purposes
-test_that("descMissData output is as expected when 'by' is specified",
+test_that("descMissData output is as expected when only 'y' is specified",
           {
             expect_equal(trimws(paste0(gsub("\n","",res3$result), collapse=" "),"right"),
                          "c(1, 2, 0, 1, 408, 592, 41, 59)")
+          }
+)
+
+# Check output when only 'y' is specified and it is fully observed
+res4<-evaluate_promise(descMissData(y="matage",data=bmi))
+## Plot is not tested
+#There's a trailing blank, but only visible in testing, so just trim for test purposes
+test_that("descMissData output is as expected when fully observed 'y' is specified",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res4$result), collapse=" "),"right"),
+                         "c(1, 1, 1000, 100)")
+          }
+)
+
+# Check output when only 'y' is specified and it is not observed
+bmi$U <- NA
+res5<-evaluate_promise(descMissData(y="U",data=bmi))
+## Plot is not tested
+#There's a trailing blank, but only visible in testing, so just trim for test purposes
+test_that("descMissData output is as expected when unobserved 'y' is specified",
+          {
+            expect_equal(trimws(paste0(gsub("\n","",res5$result), collapse=" "),"right"),
+                         "c(1, 0, 1000, 100)")
           }
 )
