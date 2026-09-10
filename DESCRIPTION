@@ -22,10 +22,9 @@ Imports:
     arm,
     blorr,
     dagitty,
-    glue,
+    ggplot2,
     grDevices,
     gridExtra,
-    lifecycle,
     mfp2,
     mice (>= 3.16.0),
     RefBasedMI,
@@ -33,6 +32,7 @@ Imports:
     rmarkdown,
     shiny,
     stats,
+    table1,
     utils
 VignetteBuilder: knitr
 Depends: 
