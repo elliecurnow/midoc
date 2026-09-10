@@ -23,8 +23,8 @@
 #'   diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
 #'   the plots
 #' @param plotprompt If TRUE (the default), and a dataset is supplied, the user
-#'   is prompted before the second plot is displayed; use plotprompt=FALSE to
-#'   remove the prompt and display all plots at the same time
+#'   is prompted before each subsequent plot is displayed; use plotprompt=FALSE
+#'   to remove the prompt and display all plots at the same time
 #' @param message If TRUE (the default), displays a message describing the
 #'   proposed 'mice' options; use message=FALSE to suppress the message
 #'
@@ -69,9 +69,12 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
     m_min <- ceiling((1-prop_complete)*100)
   }
 
+# Identify whether the mimodobj is a single list or list of lists
   if(max(lengths(mimodobj))==1){
+    list_flag <- FALSE
     mimod_count <- 1
   } else {
+    list_flag <- TRUE
     mimod_count <- length(mimodobj)
   }
 
@@ -86,7 +89,7 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
   #} else datalab <- "dataset_name"
 
   for (i in 1:mimod_count){
-    if (mimod_count > 1){
+    if (list_flag){
       if (i==1) by_check <- mimodobj[[1]][["by"]]
       family <- mimodobj[[i]][["family"]]
       formula <- mimodobj[[i]][["formula"]]
@@ -115,7 +118,10 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
     }
 
     if (!is.null(data)){
-      if(datalab_check != datalab){
+      if(is.null(datalab_check)){
+        warning("\n\nDatasets were not specified for the set of imputation models. Check the specification of each imputation model using the dataset provided.\n\n",
+                call.=FALSE, immediate.=TRUE)
+      } else if(datalab_check != datalab){
         warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
                 call.=FALSE, immediate.=TRUE)
       }
