@@ -122,9 +122,7 @@ proposeMI <- function(mimodobj, prop_complete=NA, data=NULL, plot = TRUE, plotpr
         warning("\n\nDatasets were not specified for the set of imputation models. Check the specification of each imputation model using the dataset provided.\n\n",
                 call.=FALSE, immediate.=TRUE)
       } else if(datalab_check != datalab){
-        warning("\n\nThe names of the datasets used to specify the set of imputation models
-do not match the dataset provided. Check that the specification of each imputation model
-was explored using the same dataset.\n\n",
+        warning("\n\nThe names of the datasets used to specify the set of imputation models do not match the dataset provided. Check that the specification of each imputation model was explored using the same dataset.\n\n",
                 call.=FALSE, immediate.=TRUE)
       }
     }
