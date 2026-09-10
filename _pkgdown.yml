@@ -27,6 +27,7 @@ reference:
     desc: Explore missing data patterns and mechanisms
     contents:
       - descMissData
+      - summMissData
       - exploreDAG
   - title: Check Validity
     desc: Check whether complete records analysis and multiple imputation are valid

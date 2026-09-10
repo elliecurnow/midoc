@@ -26,7 +26,7 @@ records will be calculated based on all columns included in the dataset.}
 \item{data}{Optionally, a data frame containing all the variables required
 for imputation and the substantive analysis; if stratification variable(s)
 are included in the 'mimod' object(s), these will be carried over to 'midoc'
-functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 performed for each subset of the data determined by the values of the
 stratification variable(s)}
 
@@ -35,8 +35,8 @@ diagnostic plots for the proposed 'mice' call; use plot=FALSE to disable
 the plots}
 
 \item{plotprompt}{If TRUE (the default), and a dataset is supplied, the user
-is prompted before the second plot is displayed; use plotprompt=FALSE to
-remove the prompt and display all plots at the same time}
+is prompted before each subsequent plot is displayed; use plotprompt=FALSE
+to remove the prompt and display all plots at the same time}
 
 \item{message}{If TRUE (the default), displays a message describing the
 proposed 'mice' options; use message=FALSE to suppress the message}

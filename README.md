@@ -63,13 +63,13 @@ remotes::install_github("elliecurnow/midoc")
 library(midoc)
 
 head(bmi)
-#>       bmi7      matage mated pregsize      bwt r
-#> 1 15.16444 -1.30048035     0        0 3.287754 1
-#> 2 18.00250 -0.33689915     0        0 3.770346 1
-#> 3       NA -0.22673432     0        1 3.022161 0
-#> 4       NA  0.81459107     1        0 3.103251 0
-#> 5 17.97791 -0.55260086     0        0 3.830381 1
-#> 6       NA -0.03829346     1        0 2.775282 0
+#>       bmi7      matage            mated  pregsize      bwt          r
+#> 1 15.16444 -1.30048035  No post-16 qual Singleton 3.287754   Complete
+#> 2 18.00250 -0.33689915  No post-16 qual Singleton 3.770346   Complete
+#> 3       NA -0.22673432  No post-16 qual     Twins 3.022161 Incomplete
+#> 4       NA  0.81459107 Has post-16 qual Singleton 3.103251 Incomplete
+#> 5 17.97791 -0.55260086  No post-16 qual Singleton 3.830381   Complete
+#> 6       NA -0.03829346 Has post-16 qual Singleton 2.775282 Incomplete
 
 descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
 ```
@@ -196,7 +196,7 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> Method used to explore model specification: regression of model
     #> residuals (y) on a fractional polynomial of the fitted values
     #> (fitvals). If stratification variable(s) are specified, results are
-    #> subsetted by the values of the factor(s).
+    #> subsetted by the values of these variable(s).
     #> 
     #> Call:
     #> 
@@ -231,6 +231,27 @@ descMissData(y="bmi7", covs="matage mated", data=bmi, plot=TRUE)
     #> Consider whether the specified model is plausible for your study, and
     #> update it accordingly.  Note that the observed relationships may be
     #> distorted by data missing not at random.
+    #> 
+    #> Note: This function explores the specification of your model.  In
+    #> addition, imputation models must be 'compatible' with the analysis
+    #> model. This means that imputation models must include all the same
+    #> variables in the same form as the analysis model.  Imputation models
+    #> may also contain additional, 'auxiliary', variables that are predictive
+    #> of the missing values.
+    #> 
+    #> Imputation models must include any interactions or non-linear terms
+    #> implied by the analysis model.  Imputation models for
+    #> partially-observed covariates in a survival analysis must include a
+    #> compatible form of the survival outcome - see, for example, the
+    #> 'approximately compatible' approach for Cox regression (White and
+    #> Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be
+    #> implemented using 'mice::nelsonaalen()'.
+    #> 
+    #> If it is difficult to specify imputation models in a form that is
+    #> compatible with your analysis model, consider using an alternative
+    #> approach.  See, for example, the substantive model compatible approach
+    #> (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this
+    #> method can be implemented using 'smcfcs::smcfcs()'
 
 <img src="man/figures/README-unnamed-chunk-2-2.png" alt="Plot of residuals versus fitted values." width="100%" />
 
@@ -243,9 +264,9 @@ miprop <- proposeMI(mimodobj=mimod_bmi7, data=bmi)
 #> mice(data = bmi , # You may need to specify a subset of the columns in
 #> your dataset; if you specified stratification variable(s) in your
 #> proposed imputation model(s), these will be carried over to 'midoc'
-#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
-#> stratification factor(s):
+#> stratification factor(s)
 #> 
 #> m = 41 , # You should use at least this number of imputations based on
 #> the proportion of complete records in your dataset
@@ -290,15 +311,15 @@ doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
 #> Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,
 #> multiple imputation estimates are as follows:
 #> 
-#>          term   estimate  std.error  statistic       df       p.value
+#>                    term   estimate  std.error  statistic       df       p.value
 #> 
-#> 1 (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284
+#> 1           (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284
 #> 
-#> 2      matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53
+#> 2                matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53
 #> 
-#> 3 I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74
+#> 3           I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74
 #> 
-#> 4      mated1 -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16
+#> 4 matedHas post-16 qual -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16
 #> 
 #>        2.5 %     97.5 %   conf.low  conf.high
 #> 
