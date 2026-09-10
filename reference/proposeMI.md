@@ -98,7 +98,7 @@ proposeMI(mimodobj=mimod_bmi7,
 #> mice(data = bmi , # You may need to specify a subset of the columns in
 #> your dataset; if you specified stratification variable(s) in your
 #> proposed imputation model(s), these will be carried over to 'midoc'
-#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
 #> stratification factor(s)
 #> 
@@ -147,7 +147,7 @@ proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
 #> mice(data = bmi , # You may need to specify a subset of the columns in
 #> your dataset; if you specified stratification variable(s) in your
 #> proposed imputation model(s), these will be carried over to 'midoc'
-#> functions 'doMImice' and 'doMNARmice' and multiple imputation will be
+#> functions 'doMImice' and 'doMNARMImice' and multiple imputation will be
 #> performed for each subset of the data determined by the values of the
 #> stratification factor(s)
 #> 

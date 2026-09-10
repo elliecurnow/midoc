@@ -86,7 +86,7 @@ checkMI(dep="bmi7", preds="matage", r_cra="r",
 #> observed variable(s) and complete record indicator are not independent
 #> given the fully observed imputation model predictor(s). Hence, multiple
 #> imputation methods which assume data are missing at random may not be
-#> not valid.
+#> valid.
 #> 
 #> Consider using a different imputation model and/or strategy (e.g.
 #> not-at-random fully conditional specification).  For example, the
