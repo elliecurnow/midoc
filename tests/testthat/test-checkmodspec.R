@@ -85,3 +85,14 @@ test_that("checkModSpec correctly runs when by is specified",
             expect_equal(res6$result$by, "pregsize")
           }
 )
+
+#Check an unsupported family gives an informative error
+test_that("checkModSpec gives an informative error for an unsupported family",
+          {
+            expect_error(checkModSpec(formula="bmi7~matage", family="poisson(log)", data=bmi),
+                         "'family' must be either")
+            expect_error(checkModSpec(formula="bmi7~matage", family="poisson(log)"),
+                         "'family' must be either")
+          }
+)
+

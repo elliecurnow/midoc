@@ -47,6 +47,12 @@
 #'              family="gaussian(identity)", data=bmi)
 checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message=TRUE) {
 
+  #Check the specified family is supported
+  if (length(family) != 1 || !family %in% c("gaussian(identity)", "binomial(logit)")) {
+    stop("\n\n'family' must be either \"gaussian(identity)\" or \"binomial(logit)\"\n\n",
+         call.=TRUE)
+  }
+
   if (!is.null(data)) {
     if(family == "gaussian(identity)"){
 
@@ -72,9 +78,9 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
 
       result1 <- paste("Method used to explore model specification: regression of model residuals (y) on a fractional
                        polynomial of the fitted values (fitvals). If stratification variable(s) are specified,
-                       results are subsetted by the values of the factor(s).\n",
+                       results are subsetted by the values of these variable(s).\n",
                        #paste0(pval),
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
         }
 
@@ -100,9 +106,9 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        Pregibon's link test, a regression of the model outcome (resp)
                        on the fitted values (fit) and the square of the fitted values (fit2).
                        If stratification variable(s) are specified,
-                       results are subsetted by the values of the factor(s).\n",
+                       results are subsetted by the values of these variable(s).\n",
                        #paste0(pval)
-                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),prefix="\n",collapse = "\n"),
+                       "\n\n", paste0(gsub(" ", "@",utils::capture.output(modfittest)),"\n",collapse = "\n"),
                        collapse = "\n")
       }
 
@@ -130,7 +136,32 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
                        Note that the observed relationships may be distorted by data missing not at random.", collapse = "\n")
 
     }
-    result <- paste(result1, "\n", result2, collapse = "\n")
+
+    result3 <- paste("\nNote: This function explores the specification of your model.
+                     In addition, imputation models must be 'compatible' with the
+                     analysis model. This means that imputation models must include
+                     all the same variables in the same form as the analysis model.
+                     Imputation models may also contain
+                     additional, 'auxiliary', variables that are predictive of the missing values.
+
+                     \nImputation models must
+                     include any interactions or non-linear terms implied by the analysis model.
+                     Imputation models for partially-observed covariates in a survival analysis
+                     must include a compatible form of the survival outcome
+                     - see, for example, the 'approximately compatible' approach for
+                     Cox regression
+                     (White and Royston, 2012; https://doi.org/10.1002/sim.3618);
+                     this method can be implemented using 'mice::nelsonaalen()'.
+
+                    \nIf it is difficult to specify imputation models in a form that is
+                    compatible with your analysis model, consider using an alternative approach.
+                    See, for example,
+                    the substantive model compatible approach
+                    (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348);
+                    this method can be implemented using 'smcfcs::smcfcs()'",
+                     collapse = "\n")
+
+    result <- paste(result1, "\n", result2, "\n", result3, collapse = "\n")
 
     #Return message with model check results
     if(message) {message(paste(gsub("@", " ",strwrap(result)),collapse="\n"))}
@@ -140,13 +171,13 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
     if (plot){
       if (family == "gaussian(identity)"){
         plot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",
-             main="Residuals versus fitted values \nbased on all data (not stratified)",
+             main="Residuals versus fitted values based on \nall observed data (not stratified)",
              sub=list("This plot may suggest the appropriate functional form \nfor the specified model",cex=0.8))
         graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
       else if (family == "binomial(logit)"){
         arm::binnedplot(x=modfit$fitvals,y=modfit$r,xlab="",ylab="Residuals",col.int="white",
-                      main="Residuals versus (binned) fitted values \nbased on all data (not stratified)",
+                      main="Residuals versus (binned) fitted values based on \nall observed data (not stratified)",
                       sub=list("This plot may suggest the appropriate functional form \nfor the specified model", cex=0.8))
         graphics::title(xlab="Fitted values", mgp=c(2,1,0))
       }
@@ -161,16 +192,16 @@ checkModSpec <- function(formula, family, by=NULL, data=NULL, plot=TRUE, message
         message(paste("The proposed parametric model is:",
                                sQuote(formula),
                                "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                               prefix="\n", collapse="\n"))
+                               "\n", collapse="\n"))
         } else {
           message(paste("The proposed parametric model is:",
                         sQuote(formula),
                         "\n\nstratified by:",
                         paste(by),
                         "\n\nNow specify a dataset to explore whether observed relationships in the dataset are consistent with the proposed model",
-                        prefix="\n", collapse="\n"))}
+                        "\n", collapse="\n"))}
         }
-    mimod <- list(formula = formula,family = family,by=by)
+    mimod <- list(formula = formula,family = family, by=by, datalab=NULL)
   }
   #Return an object with formula and family
   invisible(mimod)
