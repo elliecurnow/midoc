@@ -62,10 +62,10 @@ checkCRA <- function(y, covs=NULL, r_cra, mdag) {
   ylist <- unlist(strsplit(y," "))
 
   if(is.null(covs)){
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra)
+    dsep <- dagitty::dseparated(mdagspec, ylist, r_cra)
   } else {
     covslist <- unlist(strsplit(covs," "))
-    dsep <- dagitty::dseparated(dagitty::dagitty(mdagspec, layout=T), ylist, r_cra, covslist)
+    dsep <- dagitty::dseparated(mdagspec, ylist, r_cra, covslist)
   }
 
   #If r does not depend on y conditional on covariates, then CRA is valid
@@ -106,7 +106,7 @@ checkCRA <- function(y, covs=NULL, r_cra, mdag) {
                        model may not be aligned with your estimand.
                        \n \nFor example, the analysis model outcome(s) and complete
                        record indicator are independent given each of the following sets of variables:\n \n",
-              paste0(adjsetsfull, prefix="\n", collapse = "\n"), collapse = "\n")
+              paste0(adjsetsfull, "\n", collapse = "\n"), collapse = "\n")
       #print(adjsetsfull)
     }
   result <- paste(result1, "\n", result2, collapse="\n")
