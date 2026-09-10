@@ -714,7 +714,7 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
 
                   Estimate Std. Error t value Pr(>|t|)    
 
-    (Intercept) -5.908e-15  5.512e-02    0.00        1    
+    (Intercept) -1.923e-14  5.512e-02    0.00        1    
 
     fitvals.1   -5.268e-02  3.215e-03  -16.39   <2e-16 ***
 
@@ -777,7 +777,7 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
 
                   Estimate Std. Error t value Pr(>|t|)
 
-    (Intercept) -3.409e-17  4.560e-02       0        1
+    (Intercept) -2.811e-16  4.560e-02       0        1
 
     (Dispersion parameter for gaussian family taken to be 1.230712)
 
