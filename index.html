@@ -100,13 +100,13 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://elliecurnow.github.io/midoc/">midoc</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bmi</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       bmi7      matage mated pregsize      bwt r</span></span>
-<span><span class="co">#&gt; 1 15.16444 -1.30048035     0        0 3.287754 1</span></span>
-<span><span class="co">#&gt; 2 18.00250 -0.33689915     0        0 3.770346 1</span></span>
-<span><span class="co">#&gt; 3       NA -0.22673432     0        1 3.022161 0</span></span>
-<span><span class="co">#&gt; 4       NA  0.81459107     1        0 3.103251 0</span></span>
-<span><span class="co">#&gt; 5 17.97791 -0.55260086     0        0 3.830381 1</span></span>
-<span><span class="co">#&gt; 6       NA -0.03829346     1        0 2.775282 0</span></span>
+<span><span class="co">#&gt;       bmi7      matage            mated  pregsize      bwt          r</span></span>
+<span><span class="co">#&gt; 1 15.16444 -1.30048035  No post-16 qual Singleton 3.287754   Complete</span></span>
+<span><span class="co">#&gt; 2 18.00250 -0.33689915  No post-16 qual Singleton 3.770346   Complete</span></span>
+<span><span class="co">#&gt; 3       NA -0.22673432  No post-16 qual     Twins 3.022161 Incomplete</span></span>
+<span><span class="co">#&gt; 4       NA  0.81459107 Has post-16 qual Singleton 3.103251 Incomplete</span></span>
+<span><span class="co">#&gt; 5 17.97791 -0.55260086  No post-16 qual Singleton 3.830381   Complete</span></span>
+<span><span class="co">#&gt; 6       NA -0.03829346 Has post-16 qual Singleton 2.775282 Incomplete</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/descMissData.html">descMissData</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"bmi7"</span>, covs<span class="op">=</span><span class="st">"matage mated"</span>, data<span class="op">=</span><span class="va">bmi</span>, plot<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-1.png" alt="Plot of missing data pattern." width="100%"></p>
@@ -230,7 +230,7 @@
 <span id="cb4-118"><a href="#cb4-118" tabindex="-1"></a><span class="co">#&gt; Method used to explore model specification: regression of model</span></span>
 <span id="cb4-119"><a href="#cb4-119" tabindex="-1"></a><span class="co">#&gt; residuals (y) on a fractional polynomial of the fitted values</span></span>
 <span id="cb4-120"><a href="#cb4-120" tabindex="-1"></a><span class="co">#&gt; (fitvals). If stratification variable(s) are specified, results are</span></span>
-<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a><span class="co">#&gt; subsetted by the values of the factor(s).</span></span>
+<span id="cb4-121"><a href="#cb4-121" tabindex="-1"></a><span class="co">#&gt; subsetted by the values of these variable(s).</span></span>
 <span id="cb4-122"><a href="#cb4-122" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-123"><a href="#cb4-123" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
 <span id="cb4-124"><a href="#cb4-124" tabindex="-1"></a><span class="co">#&gt; </span></span>
@@ -264,7 +264,28 @@
 <span id="cb4-152"><a href="#cb4-152" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-153"><a href="#cb4-153" tabindex="-1"></a><span class="co">#&gt; Consider whether the specified model is plausible for your study, and</span></span>
 <span id="cb4-154"><a href="#cb4-154" tabindex="-1"></a><span class="co">#&gt; update it accordingly.  Note that the observed relationships may be</span></span>
-<span id="cb4-155"><a href="#cb4-155" tabindex="-1"></a><span class="co">#&gt; distorted by data missing not at random.</span></span></code></pre></div>
+<span id="cb4-155"><a href="#cb4-155" tabindex="-1"></a><span class="co">#&gt; distorted by data missing not at random.</span></span>
+<span id="cb4-156"><a href="#cb4-156" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-157"><a href="#cb4-157" tabindex="-1"></a><span class="co">#&gt; Note: This function explores the specification of your model.  In</span></span>
+<span id="cb4-158"><a href="#cb4-158" tabindex="-1"></a><span class="co">#&gt; addition, imputation models must be 'compatible' with the analysis</span></span>
+<span id="cb4-159"><a href="#cb4-159" tabindex="-1"></a><span class="co">#&gt; model. This means that imputation models must include all the same</span></span>
+<span id="cb4-160"><a href="#cb4-160" tabindex="-1"></a><span class="co">#&gt; variables in the same form as the analysis model.  Imputation models</span></span>
+<span id="cb4-161"><a href="#cb4-161" tabindex="-1"></a><span class="co">#&gt; may also contain additional, 'auxiliary', variables that are predictive</span></span>
+<span id="cb4-162"><a href="#cb4-162" tabindex="-1"></a><span class="co">#&gt; of the missing values.</span></span>
+<span id="cb4-163"><a href="#cb4-163" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-164"><a href="#cb4-164" tabindex="-1"></a><span class="co">#&gt; Imputation models must include any interactions or non-linear terms</span></span>
+<span id="cb4-165"><a href="#cb4-165" tabindex="-1"></a><span class="co">#&gt; implied by the analysis model.  Imputation models for</span></span>
+<span id="cb4-166"><a href="#cb4-166" tabindex="-1"></a><span class="co">#&gt; partially-observed covariates in a survival analysis must include a</span></span>
+<span id="cb4-167"><a href="#cb4-167" tabindex="-1"></a><span class="co">#&gt; compatible form of the survival outcome - see, for example, the</span></span>
+<span id="cb4-168"><a href="#cb4-168" tabindex="-1"></a><span class="co">#&gt; 'approximately compatible' approach for Cox regression (White and</span></span>
+<span id="cb4-169"><a href="#cb4-169" tabindex="-1"></a><span class="co">#&gt; Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be</span></span>
+<span id="cb4-170"><a href="#cb4-170" tabindex="-1"></a><span class="co">#&gt; implemented using 'mice::nelsonaalen()'.</span></span>
+<span id="cb4-171"><a href="#cb4-171" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-172"><a href="#cb4-172" tabindex="-1"></a><span class="co">#&gt; If it is difficult to specify imputation models in a form that is</span></span>
+<span id="cb4-173"><a href="#cb4-173" tabindex="-1"></a><span class="co">#&gt; compatible with your analysis model, consider using an alternative</span></span>
+<span id="cb4-174"><a href="#cb4-174" tabindex="-1"></a><span class="co">#&gt; approach.  See, for example, the substantive model compatible approach</span></span>
+<span id="cb4-175"><a href="#cb4-175" tabindex="-1"></a><span class="co">#&gt; (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this</span></span>
+<span id="cb4-176"><a href="#cb4-176" tabindex="-1"></a><span class="co">#&gt; method can be implemented using 'smcfcs::smcfcs()'</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-2-2.png" alt="Plot of residuals versus fitted values." width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -275,9 +296,9 @@
 <span><span class="co">#&gt; mice(data = bmi , # You may need to specify a subset of the columns in</span></span>
 <span><span class="co">#&gt; your dataset; if you specified stratification variable(s) in your</span></span>
 <span><span class="co">#&gt; proposed imputation model(s), these will be carried over to 'midoc'</span></span>
-<span><span class="co">#&gt; functions 'doMImice' and 'doMNARmice' and multiple imputation will be</span></span>
+<span><span class="co">#&gt; functions 'doMImice' and 'doMNARMImice' and multiple imputation will be</span></span>
 <span><span class="co">#&gt; performed for each subset of the data determined by the values of the</span></span>
-<span><span class="co">#&gt; stratification factor(s):</span></span>
+<span><span class="co">#&gt; stratification factor(s)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; m = 41 , # You should use at least this number of imputations based on</span></span>
 <span><span class="co">#&gt; the proportion of complete records in your dataset</span></span>
@@ -319,15 +340,15 @@
 <span><span class="co">#&gt; Given the substantive model: lm(bmi7 ~ matage + I(matage^2) + mated) ,</span></span>
 <span><span class="co">#&gt; multiple imputation estimates are as follows:</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;          term   estimate  std.error  statistic       df       p.value</span></span>
+<span><span class="co">#&gt;                    term   estimate  std.error  statistic       df       p.value</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 1 (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284</span></span>
+<span><span class="co">#&gt; 1           (Intercept) 17.6607324 0.07126548 247.816079 233.1668 2.116834e-284</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 2      matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53</span></span>
+<span><span class="co">#&gt; 2                matage  1.1504545 0.05230345  21.995769 184.5081  1.863532e-53</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 3 I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74</span></span>
+<span><span class="co">#&gt; 3           I(matage^2)  0.8414975 0.03231752  26.038433 257.1270  4.754845e-74</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 4      mated1 -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16</span></span>
+<span><span class="co">#&gt; 4 matedHas post-16 qual -1.0026194 0.10787751  -9.294054 159.1101  1.094881e-16</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;        2.5 %     97.5 %   conf.low  conf.high</span></span>
 <span><span class="co">#&gt; </span></span>

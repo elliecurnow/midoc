@@ -20,7 +20,7 @@ doMNARMImice(
   mnardep,
   mnardelta,
   seed,
-  substmod = " ",
+  substmod = NULL,
   message = TRUE
 )
 ```

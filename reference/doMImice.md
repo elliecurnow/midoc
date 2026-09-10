@@ -14,7 +14,7 @@ specified, the pooled estimates are calculated using
 ## Usage
 
 ``` r
-doMImice(mipropobj, seed, substmod = " ", message = TRUE)
+doMImice(mipropobj, seed, substmod = NULL, message = TRUE)
 ```
 
 ## Arguments

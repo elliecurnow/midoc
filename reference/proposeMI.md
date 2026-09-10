@@ -41,9 +41,9 @@ proposeMI(
   Optionally, a data frame containing all the variables required for
   imputation and the substantive analysis; if stratification variable(s)
   are included in the 'mimod' object(s), these will be carried over to
-  'midoc' functions 'doMImice' and 'doMNARmice' and multiple imputation
-  will be performed for each subset of the data determined by the values
-  of the stratification variable(s)
+  'midoc' functions 'doMImice' and 'doMNARMImice' and multiple
+  imputation will be performed for each subset of the data determined by
+  the values of the stratification variable(s)
 
 - plot:
 
@@ -54,8 +54,8 @@ proposeMI(
 - plotprompt:
 
   If TRUE (the default), and a dataset is supplied, the user is prompted
-  before the second plot is displayed; use plotprompt=FALSE to remove
-  the prompt and display all plots at the same time
+  before each subsequent plot is displayed; use plotprompt=FALSE to
+  remove the prompt and display all plots at the same time
 
 - message:
 

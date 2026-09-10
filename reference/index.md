@@ -6,6 +6,8 @@ Explore missing data patterns and mechanisms
 
 - [`descMissData()`](https://elliecurnow.github.io/midoc/reference/descMissData.md)
   : Lists missing data patterns in the specified dataset
+- [`summMissData()`](https://elliecurnow.github.io/midoc/reference/summMissData.md)
+  : Summarise the data distribution for complete and incomplete records
 - [`exploreDAG()`](https://elliecurnow.github.io/midoc/reference/exploreDAG.md)
   : Compares data with proposed DAG
 

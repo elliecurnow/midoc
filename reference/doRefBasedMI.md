@@ -19,7 +19,7 @@ doRefBasedMI(
   method,
   reference,
   seed,
-  substmod = " ",
+  substmod = NULL,
   message = TRUE
 )
 ```
