@@ -54,7 +54,7 @@
 #'              idvar="id", method="J2R", reference=1, seed=123,
 #'              substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
 doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
-                         reference, seed, substmod = " ", message = TRUE) {
+                         reference, seed, substmod = NULL, message = TRUE) {
 
   # Vectorise variable strings
   covsvec <- unlist(strsplit(covs," "))
@@ -62,7 +62,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   #Define variables required for RefBasedMI within fn to avoid global variable error
   id <- mipropobj$data[,idvar]
-  time <- c(1:length(depsvec))
+  time <- seq_along(depsvec)
 
   y <- data.frame(mipropobj$data[,depsvec[1]])
   for (i in 2:length(depsvec)){
@@ -82,7 +82,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   # Arrange dataset in 'long' format
   data_long <- data.frame()
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
     data_long <- base::rbind(data_long,
                              base::cbind(mipropobj$data[,covsvec],
                                          id=id,
@@ -91,7 +91,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
                                          time=c(rep(time[i],nrow(mipropobj$data)))))
   }
   # Rename baseline covariates in data_long
-  for(i in 1:length(covsvec)){
+  for(i in seq_along(covsvec)){
     names(data_long)[i]=paste("covar",i,sep="")
   }
 
@@ -153,7 +153,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
 
   refbasedmi_wide <- data.frame()
 
-  for (i in 1:length(depsvec)){
+  for (i in seq_along(depsvec)){
 
     #Add depvar_name to the dataset
     tmp <- subset(refbasedmi, time==i, c(covsvec, "y", treatvar, idvar, ".imp"))
@@ -169,7 +169,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
   refbasedmi_wide_mids <- mice::as.mids(refbasedmi_wide)
 
   #If a substantive model is specified, calculate the pooled estimates
-  if(substmod != " "){
+  if(!is.null(substmod)){
     mipo <- mice::pool(with(refbasedmi_wide_mids,parse(text=substmod, keep.source=FALSE)))
     result <- paste("Given the substantive model:",
                     substmod,
@@ -178,7 +178,7 @@ doRefBasedMI <- function(mipropobj, covs, depvar, treatvar, idvar, method,
                     "with reference = ",
                     reference,
 "\n, multiple imputation estimates are as follows: \n \n",
-              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),prefix="\n",collapse = "\n"),
+              paste0(gsub(" ", "@",utils::capture.output(summary(mipo,conf.int=TRUE))),"\n",collapse = "\n"),
               collapse = "\n")
   }
   else {
