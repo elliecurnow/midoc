@@ -58,7 +58,7 @@ test_that("checkModSpec correctly runs for the proposed logistic model",
 # Check mimod object when a dataset is not supplied
 res5<-checkModSpec(
   formula="mated~matage+I(matage^2)+bmi7+pregsize",
-  family="binomial(logit)")
+  family="binomial(logit)", message=FALSE, plot=FALSE)
 #Trim output for test purposes
 test_that("checkModSpec mimod object contains a formula and family",
           {

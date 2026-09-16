@@ -9,7 +9,7 @@ mimod_pregsize <- checkModSpec(
 # Check the proposed 'mice' options when specifying more than one imputation
 ## model (suppressing the plot)
 res1<-evaluate_promise(proposeMI(mimodobj=list(mimod_bmi7,mimod_pregsize),
-                                 data=bmi))
+                                 data=bmi, plot=FALSE))
 #Trim output for test purposes
 test_that("proposeMI suggests correct mice options and creates expected object",
   {
@@ -35,7 +35,7 @@ test_that("proposeMI gives a warning if neither data nor prop_complete are speci
           }
 )
 
-res3<-evaluate_promise(proposeMI(mimodobj=mimod, prop_complete=0.5))
+res3<-evaluate_promise(proposeMI(mimodobj=mimod, prop_complete=0.5, plot=FALSE))
 #Trim output for test purposes
 test_that("proposeMI suggests correct mice options and creates expected object if dataset not specified",
           {

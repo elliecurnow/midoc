@@ -6,10 +6,10 @@
 \usage{
 doRefBasedMI(
   mipropobj,
-  covs,
-  depvar,
-  treatvar,
-  idvar,
+  y,
+  groupvar,
+  covs = NULL,
+  idvar = NULL,
   method,
   reference,
   seed,
@@ -20,21 +20,22 @@ doRefBasedMI(
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}
 
-\item{covs}{The analysis model covariate(s), specified as a string
-(space delimited)}
+\item{y}{The analysis model outcome variables (at least two are required),
+specified as a string (space delimited) or a list}
 
-\item{depvar}{The longitudinal outcome variable(s), specified as a string
-(space delimited)}
+\item{groupvar}{Group variable; can be numeric or string}
 
-\item{treatvar}{Numeric treatment group variable; values must be positive
-integers}
+\item{covs}{Optional analysis model covariate(s), specified as a string
+(space delimited) or a list; a maximum of five covariates can be specified}
 
-\item{idvar}{Participant identifier variable}
+\item{idvar}{Optional participant identifier variable; if not provided, an
+identifier variable, named 'id', will be automatically created}
 
-\item{method}{Reference-based imputation method; methods that are
-supported are "J2R", "CR", and "CIR"}
+\item{method}{Reference-based imputation method; methods that are supported
+are "J2R", "CR", and "CIR"}
 
-\item{reference}{Numeric reference group for the specified method}
+\item{reference}{Reference group for the specified method; can be numeric or
+string}
 
 \item{seed}{An integer that is used to set the seed of the 'mice' call}
 
@@ -51,36 +52,47 @@ A 'mice' object of class 'mids' (the multiply imputed datasets).
 Optionally, a message summarising the analysis that has been performed.
 }
 \description{
-Creates multiple imputations using \link[RefBasedMI]{RefBasedMI}, based on
-the dataset and relevant options specified by a call to
-\link[midoc]{proposeMI}. If a substantive model is specified, also calculates
-the pooled estimates using \link[mice]{pool}.
+Creates multiple imputations under reference-based multiple imputation using
+\link[RefBasedMI]{RefBasedMI}. Imputations are based on the dataset and
+relevant options specified by a call to \link[midoc]{proposeMI}. If a
+substantive model is specified, the pooled estimates are also calculated
+using \link[mice]{pool}. The dataset is assumed to be in 'wide' format, with
+one row per subject. It is assumed that the outcome is measured repeatedly
+over time, with at least one measurement at an intermediate time-point (i.e.
+between baseline and study end-point). Data are assumed to be multivariate
+normal within each category of the grouping variable (in typical use, this
+denotes the treatment allocation).
 }
 \details{
-The dataset is assumed to be in 'wide' format. Data are assumed to be
-multivariate normal within each treatment arm. See
-\link[RefBasedMI]{RefBasedMI} for further details.
+Reference-based multiple imputation uses observed data from one category of
+the grouping variable - the 'reference' group - to impute missing values in
+other categories. Available reference-based methods are 'jump-to-reference'
+(J2R), 'copy reference' (CR), and 'copy increments in reference' (CIR). J2R
+assumes that the distribution of outcomes for individuals who drop out 'jumps
+to' the distribution observed in the reference group following their last
+observed time point. CR assumes individuals who drop out behave as if they
+are in the specified reference group for the full duration of the trial. CIR
+assumes that the distribution of outcomes for individuals who drop out
+follows the mean increments observed in the reference group, following their
+last observed time point.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-# First specify the imputation model as a 'mimod' object
+# First specify the imputation model as a 'mimod'object
 ## (suppressing the message)
-mimod_qol12 <- checkModSpec(formula="qol12 ~ factor(group) + age0 + qol0 + qol3",
-                           family="gaussian(identity)",
-                           data=qol,
-                           message=FALSE)
+mimod_qol12 <- checkModSpec(formula="qol12 ~ factor(group) + age0 + qol0 +
+  qol3", family="gaussian(identity)", data=qol, message=FALSE)
+
 # Save the proposed 'mice' options as a 'miprop' object
 ## (suppressing the message)
-miprop_qol12 <- proposeMI(mimodobj=mimod_qol12,
-                    data=qol,
-                    message=FALSE,
-                    plot = FALSE)
-# Create the set of imputed datasets using the proposed 'mice' options and
-## specified reference-based imputation method; then, fit the substantive
+miprop_qol12 <- proposeMI(mimodobj=mimod_qol12, data=qol, message=FALSE,
+  plot = FALSE)
+
+# Create the set of imputed datasets using the proposed mice' options and
+## specified reference-based imputation method; then fit the substantive
 ## model to each imputed dataset and display the pooled results
-doRefBasedMI(mipropobj=miprop_qol12, covs="age0 qol0",
-             depvar="qol3 qol12", treatvar="group",
-             idvar="id", method="J2R", reference=1, seed=123,
-             substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
+doRefBasedMI(mipropobj=miprop_qol12, y="qol3 qol12", groupvar="group",
+ covs="age0 qol0", idvar="id", method="J2R", reference=1, seed=123,
+ substmod = "lm(qol12 ~ factor(group) + age0 + qol0)")
 \dontshow{\}) # examplesIf}
 }
