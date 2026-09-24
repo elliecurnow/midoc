@@ -77,6 +77,12 @@ checkMI(dep="bmi7", preds="matage mated pregsize", r_cra="r",
 #> given the fully observed imputation model predictor(s). Hence, multiple
 #> imputation methods which assume data are missing at random are valid in
 #> principle.
+#> 
+#> In some settings in which multiple imputation is valid, a maximum
+#> likelihood approach will also be valid and may be more efficient. For
+#> example, using a linear mixed model when outcome data are missing at
+#> random given the observed values of the repeated outcome measures
+#> (Sullivan et al, 2018; https://doi.org/10.1177/0962280216683570).
 
 # Example DAG for which multiple imputation is not valid
 checkMI(dep="bmi7", preds="matage", r_cra="r",

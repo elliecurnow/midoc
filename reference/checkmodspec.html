@@ -132,6 +132,7 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example (incorrectly) assuming a linear relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="checkmodspec-1.png" alt="" width="700" height="433"></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore model specification: regression of model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> residuals (y) on a fractional polynomial of the fitted values</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> (fitvals). If stratification variable(s) are specified, results are</span>
@@ -176,33 +177,33 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
 <span class="r-msg co"><span class="r-pr">#&gt;</span> relationship between the model residuals and fitted values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly. Note that the observed relationships may be</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> distorted by data missing not at random.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: This function explores the specification of your model.  In</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: This function explores the specification of your model. In</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> addition, imputation models must be 'compatible' with the analysis</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> model. This means that imputation models must include all the same</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> variables in the same form as the analysis model.  Imputation models</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> may also contain additional, 'auxiliary', variables that are predictive</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> of the missing values.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> variables in the same form as the analysis model. Imputation models may</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> also contain additional, 'auxiliary', variables that are predictive of</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> the missing values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Imputation models must include any interactions or non-linear terms</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> implied by the analysis model.  Imputation models for</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> partially-observed covariates in a survival analysis must include a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> compatible form of the survival outcome - see, for example, the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'approximately compatible' approach for Cox regression (White and</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> implemented using 'mice::nelsonaalen()'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> implied by the analysis model. Imputation models for partially-observed</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> covariates in a survival analysis must include a compatible form of the</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> survival outcome - see, for example, the 'approximately compatible'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> approach for Cox regression (White and Royston, 2012;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> https://doi.org/10.1002/sim.3618); this method can be implemented using</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'mice::nelsonaalen()'.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> If it is difficult to specify imputation models in a form that is</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> compatible with your analysis model, consider using an alternative</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> approach.  See, for example, the substantive model compatible approach</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> approach. See, for example, the substantive model compatible approach</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> method can be implemented using 'smcfcs::smcfcs()'</span>
-<span class="r-plt img"><img src="checkmodspec-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>  <span class="co">## For the example above, (correctly) assuming a quadratic relationship</span></span></span>
 <span class="r-in"><span><span class="fu">checkModSpec</span><span class="op">(</span>formula<span class="op">=</span><span class="st">"bmi7~matage+I(matage^2)+mated+pregsize"</span>,</span></span>
 <span class="r-in"><span>             family<span class="op">=</span><span class="st">"gaussian(identity)"</span>, data<span class="op">=</span><span class="va">bmi</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="checkmodspec-2.png" alt="" width="700" height="433"></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Method used to explore model specification: regression of model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> residuals (y) on a fractional polynomial of the fitted values</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> (fitvals). If stratification variable(s) are specified, results are</span>
@@ -239,30 +240,29 @@ Epidemiol. <a href="doi:10.1016/j.jclinepi.2023.06.011">doi:10.1016/j.jclinepi.2
 <span class="r-msg co"><span class="r-pr">#&gt;</span> relationship between the model residuals and fitted values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Consider whether the specified model is plausible for your study, and</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly.  Note that the observed relationships may be</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> update it accordingly. Note that the observed relationships may be</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> distorted by data missing not at random.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: This function explores the specification of your model.  In</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note: This function explores the specification of your model. In</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> addition, imputation models must be 'compatible' with the analysis</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> model. This means that imputation models must include all the same</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> variables in the same form as the analysis model.  Imputation models</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> may also contain additional, 'auxiliary', variables that are predictive</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> of the missing values.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> variables in the same form as the analysis model. Imputation models may</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> also contain additional, 'auxiliary', variables that are predictive of</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> the missing values.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Imputation models must include any interactions or non-linear terms</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> implied by the analysis model.  Imputation models for</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> partially-observed covariates in a survival analysis must include a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> compatible form of the survival outcome - see, for example, the</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'approximately compatible' approach for Cox regression (White and</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> implemented using 'mice::nelsonaalen()'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> implied by the analysis model. Imputation models for partially-observed</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> covariates in a survival analysis must include a compatible form of the</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> survival outcome - see, for example, the 'approximately compatible'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> approach for Cox regression (White and Royston, 2012;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> https://doi.org/10.1002/sim.3618); this method can be implemented using</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'mice::nelsonaalen()'.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> If it is difficult to specify imputation models in a form that is</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> compatible with your analysis model, consider using an alternative</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> approach.  See, for example, the substantive model compatible approach</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> approach. See, for example, the substantive model compatible approach</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> method can be implemented using 'smcfcs::smcfcs()'</span>
-<span class="r-plt img"><img src="checkmodspec-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -127,6 +127,12 @@ Frontiers in Epidemiology. <a href="doi:10.3389/fepid.2023.1237447">doi:10.3389/
 <span class="r-msg co"><span class="r-pr">#&gt;</span> given the fully observed imputation model predictor(s). Hence, multiple</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> imputation methods which assume data are missing at random are valid in</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> principle.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> In some settings in which multiple imputation is valid, a maximum</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> likelihood approach will also be valid and may be more efficient. For</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> example, using a linear mixed model when outcome data are missing at</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> random given the observed values of the repeated outcome measures</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> (Sullivan et al, 2018; https://doi.org/10.1177/0962280216683570).</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example DAG for which multiple imputation is not valid</span></span></span>
 <span class="r-in"><span><span class="fu">checkMI</span><span class="op">(</span>dep<span class="op">=</span><span class="st">"bmi7"</span>, preds<span class="op">=</span><span class="st">"matage"</span>, r_cra<span class="op">=</span><span class="st">"r"</span>,</span></span>

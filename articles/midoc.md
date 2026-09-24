@@ -563,6 +563,12 @@ checkMI(dep="bmi7",
     imputation methods which assume data are missing at random are valid in
     principle.
 
+    In some settings in which multiple imputation is valid, a maximum
+    likelihood approach will also be valid and may be more efficient. For
+    example, using a linear mixed model when outcome data are missing at
+    random given the observed values of the repeated outcome measures
+    (Sullivan et al, 2018; https://doi.org/10.1177/0962280216683570).
+
 We will next consider the imputation model including birth weight. The
 results are shown below. These suggest that MI would not be valid if we
 included birth weight as well as the other analysis model variables in
@@ -699,6 +705,8 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
              data=bmi)
 ```
 
+![](midoc_files/figure-html/unnamed-chunk-18-1.png)
+
     Method used to explore model specification: regression of model
     residuals (y) on a fractional polynomial of the fitted values
     (fitvals). If stratification variable(s) are specified, results are
@@ -743,31 +751,29 @@ checkModSpec(formula="bmi7~matage+mated+pregsize",
     relationship between the model residuals and fitted values.
 
     Consider whether the specified model is plausible for your study, and
-    update it accordingly.  Note that the observed relationships may be
+    update it accordingly. Note that the observed relationships may be
     distorted by data missing not at random.
 
-    Note: This function explores the specification of your model.  In
+    Note: This function explores the specification of your model. In
     addition, imputation models must be 'compatible' with the analysis
     model. This means that imputation models must include all the same
-    variables in the same form as the analysis model.  Imputation models
-    may also contain additional, 'auxiliary', variables that are predictive
-    of the missing values.
+    variables in the same form as the analysis model. Imputation models may
+    also contain additional, 'auxiliary', variables that are predictive of
+    the missing values.
 
     Imputation models must include any interactions or non-linear terms
-    implied by the analysis model.  Imputation models for
-    partially-observed covariates in a survival analysis must include a
-    compatible form of the survival outcome - see, for example, the
-    'approximately compatible' approach for Cox regression (White and
-    Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be
-    implemented using 'mice::nelsonaalen()'.
+    implied by the analysis model. Imputation models for partially-observed
+    covariates in a survival analysis must include a compatible form of the
+    survival outcome - see, for example, the 'approximately compatible'
+    approach for Cox regression (White and Royston, 2012;
+    https://doi.org/10.1002/sim.3618); this method can be implemented using
+    'mice::nelsonaalen()'.
 
     If it is difficult to specify imputation models in a form that is
     compatible with your analysis model, consider using an alternative
-    approach.  See, for example, the substantive model compatible approach
+    approach. See, for example, the substantive model compatible approach
     (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this
     method can be implemented using 'smcfcs::smcfcs()'
-
-![](midoc_files/figure-html/unnamed-chunk-18-1.png)
 
 We will use the `midoc` function `checkModSpec` again, this time
 specifying a quadratic relationship between BMI at age 7 years and
@@ -782,6 +788,8 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
              family="gaussian(identity)", 
              data=bmi)
 ```
+
+![](midoc_files/figure-html/unnamed-chunk-19-1.png)
 
     Method used to explore model specification: regression of model
     residuals (y) on a fractional polynomial of the fitted values
@@ -819,31 +827,29 @@ checkModSpec(formula="bmi7~matage+I(matage^2)+mated+pregsize",
     relationship between the model residuals and fitted values.
 
     Consider whether the specified model is plausible for your study, and
-    update it accordingly.  Note that the observed relationships may be
+    update it accordingly. Note that the observed relationships may be
     distorted by data missing not at random.
 
-    Note: This function explores the specification of your model.  In
+    Note: This function explores the specification of your model. In
     addition, imputation models must be 'compatible' with the analysis
     model. This means that imputation models must include all the same
-    variables in the same form as the analysis model.  Imputation models
-    may also contain additional, 'auxiliary', variables that are predictive
-    of the missing values.
+    variables in the same form as the analysis model. Imputation models may
+    also contain additional, 'auxiliary', variables that are predictive of
+    the missing values.
 
     Imputation models must include any interactions or non-linear terms
-    implied by the analysis model.  Imputation models for
-    partially-observed covariates in a survival analysis must include a
-    compatible form of the survival outcome - see, for example, the
-    'approximately compatible' approach for Cox regression (White and
-    Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be
-    implemented using 'mice::nelsonaalen()'.
+    implied by the analysis model. Imputation models for partially-observed
+    covariates in a survival analysis must include a compatible form of the
+    survival outcome - see, for example, the 'approximately compatible'
+    approach for Cox regression (White and Royston, 2012;
+    https://doi.org/10.1002/sim.3618); this method can be implemented using
+    'mice::nelsonaalen()'.
 
     If it is difficult to specify imputation models in a form that is
     compatible with your analysis model, consider using an alternative
-    approach.  See, for example, the substantive model compatible approach
+    approach. See, for example, the substantive model compatible approach
     (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this
     method can be implemented using 'smcfcs::smcfcs()'
-
-![](midoc_files/figure-html/unnamed-chunk-19-1.png)
 
 **Note** We must make sure we account for the non-linear relationship
 between BMI at age 7 years and maternal age in all other imputation
@@ -869,7 +875,7 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
 
     Method used to explore model specification: Pregibon's link test, a
     regression of the model outcome (resp) on the fitted values (fit) and
-    the square of the fitted values (fit2).  If stratification variable(s)
+    the square of the fitted values (fit2). If stratification variable(s)
     are specified, results are subsetted by the values of these
     variable(s).
 
@@ -910,27 +916,27 @@ checkModSpec(formula="pregsize~matage+bmi7+mated",
     be mis-specified.
 
     Consider whether the specified model is plausible for your study, and
-    update it accordingly.  Note that the observed relationships may be
+    update it accordingly. Note that the observed relationships may be
     distorted by data missing not at random.
 
-    Note: This function explores the specification of your model.  In
+    Note: This function explores the specification of your model. In
     addition, imputation models must be 'compatible' with the analysis
     model. This means that imputation models must include all the same
-    variables in the same form as the analysis model.  Imputation models
-    may also contain additional, 'auxiliary', variables that are predictive
-    of the missing values.
+    variables in the same form as the analysis model. Imputation models may
+    also contain additional, 'auxiliary', variables that are predictive of
+    the missing values.
 
     Imputation models must include any interactions or non-linear terms
-    implied by the analysis model.  Imputation models for
-    partially-observed covariates in a survival analysis must include a
-    compatible form of the survival outcome - see, for example, the
-    'approximately compatible' approach for Cox regression (White and
-    Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be
-    implemented using 'mice::nelsonaalen()'.
+    implied by the analysis model. Imputation models for partially-observed
+    covariates in a survival analysis must include a compatible form of the
+    survival outcome - see, for example, the 'approximately compatible'
+    approach for Cox regression (White and Royston, 2012;
+    https://doi.org/10.1002/sim.3618); this method can be implemented using
+    'mice::nelsonaalen()'.
 
     If it is difficult to specify imputation models in a form that is
     compatible with your analysis model, consider using an alternative
-    approach.  See, for example, the substantive model compatible approach
+    approach. See, for example, the substantive model compatible approach
     (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this
     method can be implemented using 'smcfcs::smcfcs()'
 
@@ -946,9 +952,11 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
              data=bmi)
 ```
 
+![](midoc_files/figure-html/unnamed-chunk-21-1.png)
+
     Method used to explore model specification: Pregibon's link test, a
     regression of the model outcome (resp) on the fitted values (fit) and
-    the square of the fitted values (fit2).  If stratification variable(s)
+    the square of the fitted values (fit2). If stratification variable(s)
     are specified, results are subsetted by the values of these
     variable(s).
 
@@ -989,31 +997,29 @@ checkModSpec(formula="pregsize~matage+I(matage^2)+bmi7+mated",
     be mis-specified.
 
     Consider whether the specified model is plausible for your study, and
-    update it accordingly.  Note that the observed relationships may be
+    update it accordingly. Note that the observed relationships may be
     distorted by data missing not at random.
 
-    Note: This function explores the specification of your model.  In
+    Note: This function explores the specification of your model. In
     addition, imputation models must be 'compatible' with the analysis
     model. This means that imputation models must include all the same
-    variables in the same form as the analysis model.  Imputation models
-    may also contain additional, 'auxiliary', variables that are predictive
-    of the missing values.
+    variables in the same form as the analysis model. Imputation models may
+    also contain additional, 'auxiliary', variables that are predictive of
+    the missing values.
 
     Imputation models must include any interactions or non-linear terms
-    implied by the analysis model.  Imputation models for
-    partially-observed covariates in a survival analysis must include a
-    compatible form of the survival outcome - see, for example, the
-    'approximately compatible' approach for Cox regression (White and
-    Royston, 2012; https://doi.org/10.1002/sim.3618); this method can be
-    implemented using 'mice::nelsonaalen()'.
+    implied by the analysis model. Imputation models for partially-observed
+    covariates in a survival analysis must include a compatible form of the
+    survival outcome - see, for example, the 'approximately compatible'
+    approach for Cox regression (White and Royston, 2012;
+    https://doi.org/10.1002/sim.3618); this method can be implemented using
+    'mice::nelsonaalen()'.
 
     If it is difficult to specify imputation models in a form that is
     compatible with your analysis model, consider using an alternative
-    approach.  See, for example, the substantive model compatible approach
+    approach. See, for example, the substantive model compatible approach
     (Bartlett et al, 2015; https://doi.org/10.1177/0962280214521348); this
     method can be implemented using 'smcfcs::smcfcs()'
-
-![](midoc_files/figure-html/unnamed-chunk-21-1.png)
 
 **Tips for imputation model variable selection**
 
