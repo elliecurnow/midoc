@@ -69,11 +69,21 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
 
   #If r_cra does not depend on dep conditional on predictors, then MI is valid
   if(dsep){
-    result <- paste("Based on the proposed directed acyclic graph (DAG),
+    result1 <- paste("Based on the proposed directed acyclic graph (DAG),
                     the partially observed variable(s) and complete record indicator
                     are independent given the fully observed imputation model predictor(s). Hence,
                     multiple imputation methods which assume data are missing at random
                     are valid in principle.", collapse="\n")
+
+    # Add general comment on ML methods
+    result2 <- paste("\n\nIn some settings in which multiple imputation is valid,
+                     a maximum likelihood approach will also be valid and may be
+                     more efficient. For example, using a linear mixed model when
+                     outcome data are missing at random
+                     given the observed values of the repeated outcome measures
+                     (Sullivan et al, 2018; https://doi.org/10.1177/0962280216683570).",
+                     collapse="\n")
+
   } else {
       result1 <- paste("Based on the proposed directed acyclic graph (DAG),
                        the partially observed variable(s) and complete record indicator
@@ -98,9 +108,9 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
                          in the imputation model(s):\n \n",
                           paste0(adjsetsfull, "\n", collapse = "\n"),collapse = "\n")
 
-        result <- paste(result1, "\n", result2, collapse = "\n")
       }
   }
+  result <- paste(result1, "\n", result2, collapse = "\n")
   message(paste(strwrap(result),collapse="\n"))
 }
 
