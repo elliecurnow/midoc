@@ -101,7 +101,7 @@ checkMI <- function(dep, preds=NULL, r_cra, mdag) {
       #  else (adjsets <- adjsets_dep)
       #if(length(adjsets)>0){
       if(length(adjsetsfull)==0){
-        result <- result1
+        result2 <- " "
       } else {
         result2 <- paste("For example, the partially observed variable(s) and complete record indicator
                          are independent if each of the following sets of variables are used as predictors
