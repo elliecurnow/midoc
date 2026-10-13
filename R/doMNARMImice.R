@@ -2,12 +2,14 @@
 #'
 #' Creates multiple imputations using \link[mice]{mice}. Imputations are based
 #' on the options and dataset specified by a call to \link[midoc]{proposeMI},
-#' and additionally on the specified missing not at random (MNAR) mechanism. If
-#' stratification variable(s) are included in the 'miprop' object, multiple
-#' imputation will be performed for each subset of the data determined by the
-#' values of the stratification variable(s) and the resulting imputed datasets
-#' will be combined. If a substantive model is specified, the pooled estimates
-#' are calculated using \link[mice]{pool}.
+#' and additionally on the specified missing not at random (MNAR) mechanism.
+#' Further arguments can be passed to this function - see the help file for
+#' \link[mice]{mice} for more information. If stratification variable(s) are
+#' included in the 'miprop' object, multiple imputation will be performed for
+#' each subset of the data determined by the values of the stratification
+#' variable(s) and the resulting imputed datasets will be combined. If a
+#' substantive model is specified, the pooled estimates are calculated using
+#' \link[mice]{pool}.
 #'
 #' Imputation is performed using the NARFCS procedure (Tompsett et al, 2018) for
 #' the specified variable. See \link[mice]{mice.impute.mnar.logreg} for further
@@ -27,6 +29,7 @@
 #' @param message If TRUE (the default), displays a message summarising the
 #'   analysis that has been performed; use message = FALSE to suppress the
 #'   message
+#' @param ... Further arguments passed to \link[mice]{mice}
 #'
 #' @return A 'mice' object of class 'mids' (the multiply imputed datasets).
 #'   Optionally, a message summarising the analysis that has been performed.
@@ -59,7 +62,7 @@
 #' ## the pooled results
 #' doMNARMImice(mipropobj=miprop, mnardep="bmi7", mnardelta="-2", seed=123,
 #'              substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, message = TRUE) {
+doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, message = TRUE, ...) {
 
   # Update method for mnardep variable
   miprop_count <- length(mipropobj[["formulas"]])
@@ -86,9 +89,10 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, m
           method = method,
           blots=blots,
           formulas = mipropobj[["formulas"]],
-          maxit = 10,
-          printFlag = FALSE,
-          seed = seed)
+          maxit = mipropobj$maxit,
+          printFlag = mipropobj$printFlag,
+          seed = seed,
+          ...)
     } else {
       bylist <- unlist(strsplit(mipropobj$by," "))
       midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
@@ -98,9 +102,10 @@ doMNARMImice <- function(mipropobj, mnardep, mnardelta, seed, substmod = NULL, m
                                  method = method,
                                  blots = blots,
                                  formulas = mipropobj[["formulas"]],
-                                 maxit = 10,
-                                 printFlag = FALSE,
-                                 seed = seed))
+                                 maxit = mipropobj$maxit,
+                                 printFlag = mipropobj$printFlag,
+                                 seed = seed,
+                                 ...))
       # Combine the sets of imputations using `mice::rbind`
       mids <- Reduce(mice::rbind, midstmp)
     }

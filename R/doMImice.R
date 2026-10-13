@@ -1,12 +1,13 @@
 #' Performs multiple imputation
 #'
 #' Creates multiple imputations using \link[mice]{mice}, based on the options
-#' and dataset specified by a call to \link[midoc]{proposeMI}. If stratification
-#' variable(s) are included in the 'miprop' object, multiple imputation will be
-#' performed for each subset of the data determined by the values of the
-#' stratification variable(s) and the resulting imputed datasets will be
-#' combined. If a substantive model is specified, the pooled estimates are
-#' calculated using \link[mice]{pool}.
+#' and dataset specified by a call to \link[midoc]{proposeMI}. Further arguments
+#' can be passed to this function - see the help file for \link[mice]{mice} for
+#' more information. If stratification variable(s) are included in the 'miprop'
+#' object, multiple imputation will be performed for each subset of the data
+#' determined by the values of the stratification variable(s) and the resulting
+#' imputed datasets will be combined. If a substantive model is specified, the
+#' pooled estimates are calculated using \link[mice]{pool}.
 #'
 #' @param mipropobj An object of type 'miprop', created by a call to 'proposeMI'
 #' @param seed An integer that is used to set the seed of the 'mice' call
@@ -16,9 +17,10 @@
 #' @param message If TRUE (the default), displays a message summarising the
 #'   analysis that has been performed; use message = FALSE to suppress the
 #'   message
+#' @param ... Further arguments passed to \link[mice]{mice}
 #'
 #' @return A 'mice' object of class 'mids' (the multiply imputed datasets).
-#'  Optionally, a message summarising the analysis that has been performed.
+#'   Optionally, a message summarising the analysis that has been performed.
 #'
 #' @export
 #'
@@ -41,7 +43,7 @@
 #' # Additionally, fit the substantive model to each imputed dataset and display
 #' ## the pooled results
 #' doMImice(miprop, 123, substmod="lm(bmi7 ~ matage + I(matage^2) + mated)")
-doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
+doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE, ...) {
 
   if(is.null(mipropobj$by)){
     mids <- mice::mice(
@@ -49,9 +51,10 @@ doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
           m = mipropobj$m,
           method = mipropobj$method,
           formulas = mipropobj[["formulas"]],
-          maxit = 10,
-          printFlag = FALSE,
-          seed = seed)
+          maxit = mipropobj$maxit,
+          printFlag = mipropobj$printFlag,
+          seed = seed,
+          ...)
   } else {
     bylist <- unlist(strsplit(mipropobj$by," "))
     midstmp <- by(mipropobj$data, mipropobj$data[,c(bylist)],
@@ -60,9 +63,10 @@ doMImice <- function(mipropobj, seed, substmod = NULL, message = TRUE) {
                             m = mipropobj$m,
                             method = mipropobj$method,
                             formulas = mipropobj[["formulas"]],
-                            maxit = 10,
-                            printFlag = FALSE,
-                            seed = seed))
+                            maxit = mipropobj$maxit,
+                            printFlag = mipropobj$printFlag,
+                            seed = seed,
+                            ...))
     # Combine the sets of imputations using `mice::rbind`
     mids <- Reduce(mice::rbind, midstmp)
   }

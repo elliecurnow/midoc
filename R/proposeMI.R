@@ -196,6 +196,6 @@ practice to choose a seed so your results are reproducible", collapse = "\n")
   }
 
   #Return an object with the proposed specification
-  miprop <- list(data=data,m=m_min,method=method,formulas = formulas_list,by=by_check)
+  miprop <- list(data=data, m=m_min, method=method, formulas = formulas_list, maxit = 10, printFlag=FALSE, by=by_check)
   invisible(miprop)
 }
