@@ -10,6 +10,8 @@
 #' @param data Optionally, a data frame containing all the variables stated in
 #'   the DAG. All ordinal variables must be integer-coded and all categorical
 #'   variables must be dummy-coded.
+#' @param message If TRUE (the default), displays a message describing the
+#'   exploratory analysis performed; use message = FALSE to suppress the message
 #'
 #' @return A message listing the pairs of variables that are implied to be
 #'   independent (possibly conditional on other variables) by the proposed DAG.
@@ -23,7 +25,7 @@
 #' exploreDAG(mdag="matage -> bmi7 mated -> matage mated -> bmi7
 #'                  sep_unmeas -> mated sep_unmeas -> r",
 #'            data=bmi)
-exploreDAG <- function(mdag, data=NULL) {
+exploreDAG <- function(mdag, data=NULL, message=TRUE) {
 
   #Check whether input DAG is a dagitty object or not
   if(dagitty::is.dagitty(mdag)){
@@ -63,5 +65,7 @@ Note that variable names are abbreviated. Consider whether these (conditional) i
     result <- paste(result1, "\n", result2, collapse = "\n")
   } else result <- result1
 
-  message(paste(gsub("@", " ",strwrap(result)),collapse="\n"))
+  if(message) {message(paste(gsub("@", " ",strwrap(result)),collapse="\n"))}
+
+  invisible(paste(gsub("@", " ",strwrap(result)),collapse="\n"))
 }

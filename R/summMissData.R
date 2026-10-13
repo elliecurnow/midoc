@@ -46,7 +46,8 @@
 #'@export
 #'
 #' @examples
-#' summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize")
+#' summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize",
+#'               rowlabelhead="Complete")
 
 summMissData <- function(y, r_cra, data, covs=NULL, by=NULL, plot=TRUE,
                          plotprompt=TRUE, message=TRUE, ...){
