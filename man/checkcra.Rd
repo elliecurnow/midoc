@@ -25,19 +25,21 @@ the proposed DAG and analysis model outcome and covariate(s)
 \description{
 Check complete records analysis is valid under the proposed analysis model
 and directed acyclic graph (DAG). Validity means that the proposed approach
-will allow unbiased estimation of the estimand(s) of interest, including
-regression parameters, associations, and causal effects.
+will allow unbiased estimation of the estimand(s) of interest. In typical use
+this includes regression parameters, covariate associations, and causal
+effects.
 }
 \details{
 The DAG should include all observed and unobserved variables related to the
 analysis model variables and their missingness, as well as the complete
 record ("missingness") indicator.
 
-In general, complete records analysis is valid if the analysis model outcome
-and complete record indicator are unrelated, conditional on the specified
+In general, complete records analysis of the conditional relationship between
+the analysis model outcome and the specified covariates is valid if the
+outcome and complete record indicator are unrelated, given the specified
 covariates. This is determined using the proposed DAG by checking whether the
 analysis model outcome(s) and complete record indicator are 'd-separated',
-given the covariates.
+conditional on the covariates.
 }
 \examples{
 # Example DAG for which complete records analysis is not valid

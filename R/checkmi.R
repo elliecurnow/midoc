@@ -2,8 +2,9 @@
 #'
 #' Check multiple imputation is valid under the proposed imputation model(s) and
 #' directed acyclic graph (DAG). Validity means that the proposed approach will
-#' allow unbiased estimation of the estimand(s) of interest, including
-#' regression parameters, associations, and causal effects.
+#' allow unbiased estimation of the estimand(s) of interest. In typical use
+#' this includes regression parameters, covariate associations, and causal
+#' effects.
 #'
 #' Imputation model(s) should include all other analysis model variables as
 #' predictors, as well as any auxiliary variables. The DAG should include all
