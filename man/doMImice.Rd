@@ -4,7 +4,7 @@
 \alias{doMImice}
 \title{Performs multiple imputation}
 \usage{
-doMImice(mipropobj, seed, substmod = NULL, message = TRUE)
+doMImice(mipropobj, seed, substmod = NULL, message = TRUE, ...)
 }
 \arguments{
 \item{mipropobj}{An object of type 'miprop', created by a call to 'proposeMI'}
@@ -18,6 +18,8 @@ to each imputed dataset and the results pooled}
 \item{message}{If TRUE (the default), displays a message summarising the
 analysis that has been performed; use message = FALSE to suppress the
 message}
+
+\item{...}{Further arguments passed to \link[mice]{mice}}
 }
 \value{
 A 'mice' object of class 'mids' (the multiply imputed datasets).
@@ -25,12 +27,13 @@ Optionally, a message summarising the analysis that has been performed.
 }
 \description{
 Creates multiple imputations using \link[mice]{mice}, based on the options
-and dataset specified by a call to \link[midoc]{proposeMI}. If stratification
-variable(s) are included in the 'miprop' object, multiple imputation will be
-performed for each subset of the data determined by the values of the
-stratification variable(s) and the resulting imputed datasets will be
-combined. If a substantive model is specified, the pooled estimates are
-calculated using \link[mice]{pool}.
+and dataset specified by a call to \link[midoc]{proposeMI}. Further arguments
+can be passed to this function - see the help file for \link[mice]{mice} for
+more information. If stratification variable(s) are included in the 'miprop'
+object, multiple imputation will be performed for each subset of the data
+determined by the values of the stratification variable(s) and the resulting
+imputed datasets will be combined. If a substantive model is specified, the
+pooled estimates are calculated using \link[mice]{pool}.
 }
 \examples{
 # First specify the imputation model as a 'mimod' object

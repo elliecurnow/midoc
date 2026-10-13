@@ -4,7 +4,7 @@
 \alias{exploreDAG}
 \title{Compares data with proposed DAG}
 \usage{
-exploreDAG(mdag, data = NULL)
+exploreDAG(mdag, data = NULL, message = TRUE)
 }
 \arguments{
 \item{mdag}{The DAG, specified as a string using \link[dagitty]{dagitty}
@@ -13,6 +13,9 @@ syntax, or as a \link[dagitty]{dagitty} graph object}
 \item{data}{Optionally, a data frame containing all the variables stated in
 the DAG. All ordinal variables must be integer-coded and all categorical
 variables must be dummy-coded.}
+
+\item{message}{If TRUE (the default), displays a message describing the
+exploratory analysis performed; use message = FALSE to suppress the message}
 }
 \value{
 A message listing the pairs of variables that are implied to be

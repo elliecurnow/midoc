@@ -10,7 +10,8 @@ doMNARMImice(
   mnardelta,
   seed,
   substmod = NULL,
-  message = TRUE
+  message = TRUE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ to each imputed dataset and the results pooled}
 \item{message}{If TRUE (the default), displays a message summarising the
 analysis that has been performed; use message = FALSE to suppress the
 message}
+
+\item{...}{Further arguments passed to \link[mice]{mice}}
 }
 \value{
 A 'mice' object of class 'mids' (the multiply imputed datasets).
@@ -39,12 +42,14 @@ Optionally, a message summarising the analysis that has been performed.
 \description{
 Creates multiple imputations using \link[mice]{mice}. Imputations are based
 on the options and dataset specified by a call to \link[midoc]{proposeMI},
-and additionally on the specified missing not at random (MNAR) mechanism. If
-stratification variable(s) are included in the 'miprop' object, multiple
-imputation will be performed for each subset of the data determined by the
-values of the stratification variable(s) and the resulting imputed datasets
-will be combined. If a substantive model is specified, the pooled estimates
-are calculated using \link[mice]{pool}.
+and additionally on the specified missing not at random (MNAR) mechanism.
+Further arguments can be passed to this function - see the help file for
+\link[mice]{mice} for more information. If stratification variable(s) are
+included in the 'miprop' object, multiple imputation will be performed for
+each subset of the data determined by the values of the stratification
+variable(s) and the resulting imputed datasets will be combined. If a
+substantive model is specified, the pooled estimates are calculated using
+\link[mice]{pool}.
 }
 \details{
 Imputation is performed using the NARFCS procedure (Tompsett et al, 2018) for

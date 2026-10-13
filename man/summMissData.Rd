@@ -73,5 +73,6 @@ observed differences cannot be used as evidence for or against the data
 missing at random assumption.
 }
 \examples{
-summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize")
+summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize",
+              rowlabelhead="Complete")
 }
