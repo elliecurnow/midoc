@@ -21,7 +21,7 @@ res2<-evaluate_promise(checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 test_that("checkCRA correctly identifies that CRA is valid",
   {
     expect_equal(trimws(paste0(gsub("\n"," ",res2$messages), collapse=" "),"right"),
-"Based on the proposed directed acyclic graph (DAG), the analysis model outcome(s) and complete record indicator are independent given analysis model covariate(s). Hence, complete records analysis is valid.")
+"Based on the proposed directed acyclic graph (DAG), the analysis model outcome(s) and complete record indicator are independent given the specified analysis model covariate(s). Hence, complete records analysis of the conditional relationship between the analysis model outcome and the specified covariates is valid.")
   }
 )
 
