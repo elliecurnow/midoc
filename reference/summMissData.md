@@ -99,8 +99,9 @@ at random assumption.
 ## Examples
 
 ``` r
-summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize")
-#>                          0           1       Overall
+summMissData(y="bmi7", r_cra="r", data=bmi, covs="matage mated bwt pregsize",
+              rowlabelhead="Complete")
+#>     Complete             0           1       Overall
 #> 
 #>                    (N=408)     (N=592)      (N=1000)
 #> 

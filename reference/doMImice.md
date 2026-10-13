@@ -4,9 +4,11 @@ Creates multiple imputations using
 [mice](https://amices.org/mice/reference/mice.html), based on the
 options and dataset specified by a call to
 [proposeMI](https://elliecurnow.github.io/midoc/reference/proposeMI.md).
-If stratification variable(s) are included in the 'miprop' object,
-multiple imputation will be performed for each subset of the data
-determined by the values of the stratification variable(s) and the
+Further arguments can be passed to this function - see the help file for
+[mice](https://amices.org/mice/reference/mice.html) for more
+information. If stratification variable(s) are included in the 'miprop'
+object, multiple imputation will be performed for each subset of the
+data determined by the values of the stratification variable(s) and the
 resulting imputed datasets will be combined. If a substantive model is
 specified, the pooled estimates are calculated using
 [pool](https://amices.org/mice/reference/pool.html).
@@ -14,7 +16,7 @@ specified, the pooled estimates are calculated using
 ## Usage
 
 ``` r
-doMImice(mipropobj, seed, substmod = NULL, message = TRUE)
+doMImice(mipropobj, seed, substmod = NULL, message = TRUE, ...)
 ```
 
 ## Arguments
@@ -37,6 +39,11 @@ doMImice(mipropobj, seed, substmod = NULL, message = TRUE)
 
   If TRUE (the default), displays a message summarising the analysis
   that has been performed; use message = FALSE to suppress the message
+
+- ...:
+
+  Further arguments passed to
+  [mice](https://amices.org/mice/reference/mice.html)
 
 ## Value
 

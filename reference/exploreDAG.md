@@ -8,7 +8,7 @@ are consistent with the proposed DAG.
 ## Usage
 
 ``` r
-exploreDAG(mdag, data = NULL)
+exploreDAG(mdag, data = NULL, message = TRUE)
 ```
 
 ## Arguments
@@ -24,6 +24,11 @@ exploreDAG(mdag, data = NULL)
   Optionally, a data frame containing all the variables stated in the
   DAG. All ordinal variables must be integer-coded and all categorical
   variables must be dummy-coded.
+
+- message:
+
+  If TRUE (the default), displays a message describing the exploratory
+  analysis performed; use message = FALSE to suppress the message
 
 ## Value
 
