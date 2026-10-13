@@ -340,7 +340,8 @@ and mDAG (<code>mdag</code>), as follows:</p>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model
 outcome(s) and complete record indicator are not independent given
 analysis model covariate(s). Hence, in general, complete records
-analysis is not valid.
+analysis of the conditional relationship between the analysis model
+outcome and the specified covariates is not valid.
 
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
@@ -394,8 +395,10 @@ our analysis model.</p>
 <span><span class="st">               sep_unmeas -&gt; mated </span></span>
 <span><span class="st">               sep_unmeas -&gt; r"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model
-outcome(s) and complete record indicator are independent given analysis
-model covariate(s). Hence, complete records analysis is valid.</code></pre>
+outcome(s) and complete record indicator are independent given the
+specified analysis model covariate(s). Hence, complete records analysis
+of the conditional relationship between the analysis model outcome and
+the specified covariates is valid.</code></pre>
 <p><strong>Note</strong> If our outcome, BMI at age 7 years, was itself
 a cause of missingness, CRA would always be invalid, <em>i.e.</em> there
 would be no other variables we could add to the analysis model to make
@@ -415,7 +418,8 @@ case (note, in the code, we have added a path from <code>bmi7</code> to
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model
 outcome(s) and complete record indicator are not independent given
 analysis model covariate(s). Hence, in general, complete records
-analysis is not valid.
+analysis of the conditional relationship between the analysis model
+outcome and the specified covariates is not valid.
 
 In special cases, depending on the type of analysis model and estimand
 of interest, complete records analysis may still be valid. See, for
@@ -575,8 +579,10 @@ using <code>checkCRA</code> once more:</p>
 <span><span class="st">               pregsize -&gt; bwt  </span></span>
 <span><span class="st">               sep_unmeas -&gt; bwt"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Based on the proposed directed acyclic graph (DAG), the analysis model
-outcome(s) and complete record indicator are independent given analysis
-model covariate(s). Hence, complete records analysis is valid.</code></pre>
+outcome(s) and complete record indicator are independent given the
+specified analysis model covariate(s). Hence, complete records analysis
+of the conditional relationship between the analysis model outcome and
+the specified covariates is valid.</code></pre>
 <p>We will now use the <code>midoc</code> function <code>checkMI</code>
 applied to our DAG to check whether MI is valid when the imputation
 model predictors for BMI at age 7 years include pregnancy size or birth
@@ -752,7 +758,7 @@ Coefficients:
 
               Estimate Std. Error t value Pr(&gt;|t|)    
 
-(Intercept) -1.923e-14  5.512e-02    0.00        1    
+(Intercept) -5.908e-15  5.512e-02    0.00        1    
 
 fitvals.1   -5.268e-02  3.215e-03  -16.39   &lt;2e-16 ***
 
@@ -829,7 +835,7 @@ Coefficients:
 
               Estimate Std. Error t value Pr(&gt;|t|)
 
-(Intercept) -2.811e-16  4.560e-02       0        1
+(Intercept) -3.409e-17  4.560e-02       0        1
 
 (Dispersion parameter for gaussian family taken to be 1.230712)
 

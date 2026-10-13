@@ -2,8 +2,9 @@
 
 Check complete records analysis is valid under the proposed analysis
 model and directed acyclic graph (DAG). Validity means that the proposed
-approach will allow unbiased estimation of the estimand(s) of interest,
-including regression parameters, associations, and causal effects.
+approach will allow unbiased estimation of the estimand(s) of interest.
+In typical use this includes regression parameters, covariate
+associations, and causal effects.
 
 ## Usage
 
@@ -44,11 +45,12 @@ The DAG should include all observed and unobserved variables related to
 the analysis model variables and their missingness, as well as the
 complete record ("missingness") indicator.
 
-In general, complete records analysis is valid if the analysis model
-outcome and complete record indicator are unrelated, conditional on the
+In general, complete records analysis of the conditional relationship
+between the analysis model outcome and the specified covariates is valid
+if the outcome and complete record indicator are unrelated, given the
 specified covariates. This is determined using the proposed DAG by
 checking whether the analysis model outcome(s) and complete record
-indicator are 'd-separated', given the covariates.
+indicator are 'd-separated', conditional on the covariates.
 
 ## References
 
@@ -70,7 +72,8 @@ checkCRA(y="bmi7", covs="matage", r_cra="r",
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
 #> outcome(s) and complete record indicator are not independent given
 #> analysis model covariate(s). Hence, in general, complete records
-#> analysis is not valid.
+#> analysis of the conditional relationship between the analysis model
+#> outcome and the specified covariates is not valid.
 #> 
 #> In special cases, depending on the type of analysis model and estimand
 #> of interest, complete records analysis may still be valid. See, for
@@ -102,8 +105,10 @@ checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
                sep_unmeas -> mated sep_unmeas -> r")
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
-#> outcome(s) and complete record indicator are independent given analysis
-#> model covariate(s). Hence, complete records analysis is valid.
+#> outcome(s) and complete record indicator are independent given the
+#> specified analysis model covariate(s). Hence, complete records analysis
+#> of the conditional relationship between the analysis model outcome and
+#> the specified covariates is valid.
 # Example where complete records analysis is never valid
 checkCRA(y="bmi7", covs="matage mated", r_cra="r",
          mdag="matage -> bmi7 mated -> matage mated -> bmi7
@@ -111,7 +116,8 @@ checkCRA(y="bmi7", covs="matage mated", r_cra="r",
 #> Based on the proposed directed acyclic graph (DAG), the analysis model
 #> outcome(s) and complete record indicator are not independent given
 #> analysis model covariate(s). Hence, in general, complete records
-#> analysis is not valid.
+#> analysis of the conditional relationship between the analysis model
+#> outcome and the specified covariates is not valid.
 #> 
 #> In special cases, depending on the type of analysis model and estimand
 #> of interest, complete records analysis may still be valid. See, for
